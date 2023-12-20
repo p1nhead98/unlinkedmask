@@ -15,18 +15,52 @@ const UINT8 anim_jump[] = {2, 4, 5};
 const UINT8 anim_fall[] = {2, 6, 7};
 const UINT8 anim_spin[] = {6, 8, 9, 10, 11, 12, 13};
 
+
+extern INT16 inmunity;
+extern INT8 pal_tick;
+extern UINT8 current_pal;
+extern UINT8 current_life;
+extern UINT8 current_level;
+BOOLEAN canHurt;
+
+
+void CheckCollisionTile(CUSTOM_DATA* data)
+{
+    UINT8 colision = GetScrollTile((THIS->x + 3u) >> 3, (THIS->y + 12u) >> 3);
+
+    if (colision == 113 || colision == 115)
+    {
+        if(canHurt){
+            inmunity = 30;
+            canHurt = 0;
+            current_life--;
+            ScreenShake(1,1);
+            RefreshLife();
+        }
+        
+        //SpriteManagerRemove(THIS_IDX);
+    }
+   
+
+}
+
+
+
 void START()
 {
 
     CUSTOM_DATA* data = (CUSTOM_DATA*)THIS->custom_data;
-    data->state = 0;
+    data->state = 8;
     data->accel_y = 0;
     data->collision = 0;
+    THIS->lim_x = 80;
+    THIS->lim_y = 80;
     // data->direction = FALSE;
     // data->canDo = TRUE;
     data->counter = 2;
     data->accel_x = 0;
-    // data->canHurt = inmunity < 1 ? TRUE : FALSE;
+    THIS->x = -16;
+    canHurt = inmunity < 1 ? 1 : 0;
 }
 
 void UPDATE()
@@ -35,10 +69,41 @@ void UPDATE()
     UINT8 i;
 	Sprite* spr;
 
+    if (inmunity != 0)
+    {
+        inmunity -= (1 << delta_time);
+
+        if (inmunity < 1)
+        {
+            inmunity = 0;
+            pal_tick = 0; //This forces the palette to be 0 after after the next if
+            current_pal = 1;
+            canHurt = 1;
+        }
+
+        pal_tick -= 1 << delta_time;
+        if (U_LESS_THAN(pal_tick, 0))
+        {
+            pal_tick += 3;
+            current_pal++;
+            SPRITE_SET_DMG_PALETTE(THIS, current_pal % 2);
+        }
+    }
+
+
+    if(current_life < 1){
+        SpriteManagerRemove(THIS_IDX);
+        SetState(current_state);
+    }
+    if( (THIS->x >= scroll_x + 150) && data->state != 9 && data->state != 8){
+        data->state = 9;
+    }
+
+
     switch( data->state ){
         case 0:
 
-            if(KEY_PRESSED(J_LEFT) && !KEY_PRESSED(J_RIGHT)){
+            if(KEY_PRESSED(J_LEFT) && !KEY_PRESSED(J_RIGHT) && THIS->x > scroll_x + 2){
                 TranslateSprite(THIS, -2, 0);
                 SetSpriteAnim(THIS, anim_walk, 15);
                 THIS->mirror = V_MIRROR;
@@ -52,11 +117,13 @@ void UPDATE()
             if(KEY_TICKED(J_A)){
                 data->state = 1;
                 data->accel_y = -80;
+                JumpRandSound(0);
                 SetSpriteAnim(THIS, anim_jump, 15);
             }
             if(KEY_TICKED(J_B)){
                 data->state = 2;
                 data->accel_y = -80;
+                JumpRandSound(1);
                 SetSpriteAnim(THIS, anim_spin, 40);
             }
         break;
@@ -68,7 +135,7 @@ void UPDATE()
             {
                 SetSpriteAnim(THIS, anim_fall, 15);
             }
-            if(KEY_PRESSED(J_LEFT) && !KEY_PRESSED(J_RIGHT)){
+            if(KEY_PRESSED(J_LEFT) && !KEY_PRESSED(J_RIGHT) && THIS->x > scroll_x + 2){
                 TranslateSprite(THIS, -2, 0);
                 THIS->mirror = V_MIRROR;
                   
@@ -82,7 +149,7 @@ void UPDATE()
                 data->accel_y = 0;
             }
             
-            if(KEY_PRESSED(J_LEFT) && !KEY_PRESSED(J_RIGHT)){
+            if(KEY_PRESSED(J_LEFT) && !KEY_PRESSED(J_RIGHT) && THIS->x > scroll_x + 2){
                 TranslateSprite(THIS, -2, 0);
                 // THIS->mirror = V_MIRROR;
                   
@@ -96,7 +163,7 @@ void UPDATE()
             //     data->accel_y = 0;
             // }
             
-            if(KEY_PRESSED(J_LEFT) && !KEY_PRESSED(J_RIGHT)){
+            if(KEY_PRESSED(J_LEFT) && !KEY_PRESSED(J_RIGHT) && THIS->x > scroll_x + 2){
                 TranslateSprite(THIS, -2, 0);
                 // THIS->mirror = V_MIRROR;
                   
@@ -113,7 +180,7 @@ void UPDATE()
             {
                 SetSpriteAnim(THIS, anim_fall, 15);
             }
-            if(KEY_PRESSED(J_LEFT) && !KEY_PRESSED(J_RIGHT)){
+            if(KEY_PRESSED(J_LEFT) && !KEY_PRESSED(J_RIGHT) && THIS->x > scroll_x + 2){
                 TranslateSprite(THIS, -2, 0);
                 THIS->mirror = V_MIRROR;
                   
@@ -122,11 +189,31 @@ void UPDATE()
                 THIS->mirror = NO_MIRROR;
             }
         break;
-        
+        case 8:
+            TranslateSprite(THIS, 1, 0);
+            SetSpriteAnim(THIS, anim_walk, 15);
+            THIS->mirror = NO_MIRROR;
+            if(THIS->x == 11){
+                data->state = 0;
+            }
+        break;
+        case 9:
+            THIS->x++;
+            THIS->mirror = NO_MIRROR;
+            if(THIS->x >= (scroll_x + 172)){
+                if(current_level == 0){
+                    current_level++;
+                }else{
+                    current_level = 0;
+                }
+                
+                SetState(current_state);
+            }
+        break;
     }
 
    
-    if (data->state != 6 && data->state != 8)
+    if (data->state != 8 && data->state != 9)
     {
 
         if (data->accel_y < 75)
@@ -146,6 +233,7 @@ void UPDATE()
             if (data->state == 1 || data->state == 2 || data->state == 3 || data->state == 4)
             {
                 data->state = 0;
+                SetSpriteAnim(THIS, anim_idle, 15);
             }
         }
         if (data->state == 0 && data->accel_y >= 20)
@@ -154,7 +242,7 @@ void UPDATE()
         }
     }
 
-
+    CheckCollisionTile(data);
 
 
 
@@ -168,12 +256,23 @@ void UPDATE()
 		}
         if(spr->type == SpritePlataforma2) {
             CUSTOM_DATA* sprData = (CUSTOM_DATA*)spr->custom_data;
-			if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && sprData->state == 0 && (data->state == 1 || data->state == 4)) {
+			if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && sprData->state == 0 && (data->state == 1 || data->state == 4 )  ) {
                 data->state = 4;
                 data->accel_y = -80;
                 SetSpriteAnim(THIS, anim_jump, 40);
 			}
 		}
+
+        if(spr->type == SpriteCrusherDown) {
+			if(CheckCollision(THIS, spr) && THIS->y < (spr->y) && (data->state == 2 || data->state == 3) ) {
+                // THIS->y -= 5;
+                data->state = 3;
+                data->accel_y = -80;
+                SetSpriteAnim(THIS, anim_spin, 40);
+			}
+		}
+
+
 	}
 
 
@@ -185,4 +284,12 @@ void UPDATE()
 
 void DESTROY()
 {
+    CUSTOM_DATA* data = (CUSTOM_DATA*)THIS->custom_data;
+    if(data->state != 9 && data->state != 8){
+        current_life = 0;
+        ScreenShake(1,1);
+        RefreshLife();
+        SetState(current_state);
+    }   
+
 }

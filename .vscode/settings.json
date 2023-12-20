@@ -14,6 +14,9 @@
         ".vs": true
     },
     "files.associations": {
-        "setautobank.h": "c"
+        "setautobank.h": "c",
+        "zgbmain.h": "c",
+        "misc.h": "c",
+        "palette.h": "c"
     }
 }

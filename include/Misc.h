@@ -7,7 +7,6 @@
 #include "SpriteManager.h"
 #include <BankManager.h>
 #include "Banks/SetAutoBank.h"
-#include "Misc.h"
 #include "Scroll.h"
 #include "Palette.h"
 #include "Sprite.h"
@@ -21,13 +20,16 @@ typedef struct {
 	INT8 state;
 	INT8 life;
 	UINT8 collision;
-	UINT8 last_anim_speed;
 	UINT8 counter;
-	BOOLEAN direction;
-	BOOLEAN canDo;
-	BOOLEAN canHurt;
+	UINT16 initial_x;
+	UINT16 initial_y;
 } CUSTOM_DATA;
 
+void RefreshLife() BANKED;
+// void ScreenVerticalShake(UINT8 framesBtw, UINT8 seconds, UINT8 intensity) BANKED;
+void pDelay(UINT8 numloops) BANKED;
+void ScreenShake(UINT8 duration, INT8 seismicscale) BANKED;
+void JumpRandSound(BOOLEAN spin) BANKED;
 // void clean() BANKED;
 // void RefreshHud() BANKED;
 // // void SetAlertWindow() BANKED;
