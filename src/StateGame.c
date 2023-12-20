@@ -8,14 +8,16 @@
 #include "Scroll.h"
 #include "Misc.h"
 #include <gb/gb.h>
+#include "Keys.h"
 
 
 IMPORT_MAP(lvl_1);
 IMPORT_MAP(lvl_2);
+IMPORT_MAP(lvl_3);
 IMPORT_MAP(window);
 DECLARE_MUSIC(song1);
 
-UINT8 collision_tiles[] = {4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 95, 96, 97, 98, 0};
+UINT8 collision_tiles[] = {4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 33, 34, 35, 36, 37, 38, 62, 63, 64, 65, 66, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 0};
 
 
 UBYTE counter;
@@ -41,6 +43,7 @@ struct MapInfoBanked {
 const struct MapInfoBanked levels[] = {
 	BANKED_MAP(lvl_1),
 	BANKED_MAP(lvl_2),
+	BANKED_MAP(lvl_3),
 };
 
 typedef struct {
@@ -49,8 +52,9 @@ typedef struct {
 } START_POS;
 
 const START_POS start_positions[] = {
-	{50, 144},
-	{50, 128},
+	{50, 144}, //Level 1 Player Start Position
+	{50, 128}, //Level 2 Player Start Position
+	{50, 112}, //Level 3 Player Start Position
 };
 
 void START()
@@ -82,6 +86,9 @@ void START()
 	case 1:
 		MoveScroll(0,48);
 		break;
+	case 2:
+		MoveScroll(0,48);
+		break;
 	}
 	
 
@@ -105,5 +112,14 @@ void UPDATE()
 		door_open = 0;
 		door_time = 100; 
 		
+	}
+	if (KEY_TICKED(J_SELECT) && !KEY_PRESSED(J_LEFT))
+	{
+		current_level++;
+		SetState(current_state);
+	} else if (KEY_TICKED(J_SELECT) && KEY_PRESSED(J_LEFT))
+	{
+		current_level--;
+		SetState(current_state);
 	}
 }

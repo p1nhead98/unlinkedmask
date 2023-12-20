@@ -201,12 +201,7 @@ void UPDATE()
             THIS->x++;
             THIS->mirror = NO_MIRROR;
             if(THIS->x >= (scroll_x + 172)){
-                if(current_level == 0){
-                    current_level++;
-                }else{
-                    current_level = 0;
-                }
-                
+                current_level++;
                 SetState(current_state);
             }
         break;
