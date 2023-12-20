@@ -6,6 +6,7 @@
 #include "Sound.h"
 #include "Palette.h"
 #include "Math.h"
+#include "Scroll.h"
 #include "ZGBMain.h"
 
 
@@ -23,10 +24,16 @@ extern UINT8 current_life;
 extern UINT8 current_level;
 BOOLEAN canHurt;
 
+// void UpdateMapTile(INT16 map_x, INT16 map_y, UINT8 tile_id, UINT8 c) {
+//        UPDATE_TILE(map_x, map_y, &tile_id, &c);
+// }
 
 void CheckCollisionTile(CUSTOM_DATA* data)
 {
     UINT8 colision = GetScrollTile((THIS->x + 3u) >> 3, (THIS->y + 12u) >> 3);
+    // UINT8 colision2 = GetScrollTile((THIS->x + 3u) >> 3, (THIS->y + 16u) >> 3);
+
+    const UINT8 HEART_TILE4 = 132;
 
     if (colision == 113 || colision == 115)
     {
@@ -40,6 +47,27 @@ void CheckCollisionTile(CUSTOM_DATA* data)
         
         //SpriteManagerRemove(THIS_IDX);
     }
+    if( colision == 108 || colision == 110 ){
+        if((data->state == 2 || data->state == 3)){
+            data->state = 3;
+            data->accel_y = -80;
+            SetSpriteAnim(THIS, anim_spin, 40);
+        }
+    }
+
+    // if( colision2 == 104 || colision2 == 106 ){
+    //     if((data->state == 1 || data->state == 4 )){
+    //         data->state = 4;
+    //         data->accel_y = -80;
+    //         SetSpriteAnim(THIS, anim_jump, 40);
+    //         // UPDATE_TILE(13,15, HEART_TILE4 , 0);
+    //         // UPDATE_TILE(14,15, HEART_TILE4 , 0);
+            
+          
+           
+    //         // SpriteManagerAdd(SpriteTest, THIS->x - 3, THIS->y + 16);
+    //     }
+    // }
    
 
 }
