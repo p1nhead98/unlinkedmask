@@ -14,6 +14,7 @@
 IMPORT_MAP(lvl_1);
 IMPORT_MAP(lvl_2);
 IMPORT_MAP(lvl_3);
+IMPORT_MAP(lvl_4);
 IMPORT_MAP(window);
 DECLARE_MUSIC(song1);
 
@@ -44,6 +45,7 @@ const struct MapInfoBanked levels[] = {
 	BANKED_MAP(lvl_1),
 	BANKED_MAP(lvl_2),
 	BANKED_MAP(lvl_3),
+	BANKED_MAP(lvl_4),
 };
 
 typedef struct {
@@ -55,6 +57,7 @@ const START_POS start_positions[] = {
 	{50, 144}, //Level 1 Player Start Position
 	{50, 128}, //Level 2 Player Start Position
 	{50, 112}, //Level 3 Player Start Position
+	{50, 128}, //Level 4 Player Start Position
 };
 
 void START()
@@ -82,11 +85,13 @@ void START()
 	case 0:
 		MoveScroll(0,48);
 		break;
-	
 	case 1:
 		MoveScroll(0,48);
 		break;
 	case 2:
+		MoveScroll(0,48);
+		break;
+	case 3:
 		MoveScroll(0,48);
 		break;
 	}
