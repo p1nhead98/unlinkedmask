@@ -13,6 +13,17 @@
 #include "Banks/SetAutoBank.h"
 
 
+#define SCREEN_TILES_W       20 // 160 >> 3 = 20
+#define SCREEN_TILES_H       18 // 144 >> 3 = 18
+#define SCREEN_PAD_LEFT   1
+#define SCREEN_PAD_RIGHT  2
+#define SCREEN_PAD_TOP    1
+#define SCREEN_PAD_BOTTOM 2
+
+#define SCREEN_TILE_REFRES_W (SCREEN_TILES_W + SCREEN_PAD_LEFT + SCREEN_PAD_RIGHT)
+#define SCREEN_TILE_REFRES_H (SCREEN_TILES_H + SCREEN_PAD_TOP  + SCREEN_PAD_BOTTOM)
+
+
 UINT8 max_life = 2;
 UINT8 current_life = 2;
 INT16 inmunity = 0;
@@ -164,4 +175,21 @@ void JumpRandSound(BOOLEAN spin) BANKED{
         
     }
  
+}
+
+void ScrollRelocateMapTo(UINT16 new_x, UINT16 new_y) BANKED{
+    UINT8 i;
+    INT16 y;
+
+    // These are externs from scroll.h
+    // Update the
+    scroll_x = new_x;
+    scroll_y = new_y;
+
+    // PUSH_BANK(scroll_bank);
+    y = new_y >> 3;
+    for(i = 0u; i != (SCREEN_TILE_REFRES_H) && y != scroll_h; ++i, y ++) {
+        ScrollUpdateRow((scroll_x >> 3) - SCREEN_PAD_LEFT,  y - SCREEN_PAD_TOP);
+    }
+    // POP_BANK;
 }

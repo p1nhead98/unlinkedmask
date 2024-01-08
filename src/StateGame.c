@@ -86,19 +86,19 @@ void START()
 	switch (current_level)
 	{
 	case 0:
-		MoveScroll(0,48);
+		ScrollRelocateMapTo(0,48);
 		break;
 	case 1:
-		MoveScroll(0,48);
+		ScrollRelocateMapTo(0,48);
 		break;
 	case 2:
-		MoveScroll(0,48);
+		ScrollRelocateMapTo(0,48);
 		break;
 	case 3:
-		MoveScroll(0,48);
+		ScrollRelocateMapTo(0,48);
 		break;
 	case 4:
-		MoveScroll(0,48);
+		ScrollRelocateMapTo(0,48);
 		break;
 	}
 	

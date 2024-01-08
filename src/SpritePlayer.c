@@ -31,7 +31,7 @@ BOOLEAN canHurt;
 void CheckCollisionTile(CUSTOM_DATA* data)
 {
     UINT8 colision = GetScrollTile((THIS->x + 3u) >> 3, (THIS->y + 12u) >> 3);
-    // UINT8 colision2 = GetScrollTile((THIS->x + 3u) >> 3, (THIS->y + 16u) >> 3);
+    UINT8 colision2 = GetScrollTile((THIS->x + 3u) >> 3, (THIS->y + 16u) >> 3);
 
     const UINT8 HEART_TILE4 = 132;
 
@@ -60,8 +60,8 @@ void CheckCollisionTile(CUSTOM_DATA* data)
     //         data->state = 4;
     //         data->accel_y = -80;
     //         SetSpriteAnim(THIS, anim_jump, 40);
-    //         // UPDATE_TILE(13,15, HEART_TILE4 , 0);
-    //         // UPDATE_TILE(14,15, HEART_TILE4 , 0);
+    //         UPDATE_TILE(13,15, HEART_TILE4 , 0);
+    //         UPDATE_TILE(14,15, HEART_TILE4 , 0);
             
           
            
@@ -283,6 +283,15 @@ void UPDATE()
                 data->state = 4;
                 data->accel_y = -80;
                 SetSpriteAnim(THIS, anim_jump, 40);
+			}
+		}
+
+        if(spr->type == SpriteDoorTile1 || spr->type == SpriteDoorTile2 || spr->type == SpriteDoorTile3) {
+			if(CheckCollision(THIS, spr) ) {
+                current_life = 0;
+                ScreenShake(1,1);
+                RefreshLife();
+                SetState(current_state);
 			}
 		}
 
