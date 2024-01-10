@@ -47,7 +47,7 @@ void CheckCollisionTile(CUSTOM_DATA* data)
         
         //SpriteManagerRemove(THIS_IDX);
     }
-    if( colision == 108 || colision == 110 ){
+    if( colision2 == 108 || colision2 == 110 ){
         if((data->state == 2 || data->state == 3)){
             data->state = 3;
             data->accel_y = -80;

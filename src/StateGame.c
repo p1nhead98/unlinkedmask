@@ -101,6 +101,7 @@ void START()
 	switch (current_level)
 	{
 	case 0:
+		
 		ScrollRelocateMapTo(0,48);
 		break;
 	case 1:
@@ -140,11 +141,11 @@ void START()
 	NR52_REG = 0x80; //Enables sound, you should always setup this first
 	NR51_REG = 0xFF; //Enables all channels (left and right)
 	NR50_REG = 0x77; //Max volume
-	PlayMusic(song1, LOOP);
+	
 
 	INIT_HUD(window);
 	RefreshLife();
-	
+	PlayMusic(song1, 1);
 	
 }
 
