@@ -270,14 +270,14 @@ void UPDATE()
 
 
 	SPRITEMANAGER_ITERATE(i, spr) {
-		if(spr->type == SpritePlataforma1) {
+		if(spr->type == SpriteSpinOrb) {
 			if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && (data->state == 2 || data->state == 3)) {
                 data->state = 3;
                 data->accel_y = -80;
                 SetSpriteAnim(THIS, anim_spin, 40);
 			}
 		}
-        if(spr->type == SpritePlataforma2) {
+        if(spr->type == SpriteJumpBox) {
             CUSTOM_DATA* sprData = (CUSTOM_DATA*)spr->custom_data;
 			if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && sprData->state == 0 && (data->state == 1 || data->state == 4 )  ) {
                 data->state = 4;

@@ -9,7 +9,7 @@
 #include "ZGBMain.h"
 
 const UINT8 anim_box[] = {2, 0, 1};
-const UINT8 anim_box2[] = {2, 0, 0};
+const UINT8 anim_box2[] = {2, 2, 2};
 void START()
 {
     CUSTOM_DATA* data = (CUSTOM_DATA*)THIS->custom_data;
@@ -35,8 +35,7 @@ void UPDATE()
             if(THIS->anim_frame == 1){
                 data->state = 0;
                 SetSpriteAnim(THIS, anim_box, 20);
-                THIS->x = data->initial_x;
-                THIS->y = data->initial_y;
+             
             }
         break;
      }
@@ -49,9 +48,12 @@ void UPDATE()
     SPRITEMANAGER_ITERATE(i, spr) {
 		if(spr->type == SpritePlayer) {
 			if(CheckCollision(THIS, spr) && spr->y < (THIS->y - 5) && data->state == 0 && (playerData->state == 1 || playerData->state == 2 || playerData->state == 3 || playerData->state == 4)) {
-                THIS->y = -16;
+               
+             
                 data->state = 1;
                 SetSpriteAnim(THIS, anim_box2, 2);
+               
+                
 			}
 		}
 	}
