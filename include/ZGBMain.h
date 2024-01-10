@@ -16,7 +16,7 @@ _SPRITE_DMG(SpriteDoorTile3, doorTile3)\
 _SPRITE_DMG(SpriteDoorTile4, doorTile4)\
 _SPRITE_DMG(SpriteDoorButton, doorButton)\
 _SPRITE_DMG(SpriteTimeDoorClosed, timeDoorClosed)\
-_SPRITE_DMG(SpriteBlockParticle, blockParticle)\
+_SPRITE_DMG(SpriteSpinOrbActivable, plataforma1)\
 SPRITE_DEF_END
 
 #include "ZGBMain_Init.h"

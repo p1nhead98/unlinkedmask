@@ -35,7 +35,7 @@ void CheckCollisionTile(CUSTOM_DATA* data)
 
     const UINT8 HEART_TILE4 = 132;
 
-    if (colision == 113 || colision == 115)
+    if (colision == 112 || colision == 113 || colision == 114 || colision == 115)
     {
         if(canHurt){
             inmunity = 30;
@@ -274,6 +274,17 @@ void UPDATE()
 			if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && (data->state == 2 || data->state == 3)) {
                 data->state = 3;
                 data->accel_y = -80;
+                SetSpriteAnim(THIS, anim_spin, 40);
+			}
+		}
+        if(spr->type == SpriteSpinOrbActivable) {
+            CUSTOM_DATA* sprData = (CUSTOM_DATA*)spr->custom_data;
+			if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && (data->state == 2 || data->state == 3)) {
+                data->state = 3;
+                data->accel_y = -80;
+                if(sprData->state == 0){
+                    sprData->state = 1;
+                }
                 SetSpriteAnim(THIS, anim_spin, 40);
 			}
 		}
