@@ -163,14 +163,14 @@ void JumpRandSound(BOOLEAN spin) BANKED{
         if(!spin){
             PlayFx(CHANNEL_4, 10, 0x01, 0x29, 0x44, 0xc0);
         }else{
-            PlayFx(CHANNEL_4, 10, 0x2a, 0xcd, 0x34, 0xc0);
+            PlayFx(CHANNEL_4, 15, 0x2a, 0xcd, 0x34, 0xc0);
         }
         
     }else{
         if(!spin){
             PlayFx(CHANNEL_4, 10, 0x13, 0x29, 0x42, 0xc0);
         }else{
-            PlayFx(CHANNEL_4, 10, 0x2a, 0xcd, 0x33, 0xc0);  
+            PlayFx(CHANNEL_4, 15, 0x2a, 0xcd, 0x33, 0xc0);  
         }
         
     }
