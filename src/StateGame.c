@@ -22,11 +22,12 @@ IMPORT_MAP(lvl_7);
 IMPORT_MAP(lvl_8);
 IMPORT_MAP(lvl_9);
 IMPORT_MAP(lvl_10);
+IMPORT_MAP(lvl_11);
 IMPORT_MAP(window);
 DECLARE_MUSIC(song1);
 
 UINT8 collision_tiles[] = {4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 33, 34, 35, 36, 37, 38, 62, 63, 64, 65, 66, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 0};
-
+UINT8 collision_tiles2[] = {4, 5, 6, 7, 8, 9, 10, 12, 13, 14, 15, 16,17, 18, 19, 21, 22,23, 24, 25, 26, 27, 30, 31, 32, 33, 34, 39, 40, 41, 42 , 54, 55, 56, 57, 58, 59, 62, 63, 64, 65, 66, 67, 70, 71, 72, 73, 0};
 
 UBYTE counter;
 UINT16 p1, p2;
@@ -60,6 +61,7 @@ const struct MapInfoBanked levels[] = {
 	BANKED_MAP(lvl_8),
 	BANKED_MAP(lvl_9),
 	BANKED_MAP(lvl_10),
+	BANKED_MAP(lvl_11),
 };
 
 typedef struct {
@@ -79,6 +81,7 @@ const START_POS start_positions[] = {
 	{8, 96},  //Level 8 Player Start Position
 	{8, 128},  //Level 9 Player Start Position
 	{8, 128},  //Level 10 Player Start Position
+	{8, 128},  //Level 11 Player Start Position
 };
 
 void START()
@@ -100,8 +103,20 @@ void START()
 	OBP0_REG = PAL_DEF(3, 0, 1, 2);
 	OBP1_REG = PAL_DEF(1, 3, 1, 0);	
 	
+	if(current_level != 0){
+		INIT_HUD(window);
+		
+	}else{
+		HIDE_WIN;
+	}
+
+	if( current_level < 11){
+		InitScroll(level->bank, level->map, collision_tiles, 0);
+	}else if( current_level > 10){
+		InitScroll(level->bank, level->map, collision_tiles2, 0);
+	}
 	
-	InitScroll(level->bank, level->map, collision_tiles, 0);
+
 	if(current_level != 0){
 		scroll_target = SpriteManagerAdd(SpritePlayer, start_positions[current_level].start_x, start_positions[current_level].start_y);
 	}
@@ -144,6 +159,9 @@ void START()
 	case 11:
 		ScrollRelocateMapTo(0,48);
 		break;
+	case 12:
+		ScrollRelocateMapTo(0,48);
+		break;
 	}
 
 	
@@ -155,16 +173,16 @@ void START()
 	NR50_REG = 0x77; //Max volume
 	
 
-	
-	
 	if(current_level != 0){
-		INIT_HUD(window);
+
 		RefreshLife();
 		PlayMusic(song1, 1);
 		
 	}else{
 		HIDE_WIN;
 	}
+	
+	
 }
 
 void UPDATE()
