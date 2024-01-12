@@ -30,6 +30,9 @@ BOOLEAN canHurt;
 
 void CheckCollisionTile(CUSTOM_DATA* data)
 {
+
+
+
     UINT8 colision = GetScrollTile((THIS->x + 3u) >> 3, (THIS->y + 12u) >> 3);
     UINT8 colision2 = GetScrollTile((THIS->x + 3u) >> 3, (THIS->y + 16u) >> 3);
 
@@ -48,12 +51,14 @@ void CheckCollisionTile(CUSTOM_DATA* data)
         //SpriteManagerRemove(THIS_IDX);
     }
     if( colision2 == 108 || colision2 == 110 ){
-        if((data->state == 2 || data->state == 3)){
+        if((data->state == 2 || data->state == 3)  && data->accel_y > 0 ){
             data->state = 3;
             data->accel_y = -80;
             SetSpriteAnim(THIS, anim_spin, 40);
         }
     }
+
+
 
     // if( colision2 == 104 || colision2 == 106 ){
     //     if((data->state == 1 || data->state == 4 )){
@@ -288,12 +293,16 @@ void UPDATE()
                 SetSpriteAnim(THIS, anim_spin, 40);
 			}
 		}
-        if(spr->type == SpriteJumpBox) {
+        if(spr->type == SpriteJumpBox && data->accel_y > 0)  {
             CUSTOM_DATA* sprData = (CUSTOM_DATA*)spr->custom_data;
-			if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && sprData->state == 0 && (data->state == 1 || data->state == 4 )  ) {
-                data->state = 4;
-                data->accel_y = -80;
-                SetSpriteAnim(THIS, anim_jump, 40);
+			if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && sprData->state == 0 && (data->state == 1 || data->state == 2 || data->state == 4 )  ) {
+                if(data->state == 1 || data->state == 4){
+                    data->state = 4;
+                    data->accel_y = -80;
+                    SetSpriteAnim(THIS, anim_jump, 40);
+                }
+
+                sprData->state = 1;
 			}
 		}
 

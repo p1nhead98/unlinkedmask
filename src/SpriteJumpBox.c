@@ -32,6 +32,8 @@ void UPDATE()
             SetSpriteAnim(THIS, anim_box, 20);
         break;
         case 1:
+       
+                SetSpriteAnim(THIS, anim_box2, 2);
             if(THIS->anim_frame == 1){
                 data->state = 0;
                 SetSpriteAnim(THIS, anim_box, 20);
@@ -40,23 +42,6 @@ void UPDATE()
         break;
      }
 
-
-
-
-
-
-    SPRITEMANAGER_ITERATE(i, spr) {
-		if(spr->type == SpritePlayer) {
-			if(CheckCollision(THIS, spr) && spr->y < (THIS->y - 5) && data->state == 0 && (playerData->state == 1 || playerData->state == 2 || playerData->state == 3 || playerData->state == 4)) {
-               
-             
-                data->state = 1;
-                SetSpriteAnim(THIS, anim_box2, 2);
-               
-                
-			}
-		}
-	}
 }
 
 void DESTROY()
