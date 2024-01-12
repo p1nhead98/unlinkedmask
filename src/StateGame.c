@@ -11,6 +11,7 @@
 #include "Keys.h"
 
 
+IMPORT_MAP(titleScreen);
 IMPORT_MAP(lvl_1);
 IMPORT_MAP(lvl_2);
 IMPORT_MAP(lvl_3);
@@ -48,6 +49,7 @@ struct MapInfoBanked {
 #define BANKED_MAP(MAP) {BANK(MAP), &MAP}
 
 const struct MapInfoBanked levels[] = {
+	BANKED_MAP(titleScreen),
 	BANKED_MAP(lvl_1),
 	BANKED_MAP(lvl_2),
 	BANKED_MAP(lvl_3),
@@ -66,16 +68,17 @@ typedef struct {
 } START_POS;
 
 const START_POS start_positions[] = {
-	{50, 144}, //Level 1 Player Start Position
-	{50, 128}, //Level 2 Player Start Position
-	{50, 112}, //Level 3 Player Start Position
-	{50, 128}, //Level 4 Player Start Position
-	{50, 96},  //Level 5 Player Start Position
-	{50, 144},  //Level 6 Player Start Position
-	{50, 112},  //Level 7 Player Start Position
-	{50, 96},  //Level 8 Player Start Position
-	{50, 128},  //Level 9 Player Start Position
-	{50, 128},  //Level 10 Player Start Position
+	{8, 0}, //TitleScreen
+	{8, 144}, //Level 1 Player Start Position
+	{8, 128}, //Level 2 Player Start Position
+	{8, 112}, //Level 3 Player Start Position
+	{8, 128}, //Level 4 Player Start Position
+	{8, 96},  //Level 5 Player Start Position
+	{8, 144},  //Level 6 Player Start Position
+	{8, 112},  //Level 7 Player Start Position
+	{8, 96},  //Level 8 Player Start Position
+	{8, 128},  //Level 9 Player Start Position
+	{8, 128},  //Level 10 Player Start Position
 };
 
 void START()
@@ -86,6 +89,7 @@ void START()
 	// add_LCD(LCD_Interrupt);
 	// add_VBL(VBL_Interrupt);
 	// enable_interrupts();
+
 	const struct MapInfoBanked* level = &levels[current_level];
 
 	door_open = 0;
@@ -95,16 +99,19 @@ void START()
 
 	OBP0_REG = PAL_DEF(3, 0, 1, 2);
 	OBP1_REG = PAL_DEF(1, 3, 1, 0);	
-	scroll_target = SpriteManagerAdd(SpritePlayer, start_positions[current_level].start_x, start_positions[current_level].start_y);
+	
 	
 	InitScroll(level->bank, level->map, collision_tiles, 0);
+	if(current_level != 0){
+		scroll_target = SpriteManagerAdd(SpritePlayer, start_positions[current_level].start_x, start_positions[current_level].start_y);
+	}
+	
+	
 	switch (current_level)
 	{
-	case 0:
 		
-		ScrollRelocateMapTo(0,48);
-		break;
 	case 1:
+		
 		ScrollRelocateMapTo(0,48);
 		break;
 	case 2:
@@ -134,7 +141,12 @@ void START()
 	case 10:
 		ScrollRelocateMapTo(0,48);
 		break;
+	case 11:
+		ScrollRelocateMapTo(0,48);
+		break;
 	}
+
+	
 	
 
 	//set_interrupts(LCD_IFLAG | VBL_IFLAG );
@@ -143,16 +155,26 @@ void START()
 	NR50_REG = 0x77; //Max volume
 	
 
-	INIT_HUD(window);
-	RefreshLife();
-	PlayMusic(song1, 1);
 	
+	
+	if(current_level != 0){
+		INIT_HUD(window);
+		RefreshLife();
+		PlayMusic(song1, 1);
+		
+	}else{
+		HIDE_WIN;
+	}
 }
 
 void UPDATE()
 {
 	// vsync();
 	// scanline_offsets = scanline_offsets_tbl + ((sys_time >> 2) & 0x07u)
+	if(current_level == 0 && KEY_TICKED(J_START)){
+		current_level++;
+		SetState(current_state);		
+	}
 	if(door_open == 1 && --door_time == 0){
 		door_open = 0;
 		door_time = 100; 

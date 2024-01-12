@@ -29,7 +29,7 @@ UINT8 current_life = 2;
 INT16 inmunity = 0;
 INT8 pal_tick = 0;
 UINT8 current_pal = 0;
-
+UINT8 on_off = 0;
 
 
 void RefreshLife() BANKED

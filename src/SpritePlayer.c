@@ -34,9 +34,10 @@ void CheckCollisionTile(CUSTOM_DATA* data)
 
 
     UINT8 colision = GetScrollTile((THIS->x + 3u) >> 3, (THIS->y + 12u) >> 3);
-    UINT8 colision2 = GetScrollTile((THIS->x + 3u) >> 3, (THIS->y + 16u) >> 3);
+    UINT8 colision2 = GetScrollTile((THIS->x + 1u) >> 3, (THIS->y + 16u) >> 3);
+    UINT8 colision3 = GetScrollTile((THIS->x + 10u) >> 3, (THIS->y + 16u) >> 3);
 
-    const UINT8 HEART_TILE4 = 132;
+ 
 
     if (colision == 112 || colision == 113 || colision == 114 || colision == 115)
     {
@@ -50,29 +51,19 @@ void CheckCollisionTile(CUSTOM_DATA* data)
         
         //SpriteManagerRemove(THIS_IDX);
     }
-    if( colision2 == 108 || colision2 == 110 ){
-        if((data->state == 2 || data->state == 3)  && data->accel_y > 0 ){
+    if( (colision2 == 108 || colision2 == 110) ||  (colision3 == 108 || colision3 == 110)){
+        if((data->state == 2 || data->state == 3)  && data->accel_y > 2 ){
             data->state = 3;
             data->accel_y = -80;
+            PlayFx(CHANNEL_4, 10, 0x02, 0xf1, 0x40, 0xc0);
+            // PlayFx(CHANNEL_2, 10, 0xc1, 0xb1, 0x2b, 0x87);
             SetSpriteAnim(THIS, anim_spin, 40);
         }
     }
 
 
 
-    // if( colision2 == 104 || colision2 == 106 ){
-    //     if((data->state == 1 || data->state == 4 )){
-    //         data->state = 4;
-    //         data->accel_y = -80;
-    //         SetSpriteAnim(THIS, anim_jump, 40);
-    //         UPDATE_TILE(13,15, HEART_TILE4 , 0);
-    //         UPDATE_TILE(14,15, HEART_TILE4 , 0);
-            
-          
-           
-    //         // SpriteManagerAdd(SpriteTest, THIS->x - 3, THIS->y + 16);
-    //     }
-    // }
+
    
 
 }
@@ -83,16 +74,16 @@ void START()
 {
 
     CUSTOM_DATA* data = (CUSTOM_DATA*)THIS->custom_data;
-    data->state = 8;
+    data->state = 0;
     data->accel_y = 0;
     data->collision = 0;
     THIS->lim_x = 80;
-    THIS->lim_y = 80;
+    THIS->lim_y = 40;
     // data->direction = FALSE;
     // data->canDo = TRUE;
     data->counter = 2;
     data->accel_x = 0;
-    THIS->x = -16;
+    // THIS->x -= 17;
     canHurt = inmunity < 1 ? 1 : 0;
 }
 
@@ -226,7 +217,7 @@ void UPDATE()
             TranslateSprite(THIS, 1, 0);
             SetSpriteAnim(THIS, anim_walk, 15);
             THIS->mirror = NO_MIRROR;
-            if(THIS->x == 11){
+            if(THIS->x == 16){
                 data->state = 0;
             }
         break;
@@ -275,14 +266,16 @@ void UPDATE()
 
 
 	SPRITEMANAGER_ITERATE(i, spr) {
-		if(spr->type == SpriteSpinOrb) {
+		if(spr->type == SpriteSpinOrb && data->accel_y > 0) {
 			if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && (data->state == 2 || data->state == 3)) {
                 data->state = 3;
                 data->accel_y = -80;
+                 PlayFx(CHANNEL_4, 10, 0x02, 0xf1, 0x40, 0xc0);
+                 
                 SetSpriteAnim(THIS, anim_spin, 40);
 			}
 		}
-        if(spr->type == SpriteSpinOrbActivable) {
+        if(spr->type == SpriteSpinOrbActivable  && data->accel_y > 0) {
             CUSTOM_DATA* sprData = (CUSTOM_DATA*)spr->custom_data;
 			if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && (data->state == 2 || data->state == 3)) {
                 data->state = 3;
@@ -290,6 +283,7 @@ void UPDATE()
                 if(sprData->state == 0){
                     sprData->state = 1;
                 }
+                 PlayFx(CHANNEL_4, 10, 0x02, 0xf1, 0x40, 0xc0);
                 SetSpriteAnim(THIS, anim_spin, 40);
 			}
 		}
@@ -300,8 +294,9 @@ void UPDATE()
                     data->state = 4;
                     data->accel_y = -80;
                     SetSpriteAnim(THIS, anim_jump, 40);
+                    
                 }
-
+                PlayFx(CHANNEL_4, 10, 0x05, 0xf1, 0x70, 0xc0);
                 sprData->state = 1;
 			}
 		}
