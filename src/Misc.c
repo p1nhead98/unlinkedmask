@@ -193,3 +193,25 @@ void ScrollRelocateMapTo(UINT16 new_x, UINT16 new_y) BANKED{
     }
     // POP_BANK;
 }
+
+void RefreshTimer( UINT8 timer ) BANKED{
+
+    UINT8 i = 0;
+    UINT8 x = 0;
+    const UINT8 TIME_TILE  = 137;
+    const UINT8 TIME_TILE2 = 138;
+    const UINT8 CLEAN_TILE = 0;
+    if((timer - 1) == 6){
+        for (i = 0; i != (timer -1 ); ++i)
+        {
+            set_win_tiles(14 + i, 0, 1, 1, &TIME_TILE);
+            set_win_tiles(14 + i, 1, 1, 1, &TIME_TILE2); 
+        }
+    }else if(timer > 0){
+        set_win_tiles(14 + (timer - 1) , 0, 1, 1, &CLEAN_TILE);
+        set_win_tiles(14 + (timer - 1), 1, 1, 1, &CLEAN_TILE);
+    }
+
+
+  
+}

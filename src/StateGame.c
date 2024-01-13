@@ -33,15 +33,17 @@ UINT8 collision_tiles2[] = {4, 5, 6 ,7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18
 UBYTE counter;
 UINT16 p1, p2;
 
-UINT8 door_time;
-UINT8 door_open;
-BOOLEAN door_button;
+UINT8 door_time = 0;
+UINT8 door_time_btwn = 0;
+UINT8 door_time_btwn_start = 0;
+UINT8 door_open = 0;
+BOOLEAN door_button = 0;
 UINT8 current_level = 0;
 
 extern UINT8 max_life;
 extern UINT8 current_life;
 
-
+extern UINT8 stop_music_on_new_state;
 
 struct MapInfoBanked {
 	UINT8 bank;
@@ -95,16 +97,20 @@ void START()
 	// add_LCD(LCD_Interrupt);
 	// add_VBL(VBL_Interrupt);
 	// enable_interrupts();
+	current_level = 11;
+	stop_music_on_new_state = 0;
 
 	const struct MapInfoBanked* level = &levels[current_level];
 
 	door_open = 0;
 	door_button = 1;
-	door_time = 100;
+	door_time = 7;
+	
 	current_life = max_life;
 
 	OBP0_REG = PAL_DEF(3, 0, 1, 2);
-	OBP1_REG = PAL_DEF(1, 3, 1, 0);	
+	OBP1_REG = PAL_DEF(1, 3, 1, 0);
+
 	
 	if(current_level != 0){
 		INIT_HUD(window);
@@ -161,9 +167,11 @@ void START()
 		break;
 	case 11:
 		ScrollRelocateMapTo(0,48);
+		door_time_btwn_start = door_time_btwn = 15;
 		break;
 	case 12:
 		ScrollRelocateMapTo(0,48);
+		
 		break;
 	case 13:
 		ScrollRelocateMapTo(0,48);
@@ -199,10 +207,17 @@ void UPDATE()
 		current_level++;
 		SetState(current_state);		
 	}
-	if(door_open == 1 && --door_time == 0){
-		door_open = 0;
-		door_time = 100; 
+	if(door_open == 1 && --door_time_btwn == 0){
 		
+		door_time--; 
+		RefreshTimer(door_time);
+		door_time_btwn = door_time_btwn_start;
+		
+	}
+	if(door_time == 0){
+		door_open = 0;
+		door_time = 7;
+		RefreshTimer(door_time);
 	}
 	if (KEY_TICKED(J_SELECT) && !KEY_PRESSED(J_LEFT))
 	{
