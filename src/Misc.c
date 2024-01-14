@@ -198,18 +198,36 @@ void RefreshTimer( UINT8 timer ) BANKED{
 
     UINT8 i = 0;
     UINT8 x = 0;
+    
+    const UINT8 CLOCK_TILE  = 133;
+    const UINT8 CLOCK_TILE2 = 135;
+    const UINT8 CLOCK_TILE3  = 134;
+    const UINT8 CLOCK_TILE4 = 136;
+
     const UINT8 TIME_TILE  = 137;
     const UINT8 TIME_TILE2 = 138;
+    
     const UINT8 CLEAN_TILE = 0;
-    if((timer - 1) == 6){
-        for (i = 0; i != (timer -1 ); ++i)
+
+    if((timer) == 6){
+        set_win_tiles(12, 0, 1, 1, &CLOCK_TILE);
+        set_win_tiles(13, 0, 1, 1, &CLOCK_TILE2); 
+        set_win_tiles(12, 1, 1, 1, &CLOCK_TILE3);
+        set_win_tiles(13, 1, 1, 1, &CLOCK_TILE4); 
+        for (i = 0; i != (timer ); ++i)
         {
             set_win_tiles(14 + i, 0, 1, 1, &TIME_TILE);
             set_win_tiles(14 + i, 1, 1, 1, &TIME_TILE2); 
         }
     }else if(timer > 0){
-        set_win_tiles(14 + (timer - 1) , 0, 1, 1, &CLEAN_TILE);
-        set_win_tiles(14 + (timer - 1), 1, 1, 1, &CLEAN_TILE);
+        set_win_tiles(14 + (timer) , 0, 1, 1, &CLEAN_TILE);
+        set_win_tiles(14 + (timer), 1, 1, 1, &CLEAN_TILE);
+    }else{
+        for (i = 0; i != 8; ++i)
+        { 
+            set_win_tiles(12 + i, 0, 1, 1, &CLEAN_TILE);
+            set_win_tiles(12 + i, 1, 1, 1, &CLEAN_TILE); 
+        }
     }
 
 

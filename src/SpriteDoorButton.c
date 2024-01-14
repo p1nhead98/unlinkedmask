@@ -49,6 +49,7 @@ void UPDATE()
                 data->state = 1;
                 door_open = 1;
                 door_button = 0;
+                RefreshTimer(door_time);
 			}
 		}
 	}

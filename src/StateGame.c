@@ -104,7 +104,7 @@ void START()
 
 	door_open = 0;
 	door_button = 1;
-	door_time = 7;
+	door_time = 6;
 	
 	current_life = max_life;
 
@@ -216,8 +216,8 @@ void UPDATE()
 	}
 	if(door_time == 0){
 		door_open = 0;
-		door_time = 7;
-		RefreshTimer(door_time);
+		door_time = 6;
+		
 	}
 	if (KEY_TICKED(J_SELECT) && !KEY_PRESSED(J_LEFT))
 	{
