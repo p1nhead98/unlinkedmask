@@ -97,7 +97,7 @@ void START()
 	// add_LCD(LCD_Interrupt);
 	// add_VBL(VBL_Interrupt);
 	// enable_interrupts();
-	current_level = 11;
+
 	stop_music_on_new_state = 0;
 
 	const struct MapInfoBanked* level = &levels[current_level];
