@@ -85,7 +85,7 @@ const START_POS start_positions[] = {
 	{8, 96},  //Level 8 Player Start Position
 	{8, 128},  //Level 9 Player Start Position
 	{8, 128},  //Level 10 Player Start Position
-	{8, 128},  //Level 11 Player Start Position
+	{8, 144},  //Level 11 Player Start Position
 	{8, 96},  //Level 12 Player Start Position
 };
 
@@ -171,7 +171,7 @@ void START()
 		break;
 	case 12:
 		ScrollRelocateMapTo(0,48);
-		
+		door_time_btwn_start = door_time_btwn = 120;
 		break;
 	case 13:
 		ScrollRelocateMapTo(0,48);
