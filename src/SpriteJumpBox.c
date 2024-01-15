@@ -10,9 +10,13 @@
 
 const UINT8 anim_box[] = {2, 0, 1};
 const UINT8 anim_box2[] = {2, 2, 2};
+
+
+
+
 void START()
 {
-    CUSTOM_DATA* data = (CUSTOM_DATA*)THIS->custom_data;
+    CUSTOM_DATA_BOX* data = (CUSTOM_DATA_BOX*)THIS->custom_data;
     data->initial_x = THIS->x;
     data->initial_y = THIS->y;
     THIS->lim_x = 80;
@@ -22,7 +26,7 @@ void START()
 
 void UPDATE()
 {
-    CUSTOM_DATA* data = (CUSTOM_DATA*)THIS->custom_data;
+    CUSTOM_DATA_BOX* data = (CUSTOM_DATA_BOX*)THIS->custom_data;
     CUSTOM_DATA* playerData = (CUSTOM_DATA*)scroll_target->custom_data;
     UINT8 i;
 	Sprite* spr;

@@ -167,7 +167,7 @@ void START()
 		break;
 	case 11:
 		ScrollRelocateMapTo(0,48);
-		door_time_btwn_start = door_time_btwn = 15;
+		door_time_btwn_start = door_time_btwn = 30;
 		break;
 	case 12:
 		ScrollRelocateMapTo(0,48);

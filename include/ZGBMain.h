@@ -17,6 +17,8 @@ _SPRITE_DMG(SpriteDoorTile4, doorTile4)\
 _SPRITE_DMG(SpriteDoorButton, doorButton)\
 _SPRITE_DMG(SpriteTimeDoorClosed, timeDoorClosed)\
 _SPRITE_DMG(SpriteSpinOrbActivable, plataforma1)\
+_SPRITE_DMG(SpritePlayerDeath, playerDeath)\
+_SPRITE_DMG(SpritePlayerVfx, playerVFX)\
 SPRITE_DEF_END
 
 #include "ZGBMain_Init.h"

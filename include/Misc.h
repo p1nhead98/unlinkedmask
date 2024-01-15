@@ -25,6 +25,16 @@ typedef struct {
 	UINT16 initial_y;
 } CUSTOM_DATA;
 
+typedef struct {
+	INT8 state;
+	UINT16 initial_x;
+	UINT16 initial_y;
+} CUSTOM_DATA_BOX;
+
+typedef struct {
+	INT8 state;
+} CUSTOM_DATA_ORB;
+
 void RefreshLife() BANKED;
 // void ScreenVerticalShake(UINT8 framesBtw, UINT8 seconds, UINT8 intensity) BANKED;
 void pDelay(UINT8 numloops) BANKED;

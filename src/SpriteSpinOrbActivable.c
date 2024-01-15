@@ -8,7 +8,7 @@
 #include "Math.h"
 #include "ZGBMain.h"
 
-void CheckCollisionTilePlt2(CUSTOM_DATA* data)
+void CheckCollisionTilePlt2(CUSTOM_DATA_ORB* data)
 {
     UINT8 colision = GetScrollTile((THIS->x + 3u) >> 3, (THIS->y + 4u) >> 3);
     // UINT8 colision2 = GetScrollTile((THIS->x + 3u) >> 3, (THIS->y + 16u) >> 3);
@@ -37,7 +37,7 @@ void CheckCollisionTilePlt2(CUSTOM_DATA* data)
 
 void START()
 {
-    CUSTOM_DATA* data = (CUSTOM_DATA*)THIS->custom_data;
+    CUSTOM_DATA_ORB* data = (CUSTOM_DATA_ORB*)THIS->custom_data;
     data->state = 0;
     THIS->y -= 4;
     THIS->x - 8;
@@ -47,7 +47,7 @@ void START()
 
 void UPDATE()
 {
-    CUSTOM_DATA* data = (CUSTOM_DATA*)THIS->custom_data;
+    CUSTOM_DATA_ORB* data = (CUSTOM_DATA_ORB*)THIS->custom_data;
     UINT8 i;
 	Sprite* spr;
 
