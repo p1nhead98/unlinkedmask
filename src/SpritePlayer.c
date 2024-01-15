@@ -229,6 +229,36 @@ void UPDATE()
                 SetState(current_state);
             }
         break;
+        case 10:
+            if(data->accel_y < 70){
+                if(KEY_TICKED(J_A)){
+                data->state = 1;
+                data->accel_y = -80;
+                JumpRandSound(0);
+                SetSpriteAnim(THIS, anim_jump, 15);
+                }
+                if(KEY_TICKED(J_B)){
+                    data->state = 2;
+                    data->accel_y = -80;
+                    JumpRandSound(1);
+                    SetSpriteAnim(THIS, anim_spin, 40);
+                }
+
+            }
+            
+            if (data->accel_y > 2)
+            {
+                SetSpriteAnim(THIS, anim_fall, 15);
+            }
+            if(KEY_PRESSED(J_LEFT) && !KEY_PRESSED(J_RIGHT) && THIS->x > scroll_x + 2){
+                TranslateSprite(THIS, -2, 0);
+                THIS->mirror = V_MIRROR;
+                  
+            }else if(KEY_PRESSED(J_RIGHT) && !KEY_PRESSED(J_LEFT)){
+                TranslateSprite(THIS, 2, 0);
+                THIS->mirror = NO_MIRROR;
+            }
+        break;
     }
 
    
@@ -249,7 +279,7 @@ void UPDATE()
         if (data->collision && !TranslateSprite(THIS, 0, (data->accel_y >> (-4 << delta_time))))
         {
             data->accel_y = 0;
-            if (data->state == 1 || data->state == 2 || data->state == 3 || data->state == 4)
+            if (data->state == 1 || data->state == 2 || data->state == 3 || data->state == 4 || data->state == 10)
             {
                 data->state = 0;
                 SetSpriteAnim(THIS, anim_idle, 15);
@@ -257,7 +287,7 @@ void UPDATE()
         }
         if (data->state == 0 && data->accel_y >= 20)
         {
-            data->state = 1;
+            data->state = 10;
         }
     }
 
