@@ -7,6 +7,7 @@
 #include "Music.h"
 #include "Scroll.h"
 #include "Misc.h"
+#include "TileAnimation.h"
 #include <gb/gb.h>
 #include "Keys.h"
 
@@ -40,10 +41,20 @@ UINT8 door_open = 0;
 BOOLEAN door_button = 0;
 UINT8 current_level = 0;
 
+UINT8 doAnimCount;
+UINT8 AnimCounter;
+
+
+
 extern UINT8 max_life;
 extern UINT8 current_life;
-
 extern UINT8 stop_music_on_new_state;
+extern UINT8 on_off;
+
+IMPORT_TILES(spikesAnim);
+IMPORT_TILES(spikesAnim2);
+IMPORT_TILES(spikesAnim3);
+IMPORT_TILES(spikesAnim4);
 
 struct MapInfoBanked {
 	UINT8 bank;
@@ -100,12 +111,18 @@ void START()
 
 	stop_music_on_new_state = 0;
 
+	current_level = 11;
 	const struct MapInfoBanked* level = &levels[current_level];
 
 	door_open = 0;
 	door_button = 1;
 	door_time = 6;
+
+	doAnimCount = 3;
+	AnimCounter = 0;
 	
+	on_off = 0;
+
 	current_life = max_life;
 
 	OBP0_REG = PAL_DEF(3, 0, 1, 2);
@@ -167,7 +184,8 @@ void START()
 		break;
 	case 11:
 		ScrollRelocateMapTo(0,48);
-		door_time_btwn_start = door_time_btwn = 30;
+		door_time_btwn_start = door_time_btwn = 35;
+		SetOnOffCols(collision_tiles2, on_off);
 		break;
 	case 12:
 		ScrollRelocateMapTo(0,48);
@@ -203,6 +221,17 @@ void UPDATE()
 {
 	// vsync();
 	// scanline_offsets = scanline_offsets_tbl + ((sys_time >> 2) & 0x07u)
+	if(--doAnimCount == 0 ){
+		
+		
+		AnimCounter++;
+		Tile_Anim(AnimCounter , 2, &spikesAnim, 112, BANK(spikesAnim));
+		Tile_Anim(AnimCounter , 2, &spikesAnim2, 114, BANK(spikesAnim2));
+		Tile_Anim(AnimCounter , 2, &spikesAnim3, 113, BANK(spikesAnim3));
+		Tile_Anim(AnimCounter , 2, &spikesAnim4, 115, BANK(spikesAnim4));
+		// Tile_Anim(AnimCounter + 8, 16, &cloudAnim1, 46, BANK(cloudAnim1));
+		doAnimCount = 5;
+	}
 	if(current_level == 0 && KEY_TICKED(J_START)){
 		current_level++;
 		SetState(current_state);		
@@ -227,5 +256,9 @@ void UPDATE()
 	{
 		current_level--;
 		SetState(current_state);
+	}
+
+	if(KEY_TICKED(J_START)){
+		
 	}
 }

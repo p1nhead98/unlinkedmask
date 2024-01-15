@@ -10,6 +10,7 @@
 #include "Sound.h"
 #include "Music.h"
 #include "rand.h"
+#include "TileAnimation.h"
 #include "Banks/SetAutoBank.h"
 
 
@@ -31,6 +32,8 @@ INT8 pal_tick = 0;
 UINT8 current_pal = 0;
 UINT8 on_off = 0;
 
+IMPORT_TILES(OnAnim);
+IMPORT_TILES(OffAnim);
 
 void RefreshLife() BANKED
 {
@@ -87,42 +90,6 @@ void RefreshLife() BANKED
 
 }
 
-// void ScreenVerticalShake(UINT8 framesBtw, UINT8 seconds, UINT8 intensity) BANKED
-// {
-//     UINT16 initial_y = scroll_y;
-//     UINT8 initialSeconds = seconds;
-//     UINT8 initTime = 0;
-//     UINT8 i = 0;
-//     UINT8 x = 0;
-
-//     for (i = 0; i != seconds; ++i)
-//     {
-//         if(scroll_y == initial_y){
-//             scroll_y = scroll_y + intensity;
-//         }else{
-//             for (x = 0; x != framesBtw; ++x){
-//                 if(x == (framesBtw -1)){
-//                     scroll_y = scroll_y - intensity;
-//                 }
-//             }
-            
-//         }  
-//     }
-    
-   
-//     // if(--seconds == 0){
-//     //     if(initTime != times){
-        
-//     //         if(initTime % 2 == 0){
-//     //             scroll_y = scroll_y - intensity;
-//     //         }else{
-//     //             scroll_y = initial_y;
-//     //         }
-//     //         initTime++;
-//     //         seconds = initialSeconds;
-//     //     }
-//     // }
-// }
 
 void pDelay(UINT8 numloops) BANKED
 {
@@ -232,4 +199,39 @@ void RefreshTimer( UINT8 timer ) BANKED{
 
 
   
+}
+
+void SetOnOffCols(UINT8 cols[], UINT8 onOff ) BANKED{
+
+    UINT8 i = 0;
+
+    if(onOff == 0){
+		for(i = 0u; cols[i] != 0u; ++i) {
+            if(i > 15u && i < 20u){
+				scroll_collisions[cols[i]] = 1u;
+				scroll_collisions_down[cols[i]] = 1u;
+			}else if(i > 19u){
+				scroll_collisions[cols[i]] = 0u;
+				scroll_collisions_down[cols[i]] = 0u;
+			}
+            
+		}
+        Onoff_tile_anim(&OffAnim, 0, BANK(OffAnim), 60);
+        Onoff_tile_anim(&OnAnim, 0, BANK(OnAnim), 56);
+        
+    }else if(onOff == 1){
+        for(i = 0u; cols[i] != 0u; ++i) {
+            if(i > 15u && i < 20u){
+				scroll_collisions[cols[i]] = 0u;
+				scroll_collisions_down[cols[i]] = 0u;
+			}else if(i > 19u){
+				scroll_collisions[cols[i]] = 1u;
+				scroll_collisions_down[cols[i]] = 1u;
+			}
+		}
+
+        Onoff_tile_anim(&OnAnim, 0, BANK(OnAnim), 60);
+        Onoff_tile_anim(&OffAnim, 0, BANK(OffAnim), 56);
+    }
+
 }

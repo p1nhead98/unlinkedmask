@@ -17,6 +17,8 @@
         "setautobank.h": "c",
         "zgbmain.h": "c",
         "misc.h": "c",
-        "palette.h": "c"
+        "palette.h": "c",
+        "zgbmain_init.h": "c",
+        "tileanimation.h": "c"
     }
 }
