@@ -23,6 +23,7 @@ extern INT8 pal_tick;
 extern UINT8 current_pal;
 extern UINT8 current_life;
 extern UINT8 current_level;
+extern UINT8 door_open;
 BOOLEAN canHurt;
 
 
@@ -69,6 +70,13 @@ void CheckCollisionTile()
             SetSpriteAnim(THIS, anim_spin, 20);
             SpriteManagerAdd(SpritePlayerVfx, THIS->x - 4, THIS->y + 8);
         }
+    }
+    if( (colision > 63 && colision < 76) && current_level > 10 && current_life != 0 && door_open == 0){
+        current_life = 0;
+        ScreenShake(1,1);
+        RefreshLife();
+        SetSpriteAnim(THIS, anim_death, 15);
+        player_state = 11;
     }
 
 
@@ -282,7 +290,7 @@ void UPDATE()
     }
 
    
-    if (player_state != 8 && player_state != 9)
+    if (player_state != 8 && player_state != 9 && player_state != 11)
     {
 
         if (player_accel_y < 90)
@@ -374,7 +382,7 @@ void UPDATE()
 
         if(spr->type == SpriteOnOffBtn) {
             CUSTOM_DATA_BOX* sprData = (CUSTOM_DATA_BOX*)spr->custom_data;
-			if(CheckCollision(THIS, spr) && THIS->y > (spr->y) && (player_state == 1 || player_state == 2 || player_state == 3 || player_state == 4) ) {
+			if(CheckCollision(THIS, spr) && THIS->y > (spr->y) && (player_state == 1 || player_state == 2 || player_state == 3 || player_state == 4) && player_accel_y < 0) {
                 // THIS->y -= 5;
                 player_accel_y = 20;
                 if(player_state == 1 || player_state == 4){
@@ -382,7 +390,7 @@ void UPDATE()
                     SetSpriteAnim(THIS, anim_jump, 20);
                 }else{
                     player_state = 3;
-                    SetSpriteAnim(THIS, anim_jump, 20);
+                    SetSpriteAnim(THIS, anim_spin, 20);
                 }
                 if(sprData->state == 0){
                     sprData->state = 1;

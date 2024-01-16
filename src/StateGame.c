@@ -41,8 +41,8 @@ UINT8 door_open = 0;
 BOOLEAN door_button = 0;
 UINT8 current_level = 0;
 
-UINT8 doAnimCount;
-UINT8 AnimCounter;
+UINT8 doAnimCount = 0;
+UINT8 AnimCounter = 0;
 
 
 
@@ -50,6 +50,7 @@ extern UINT8 max_life;
 extern UINT8 current_life;
 extern UINT8 stop_music_on_new_state;
 extern UINT8 on_off;
+
 
 IMPORT_TILES(spikesAnim);
 IMPORT_TILES(spikesAnim2);
@@ -111,7 +112,6 @@ void START()
 
 	stop_music_on_new_state = 0;
 
-	current_level = 11;
 	const struct MapInfoBanked* level = &levels[current_level];
 
 	door_open = 0;
@@ -190,9 +190,11 @@ void START()
 	case 12:
 		ScrollRelocateMapTo(0,48);
 		door_time_btwn_start = door_time_btwn = 120;
+		SetOnOffCols(collision_tiles2, on_off);
 		break;
 	case 13:
 		ScrollRelocateMapTo(0,48);
+		SetOnOffCols(collision_tiles2, on_off);
 		break;
 	}
 
@@ -246,6 +248,8 @@ void UPDATE()
 	if(door_time == 0){
 		door_open = 0;
 		door_time = 6;
+		door_button = 1;
+		SetDoorCols( 0 );
 		
 	}
 	if (KEY_TICKED(J_SELECT) && !KEY_PRESSED(J_LEFT))

@@ -34,6 +34,8 @@ UINT8 on_off = 0;
 
 IMPORT_TILES(OnAnim);
 IMPORT_TILES(OffAnim);
+IMPORT_TILES(darkTileAnim);
+IMPORT_TILES(doorAnim);
 
 void RefreshLife() BANKED
 {
@@ -234,4 +236,15 @@ void SetOnOffCols(UINT8 cols[], UINT8 onOff ) BANKED{
         Onoff_tile_anim(&OffAnim, 0, BANK(OffAnim), 56);
     }
 
+}
+
+void SetDoorCols(UINT8 off) BANKED{
+    if(off == 1){
+        Door_Anim(&darkTileAnim, 0, BANK(darkTileAnim), 64, 1);
+        Tile_Anim(9 , 12, &doorAnim, 64, BANK(doorAnim));
+        Tile_Anim(11 , 12, &doorAnim, 66, BANK(doorAnim));
+    }else{
+        Door_Anim(&doorAnim, 0, BANK(doorAnim), 64, 0);
+    }
+     
 }
