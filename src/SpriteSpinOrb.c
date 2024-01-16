@@ -13,11 +13,11 @@ void CheckCollisionTilePlt(CUSTOM_DATA* data)
     UINT8 colision = GetScrollTile((THIS->x + 3u) >> 3, (THIS->y + 4u) >> 3);
     // UINT8 colision2 = GetScrollTile((THIS->x + 3u) >> 3, (THIS->y + 16u) >> 3);
     if(data->state == 1){
-        colision = GetScrollTile((THIS->x) >> 3, (THIS->y + 4u) >> 3);
+        colision = GetScrollTile((THIS->x + 3u) >> 3, (THIS->y + 4u) >> 3);
     }else if (data->state == 2){
-        colision = GetScrollTile((THIS->x) >> 3, (THIS->y + 10u) >> 3);
+        colision = GetScrollTile((THIS->x + 3u) >> 3, (THIS->y + 10u) >> 3);
     }else if(data->state == 3){
-        colision = GetScrollTile((THIS->x + 8u) >> 3, (THIS->y + 4u) >> 3);
+        colision = GetScrollTile((THIS->x + 10u) >> 3, (THIS->y + 4u) >> 3);
     }
 
 
@@ -40,7 +40,7 @@ void START()
     CUSTOM_DATA* data = (CUSTOM_DATA*)THIS->custom_data;
     data->state = 0;
     THIS->y -= 4;
-    THIS->x - 8;
+    THIS->x -= 3;
 }
 
 void UPDATE()

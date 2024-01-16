@@ -31,12 +31,13 @@ void UPDATE()
     switch(data->state){
         case 0:
             SetSpriteAnim(THIS, door_op, 0);
-          
+
         break;
         case 1:
                 
             if(door_button == 1){
                 data->state = 0;
+               
             }
         break;
 
@@ -50,6 +51,7 @@ void UPDATE()
                 door_open = 1;
                 door_button = 0;
                 RefreshTimer(door_time);
+                SetDoorCols( 1 );
 			}
 		}
 	}

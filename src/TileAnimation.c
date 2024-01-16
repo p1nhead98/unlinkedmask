@@ -38,6 +38,22 @@ void Onoff_tile_anim(struct TilesInfo *tile, UINT8 tileStart, UINT8 bank, UINT8 
 	Tile_Anim(tileStart + 3, 12, tile, firstTile + 3, bank);
     POP_BANK;
 }
+void Door_Anim(struct TilesInfo *tile, UINT8 tileStart, UINT8 bank, UINT8 firstTile, UINT8 off) BANKED{
+    UINT8 i = 0;
+    PUSH_BANK(bank);
+    for ( i = 0; i < 12; i++)
+    {
+        if(off == 1){
+            Tile_Anim(tileStart, 12, tile, firstTile + i, bank);
+        }else{
+            Tile_Anim(tileStart + i, 12, tile, firstTile + i, bank);
+        }
+        
+    }
+    
+ 
+    POP_BANK;
+}
 
 // void WarningTileAnim(UINT8 x, struct TilesInfo *tile, UINT8 first_tile, UINT8 bank){
 

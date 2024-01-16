@@ -25,8 +25,6 @@ IMPORT_MAP(lvl_9);
 IMPORT_MAP(lvl_10);
 IMPORT_MAP(lvl_11);
 IMPORT_MAP(lvl_12);
-IMPORT_MAP(lvl_13);
-IMPORT_MAP(lvl_14);
 IMPORT_MAP(window);
 DECLARE_MUSIC(song1);
 
@@ -43,8 +41,8 @@ UINT8 door_open = 0;
 BOOLEAN door_button = 0;
 UINT8 current_level = 0;
 
-UINT8 doAnimCount;
-UINT8 AnimCounter;
+UINT8 doAnimCount = 0;
+UINT8 AnimCounter = 0;
 
 
 
@@ -52,6 +50,7 @@ extern UINT8 max_life;
 extern UINT8 current_life;
 extern UINT8 stop_music_on_new_state;
 extern UINT8 on_off;
+
 
 IMPORT_TILES(spikesAnim);
 IMPORT_TILES(spikesAnim2);
@@ -79,8 +78,6 @@ const struct MapInfoBanked levels[] = {
 	BANKED_MAP(lvl_10),
 	BANKED_MAP(lvl_11),
 	BANKED_MAP(lvl_12),
-	BANKED_MAP(lvl_13),
-	BANKED_MAP(lvl_14),
 };
 
 typedef struct {
@@ -102,8 +99,6 @@ const START_POS start_positions[] = {
 	{8, 128},  //Level 10 Player Start Position
 	{8, 144},  //Level 11 Player Start Position
 	{8, 96},  //Level 12 Player Start Position
-	{8, 96},  //Level 13 Player Start Position
-	{8, 96},  //Level 14 Player Start Position
 };
 
 void START()
@@ -117,7 +112,6 @@ void START()
 
 	stop_music_on_new_state = 0;
 
-	//current_level = 11;
 	const struct MapInfoBanked* level = &levels[current_level];
 
 	door_open = 0;
@@ -190,22 +184,16 @@ void START()
 		break;
 	case 11:
 		ScrollRelocateMapTo(0,48);
-		door_time_btwn_start = door_time_btwn = 45;
+		door_time_btwn_start = door_time_btwn = 35;
 		SetOnOffCols(collision_tiles2, on_off);
 		break;
 	case 12:
 		ScrollRelocateMapTo(0,48);
-		door_time_btwn_start = door_time_btwn = 135;
+		door_time_btwn_start = door_time_btwn = 120;
 		SetOnOffCols(collision_tiles2, on_off);
 		break;
 	case 13:
 		ScrollRelocateMapTo(0,48);
-		door_time_btwn_start = door_time_btwn = 135;
-		SetOnOffCols(collision_tiles2, on_off);
-		break;
-	case 14:
-		ScrollRelocateMapTo(0,48);
-		door_time_btwn_start = door_time_btwn = 135;
 		SetOnOffCols(collision_tiles2, on_off);
 		break;
 	}
@@ -260,6 +248,8 @@ void UPDATE()
 	if(door_time == 0){
 		door_open = 0;
 		door_time = 6;
+		door_button = 1;
+		SetDoorCols( 0 );
 		
 	}
 	if (KEY_TICKED(J_SELECT) && !KEY_PRESSED(J_LEFT))
