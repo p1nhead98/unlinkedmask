@@ -29,6 +29,7 @@ IMPORT_MAP(lvl_13);
 IMPORT_MAP(lvl_14);
 IMPORT_MAP(window);
 DECLARE_MUSIC(song1);
+DECLARE_MUSIC(unlinkedmaskwip_1);
 
 UINT8 collision_tiles[] = {4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 33, 34, 35, 36, 37, 38, 62, 63, 64, 65, 66, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 0};
 UINT8 collision_tiles2[] = {4, 5, 6 ,7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 56, 57, 58, 59, 60, 61, 62, 63, 0};
@@ -215,12 +216,16 @@ void START()
 	NR52_REG = 0x80; //Enables sound, you should always setup this first
 	NR51_REG = 0xFF; //Enables all channels (left and right)
 	NR50_REG = 0x77; //Max volume
-	
+		#ifdef CGB
+		TMA_REG = _cpu == CGB_TYPE ? 120U : 0xBCU;
+#else
+		TMA_REG = 180u;
+#endif
 
 	if(current_level != 0){
 
 		RefreshLife();
-		PlayMusic(song1, 1);
+		PlayMusic(unlinkedmaskwip_1, 1);
 		
 	}else{
 		HIDE_WIN;

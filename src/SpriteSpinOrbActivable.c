@@ -12,11 +12,11 @@ void CheckCollisionTilePlt2(CUSTOM_DATA_ORB* data)
 {
     UINT8 colision = GetScrollTile((THIS->x + 3u) >> 3, (THIS->y + 4u) >> 3);
     // UINT8 colision2 = GetScrollTile((THIS->x + 3u) >> 3, (THIS->y + 16u) >> 3);
-    if(data->state == 1){
+    if (data->state == 2){
         colision = GetScrollTile((THIS->x + 3u) >> 3, (THIS->y + 4u) >> 3);
-    }else if (data->state == 2){
-        colision = GetScrollTile((THIS->x + 3u) >> 3, (THIS->y + 10u) >> 3);
     }else if(data->state == 3){
+        colision = GetScrollTile((THIS->x + 10u) >> 3, (THIS->y + 10u) >> 3);
+    }else if(data->state == 4){
         colision = GetScrollTile((THIS->x + 10u) >> 3, (THIS->y + 4u) >> 3);
     }
 
