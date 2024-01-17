@@ -25,6 +25,8 @@ IMPORT_MAP(lvl_9);
 IMPORT_MAP(lvl_10);
 IMPORT_MAP(lvl_11);
 IMPORT_MAP(lvl_12);
+IMPORT_MAP(lvl_13);
+IMPORT_MAP(lvl_14);
 IMPORT_MAP(window);
 DECLARE_MUSIC(song1);
 
@@ -78,6 +80,8 @@ const struct MapInfoBanked levels[] = {
 	BANKED_MAP(lvl_10),
 	BANKED_MAP(lvl_11),
 	BANKED_MAP(lvl_12),
+	BANKED_MAP(lvl_13),
+	BANKED_MAP(lvl_14),
 };
 
 typedef struct {
@@ -193,6 +197,10 @@ void START()
 		SetOnOffCols(collision_tiles2, on_off);
 		break;
 	case 13:
+		ScrollRelocateMapTo(0,48);
+		SetOnOffCols(collision_tiles2, on_off);
+		break;
+	case 14:
 		ScrollRelocateMapTo(0,48);
 		SetOnOffCols(collision_tiles2, on_off);
 		break;
