@@ -103,6 +103,8 @@ const START_POS start_positions[] = {
 	{8, 128},  //Level 10 Player Start Position
 	{8, 144},  //Level 11 Player Start Position
 	{8, 96},  //Level 12 Player Start Position
+	{8, 96},  //Level 13 Player Start Position
+	{8, 96},  //Level 14 Player Start Position
 };
 
 void START()
