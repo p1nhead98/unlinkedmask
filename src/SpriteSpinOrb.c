@@ -41,6 +41,7 @@ void START()
     data->state = 0;
     THIS->y -= 4;
     THIS->x -= 3;
+    THIS->lim_x = 80;
 }
 
 void UPDATE()
