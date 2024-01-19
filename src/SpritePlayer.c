@@ -27,10 +27,11 @@ extern UINT8 door_open;
 BOOLEAN canHurt;
 
 
-INT16 player_accel_y;
-INT16 player_accel_x;
-INT8 player_state;
-UINT8 player_collision;
+INT16 player_accel_y = 0;
+INT16 player_accel_x = 0;
+INT8 player_state = 0;
+UINT8 player_collision = 0;
+UINT8 player_last_state = 0;
 
 
 
@@ -62,7 +63,7 @@ void CheckCollisionTile()
         //SpriteManagerRemove(THIS_IDX);
     }
     if( (colision2 == 108 || colision2 == 110) ||  (colision3 == 108 || colision3 == 110)){
-        if((player_state == 2 || player_state == 3)  && player_accel_y > 2 ){
+        if((player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 1))  && player_accel_y > 2 ){
             player_state = 3;
             player_accel_y = -82;
             PlayFx(CHANNEL_4, 10, 0x02, 0xf1, 0x40, 0xc0);
@@ -97,7 +98,7 @@ void START()
     THIS->lim_y = 40;
     // player_direction = FALSE;
     // player_canDo = TRUE;
-
+    player_last_state = 0;
     player_accel_x = 0;
     // THIS->x -= 17;
     canHurt = inmunity < 1 ? 1 : 0;
@@ -161,6 +162,7 @@ void UPDATE()
                 player_accel_y = -82;
                 JumpRandSound(0);
                 SetSpriteAnim(THIS, anim_jump, 15);
+                player_last_state = 0;
                 SpriteManagerAdd(SpritePlayerVfx, THIS->x - 4, THIS->y + 8);
             }
             if(KEY_TICKED(J_B)){
@@ -168,6 +170,7 @@ void UPDATE()
                 player_accel_y = -82;
                 JumpRandSound(1);
                 SetSpriteAnim(THIS, anim_spin, 20);
+                player_last_state = 1;
                 SpriteManagerAdd(SpritePlayerVfx, THIS->x - 4, THIS->y + 8);
             }
         break;
@@ -270,7 +273,8 @@ void UPDATE()
             
             if (player_accel_y > 2)
             {
-                SetSpriteAnim(THIS, anim_fall, 15);
+                
+                SetSpriteAnim(THIS, player_last_state == 1 ? anim_spin : anim_fall, 15);
             }
             if(KEY_PRESSED(J_LEFT) && !KEY_PRESSED(J_RIGHT) && THIS->x > scroll_x + 2){
                 TranslateSprite(THIS, -2, 0);
@@ -325,7 +329,7 @@ void UPDATE()
 
 	SPRITEMANAGER_ITERATE(i, spr) {
 		if(spr->type == SpriteSpinOrb && player_accel_y > 0) {
-			if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && (player_state == 2 || player_state == 3)) {
+			if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && (player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 1))) {
                 player_state = 3;
                 player_accel_y = -82;
                  PlayFx(CHANNEL_4, 10, 0x02, 0xf1, 0x40, 0xc0);
@@ -336,7 +340,7 @@ void UPDATE()
 		}
         if(spr->type == SpriteSpinOrbActivable  && player_accel_y > 0) {
             CUSTOM_DATA_ORB* sprData = (CUSTOM_DATA_ORB*)spr->custom_data;
-			if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && (player_state == 2 || player_state == 3)) {
+			if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && (player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 1))) {
                 player_state = 3;
                 player_accel_y = -82;
                 if(sprData->state == 0){
@@ -349,8 +353,8 @@ void UPDATE()
 		}
         if(spr->type == SpriteJumpBox && player_accel_y > 0)  {
             CUSTOM_DATA_BOX* sprData = (CUSTOM_DATA_BOX*)spr->custom_data;
-			if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && sprData->state == 0 && (player_state == 1 || player_state == 2 || player_state == 4 )  ) {
-                if(player_state == 1 || player_state == 4){
+			if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && sprData->state == 0 && (player_state == 1 || player_state == 2 || player_state == 4 || (player_state == 10))  ) {
+                if(player_state == 1 || player_state == 4 || (player_state == 10 && player_last_state == 0)){
                     player_state = 4;
                     player_accel_y = -82;
                     SetSpriteAnim(THIS, anim_jump, 40);   
@@ -372,7 +376,7 @@ void UPDATE()
 		}
 
         if(spr->type == SpriteCrusherDown) {
-			if(CheckCollision(THIS, spr) && THIS->y < (spr->y) && (player_state == 2 || player_state == 3) ) {
+			if(CheckCollision(THIS, spr) && THIS->y < (spr->y) && (player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 1)) ) {
                 // THIS->y -= 5;
                 player_state = 3;
                 player_accel_y = -82;
