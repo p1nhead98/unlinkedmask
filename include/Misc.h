@@ -33,6 +33,8 @@ typedef struct {
 
 typedef struct {
 	INT8 state;
+	UINT16 speed;
+	UINT16 initial_speed;
 } CUSTOM_DATA_ORB;
 
 void RefreshLife() BANKED;

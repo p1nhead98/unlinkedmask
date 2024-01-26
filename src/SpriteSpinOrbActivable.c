@@ -31,6 +31,20 @@ void CheckCollisionTilePlt2(CUSTOM_DATA_ORB* data)
         data->state = 5;
     }
 
+    if(colision == 98 && data->state != 2 ){
+        data->state = 2;
+        data->initial_speed = 10;
+    }else if( colision == 99 && data->state != 5){
+        data->state = 5;
+        data->initial_speed = 10;
+    }else if( colision == 100 && data->state != 4){
+        data->state = 4;
+        data->initial_speed = 10;
+    }else if( colision == 101 && data->state != 3){
+        data->state = 3;
+        data->initial_speed = 10;
+    }
+
    
 
 }
@@ -39,6 +53,8 @@ void START()
 {
     CUSTOM_DATA_ORB* data = (CUSTOM_DATA_ORB*)THIS->custom_data;
     data->state = 0;
+    data->initial_speed = 20;
+    data->speed = data->initial_speed;
     THIS->y -= 4;
     THIS->x -= 3;
     THIS->lim_x = 80;
@@ -61,16 +77,32 @@ void UPDATE()
 
         break;
     case 2:
-        THIS->x++;
+        if(--data->speed == 0){
+            THIS->x++;
+            data->speed = data->initial_speed;
+        }
+            
         break;
     case 3:
         THIS->y--;
+        if(--data->speed == 0){
+            THIS->y--;
+            data->speed = data->initial_speed;
+        }
         break;
     case 4:
-        THIS->x--;
+        if(--data->speed == 0){
+            THIS->x--;
+            data->speed = data->initial_speed;
+        }
+    
         break;
     case 5:
-        THIS->y++;
+        if(--data->speed == 0){
+            THIS->y++;
+            data->speed = data->initial_speed;
+        }
+      
         break;
     default:
         break;

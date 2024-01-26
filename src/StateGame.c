@@ -28,6 +28,7 @@ IMPORT_MAP(lvl_12);
 IMPORT_MAP(lvl_13);
 IMPORT_MAP(lvl_14);
 IMPORT_MAP(lvl_15);
+IMPORT_MAP(lvl_16);
 IMPORT_MAP(window);
 DECLARE_MUSIC(song1);
 DECLARE_MUSIC(unlinkedmaskwip_1);
@@ -85,6 +86,7 @@ const struct MapInfoBanked levels[] = {
 	BANKED_MAP(lvl_13),
 	BANKED_MAP(lvl_14),
 	BANKED_MAP(lvl_15),
+	BANKED_MAP(lvl_16),
 };
 
 typedef struct {
@@ -109,6 +111,7 @@ const START_POS start_positions[] = {
 	{8, 96},  //Level 13 Player Start Position
 	{8, 96},  //Level 14 Player Start Position
 	{8, 96},  //Level 15 Player Start Position
+	{8, 144},  //Level 16 Player Start Position
 };
 
 void START()
@@ -121,7 +124,7 @@ void START()
 	// enable_interrupts();
 
 	stop_music_on_new_state = 0;
-
+	current_level = 16;
 	const struct MapInfoBanked* level = &levels[current_level];
 
 	door_open = 0;
@@ -213,6 +216,11 @@ void START()
 		SetOnOffCols(collision_tiles2, on_off);
 		break;
 	case 15:
+		ScrollRelocateMapTo(0,48);
+		door_time_btwn_start = door_time_btwn = 220;
+		SetOnOffCols(collision_tiles2, on_off);
+		break;
+	case 16:
 		ScrollRelocateMapTo(0,48);
 		door_time_btwn_start = door_time_btwn = 220;
 		SetOnOffCols(collision_tiles2, on_off);

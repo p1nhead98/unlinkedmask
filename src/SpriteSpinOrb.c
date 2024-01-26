@@ -8,7 +8,7 @@
 #include "Math.h"
 #include "ZGBMain.h"
 
-void CheckCollisionTilePlt(CUSTOM_DATA* data)
+void CheckCollisionTilePlt(CUSTOM_DATA_ORB* data)
 {
     UINT8 colision = GetScrollTile((THIS->x + 3u) >> 3, (THIS->y + 4u) >> 3);
     // UINT8 colision2 = GetScrollTile((THIS->x + 3u) >> 3, (THIS->y + 16u) >> 3);
@@ -31,14 +31,28 @@ void CheckCollisionTilePlt(CUSTOM_DATA* data)
         data->state = 4;
     }
 
-   
+    if(colision == 98 && data->state != 1 ){
+        data->state = 1;
+        data->initial_speed = 1;
+    }else if( colision == 99 && data->state != 4){
+        data->state = 4;
+        data->initial_speed = 1;
+    }else if( colision == 100 && data->state != 3){
+        data->state = 3;
+        data->initial_speed = 1;
+    }else if( colision == 101 && data->state != 2){
+        data->state = 2;
+        data->initial_speed = 1;
+    }
 
 }
 
 void START()
 {
-    CUSTOM_DATA* data = (CUSTOM_DATA*)THIS->custom_data;
+    CUSTOM_DATA_ORB* data = (CUSTOM_DATA_ORB*)THIS->custom_data;
     data->state = 0;
+    data->initial_speed = 3;
+    data->speed = data->initial_speed;
     THIS->y -= 4;
     THIS->x -= 3;
     THIS->lim_x = 80;
@@ -46,24 +60,36 @@ void START()
 
 void UPDATE()
 {
-    CUSTOM_DATA* data = (CUSTOM_DATA*)THIS->custom_data;
+    CUSTOM_DATA_ORB* data = (CUSTOM_DATA_ORB*)THIS->custom_data;
     UINT8 i;
 	Sprite* spr;
     CheckCollisionTilePlt(data);
 
     switch (data->state)
     {
-    case 1:
-        THIS->x++;
+        case 1:
+            if(--data->speed == 0){
+                THIS->x++;
+                data->speed = data->initial_speed;
+            }
         break;
-    case 2:
-        THIS->y--;
+        case 2:
+            if(--data->speed == 0){
+                THIS->y--;
+                data->speed = data->initial_speed;
+            }
         break;
-    case 3:
-        THIS->x--;
+        case 3:
+            if(--data->speed == 0){
+                THIS->x--;
+                data->speed = data->initial_speed;
+            }
         break;
-    case 4:
-        THIS->y++;
+        case 4:
+            if(--data->speed == 0){
+                THIS->y++;
+                data->speed = data->initial_speed;
+            }
         break;
     default:
         break;
