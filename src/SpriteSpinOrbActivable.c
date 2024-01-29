@@ -8,6 +8,9 @@
 #include "Math.h"
 #include "ZGBMain.h"
 
+
+extern UINT8 current_level;
+
 void CheckCollisionTilePlt2(CUSTOM_DATA_ORB* data)
 {
     UINT8 colision = GetScrollTile((THIS->x + 3u) >> 3, (THIS->y + 4u) >> 3);
@@ -30,21 +33,21 @@ void CheckCollisionTilePlt2(CUSTOM_DATA_ORB* data)
     }else if( colision == 104 && data->state != 5 ){
         data->state = 5;
     }
-
-    if(colision == 98 && data->state != 2 ){
-        data->state = 2;
-        data->initial_speed = 10;
-    }else if( colision == 99 && data->state != 5){
-        data->state = 5;
-        data->initial_speed = 10;
-    }else if( colision == 100 && data->state != 4){
-        data->state = 4;
-        data->initial_speed = 10;
-    }else if( colision == 101 && data->state != 3){
-        data->state = 3;
-        data->initial_speed = 10;
+    if(current_level > 11){
+        if(colision == 98 && data->state != 2 ){
+            data->state = 2;
+            data->initial_speed = 1;
+        }else if( colision == 99 && data->state != 5){
+            data->state = 5;
+            data->initial_speed = 1;
+        }else if( colision == 100 && data->state != 4){
+            data->state = 4;
+            data->initial_speed = 1;
+        }else if( colision == 101 && data->state != 3){
+            data->state = 3;
+            data->initial_speed = 1;
+        }
     }
-
    
 
 }
@@ -53,7 +56,11 @@ void START()
 {
     CUSTOM_DATA_ORB* data = (CUSTOM_DATA_ORB*)THIS->custom_data;
     data->state = 0;
-    data->initial_speed = 20;
+    if(current_level == 10 || current_level == 11){
+        data->initial_speed = 1;
+    }else{
+        data->initial_speed = 2;
+    }
     data->speed = data->initial_speed;
     THIS->y -= 4;
     THIS->x -= 3;

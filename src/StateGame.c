@@ -124,7 +124,7 @@ void START()
 	// enable_interrupts();
 
 	stop_music_on_new_state = 0;
-	current_level = 16;
+	// current_level = 16;
 	const struct MapInfoBanked* level = &levels[current_level];
 
 	door_open = 0;
