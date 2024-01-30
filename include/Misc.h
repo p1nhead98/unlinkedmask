@@ -27,14 +27,15 @@ typedef struct {
 
 typedef struct {
 	INT8 state;
-	UINT16 initial_x;
-	UINT16 initial_y;
+	UINT8 initial_x;
+	UINT8 initial_y;
 } CUSTOM_DATA_BOX;
 
 typedef struct {
-	INT8 state;
-	UINT16 speed;
-	UINT16 initial_speed;
+	UINT8 state;
+	UINT8 initial_state;
+	UINT8 speed;
+	UINT8 initial_speed;
 } CUSTOM_DATA_ORB;
 
 void RefreshLife() BANKED;

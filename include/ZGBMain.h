@@ -21,6 +21,7 @@ _SPRITE_DMG(SpritePlayerDeath, playerDeath)\
 _SPRITE_DMG(SpritePlayerVfx, playerVFX)\
 _SPRITE_DMG(SpriteOnOffBtn, onOffButton)\
 _SPRITE_DMG(SpriteSpinOrbFall, plataforma1)\
+_SPRITE_DMG(SpriteSpinOrbStoppable, plataforma1)\
 SPRITE_DEF_END
 
 #include "ZGBMain_Init.h"

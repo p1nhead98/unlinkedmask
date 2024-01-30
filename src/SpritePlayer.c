@@ -364,6 +364,21 @@ void UPDATE()
                 SpriteManagerAdd(SpritePlayerVfx, THIS->x - 4, THIS->y + 8);
 			}
 		}
+        if(spr->type == SpriteSpinOrbStoppable  && player_accel_y > 0) {
+            CUSTOM_DATA_ORB* sprData = (CUSTOM_DATA_ORB*)spr->custom_data;
+			if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && (player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 1))) {
+                player_state = 3;
+                player_accel_y = -82;
+                if(sprData->state == 0){
+                    sprData->state = 1;
+                }else if(sprData->state == 6){
+                    sprData->state = sprData->initial_state;
+                }
+                PlayFx(CHANNEL_4, 10, 0x02, 0xf1, 0x40, 0xc0);
+                SetSpriteAnim(THIS, anim_spin, 20);
+                SpriteManagerAdd(SpritePlayerVfx, THIS->x - 4, THIS->y + 8);
+			}
+		}
         if(spr->type == SpriteJumpBox && player_accel_y > 0)  {
             CUSTOM_DATA_BOX* sprData = (CUSTOM_DATA_BOX*)spr->custom_data;
 			if(CheckCollision(THIS, spr) && sprData->state == 0 && (player_state == 1 || player_state == 2 || player_state == 4 || (player_state == 10))  ) {

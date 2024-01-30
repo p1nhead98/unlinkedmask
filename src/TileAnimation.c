@@ -8,19 +8,18 @@
 
 
 
-void Tile_Anim(UINT8 x, int tilesAmount, struct TilesInfo *tile, UINT8 first_tile, UINT8 bank) BANKED
+void Tile_Anim(UINT8 x, UINT8 tilesAmount, struct TilesInfo *tile, UINT8 first_tile, UINT8 bank) __nonbanked
 {
 
-    unsigned char tileData[16];
+    UINT16 tileData[16];
     PUSH_BANK(bank);
     memcpy(tileData, &tile->data[16 * (x % tilesAmount)], 16);
     set_bkg_data(first_tile, 1, tileData);
     POP_BANK;
 }
 
-
-void Spike_anim(struct TilesInfo *tile, UINT8 tileStart, UINT8 bank) BANKED{
-    unsigned char tileData[16];
+void Spike_anim(struct TilesInfo *tile, UINT8 tileStart, UINT8 bank) __nonbanked{
+    UINT16 tileData[16];
     PUSH_BANK(bank);
     Tile_Anim(tileStart, 12, tile, 126, bank);
 	Tile_Anim(tileStart + 1, 12, tile, 127, bank);
@@ -29,7 +28,7 @@ void Spike_anim(struct TilesInfo *tile, UINT8 tileStart, UINT8 bank) BANKED{
     POP_BANK;
 }
 
-void Onoff_tile_anim(struct TilesInfo *tile, UINT8 tileStart, UINT8 bank, UINT8 firstTile) BANKED{
+void Onoff_tile_anim(struct TilesInfo *tile, UINT8 tileStart, UINT8 bank, UINT8 firstTile) __nonbanked{
     
     PUSH_BANK(bank);
     Tile_Anim(tileStart, 12, tile, firstTile, bank);
@@ -38,7 +37,7 @@ void Onoff_tile_anim(struct TilesInfo *tile, UINT8 tileStart, UINT8 bank, UINT8 
 	Tile_Anim(tileStart + 3, 12, tile, firstTile + 3, bank);
     POP_BANK;
 }
-void Door_Anim(struct TilesInfo *tile, UINT8 tileStart, UINT8 bank, UINT8 firstTile, UINT8 off) BANKED{
+void Door_Anim(struct TilesInfo *tile, UINT8 tileStart, UINT8 bank, UINT8 firstTile, UINT8 off) __nonbanked{
     UINT8 i = 0;
     PUSH_BANK(bank);
     for ( i = 0; i < 12; i++)

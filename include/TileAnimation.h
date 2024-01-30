@@ -9,8 +9,8 @@
 #include "Misc.h"
 #include "Scroll.h"
 
-void Tile_Anim(UINT8 x, int tilesAmount, struct TilesInfo *tile, UINT8 first_tile, UINT8 bank) BANKED;
-void Spike_anim(struct TilesInfo *tile, UINT8 tileStart, UINT8 bank) BANKED;
-void Onoff_tile_anim(struct TilesInfo *tile, UINT8 tileStart, UINT8 bank, UINT8 firstTile) BANKED;
-void Door_Anim(struct TilesInfo *tile, UINT8 tileStart, UINT8 bank, UINT8 firstTile, UINT8 off) BANKED;
+void Tile_Anim(UINT8 x, UINT8 tilesAmount, struct TilesInfo *tile, UINT8 first_tile, UINT8 bank) __nonbanked;
+void Spike_anim(struct TilesInfo *tile, UINT8 tileStart, UINT8 bank) __nonbanked;
+void Onoff_tile_anim(struct TilesInfo *tile, UINT8 tileStart, UINT8 bank, UINT8 firstTile) __nonbanked;
+void Door_Anim(struct TilesInfo *tile, UINT8 tileStart, UINT8 bank, UINT8 firstTile, UINT8 off) __nonbanked;
 #endif
