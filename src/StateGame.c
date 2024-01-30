@@ -44,7 +44,7 @@ UINT8 door_time_btwn = 0;
 UINT8 door_time_btwn_start = 0;
 UINT8 door_open = 0;
 BOOLEAN door_button = 0;
-UINT8 current_level = 0;
+UINT8 current_level = 13;
 
 UINT8 doAnimCount = 0;
 UINT8 AnimCounter = 0;
@@ -124,7 +124,7 @@ void START()
 	// enable_interrupts();
 
 	stop_music_on_new_state = 0;
-	// current_level = 16;
+	// current_level = 9;
 	const struct MapInfoBanked* level = &levels[current_level];
 
 	door_open = 0;

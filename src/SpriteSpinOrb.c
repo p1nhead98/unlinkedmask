@@ -12,41 +12,44 @@ extern UINT8 current_level;
 
 void CheckCollisionTilePlt(CUSTOM_DATA_ORB* data)
 {
-    UINT8 colision = GetScrollTile((THIS->x + 3u) >> 3, (THIS->y + 4u) >> 3);
+    UINT8 colision = GetScrollTile((THIS->x ) >> 3, (THIS->y + 6u) >> 3);
     // UINT8 colision2 = GetScrollTile((THIS->x + 3u) >> 3, (THIS->y + 16u) >> 3);
     if(data->state == 1){
-        colision = GetScrollTile((THIS->x + 3u) >> 3, (THIS->y + 4u) >> 3);
+        colision = GetScrollTile((THIS->x + 12) >> 3, (THIS->y + 4u) >> 3);
     }else if (data->state == 2){
-        colision = GetScrollTile((THIS->x + 3u) >> 3, (THIS->y + 10u) >> 3);
+        colision = GetScrollTile((THIS->x + 9u) >> 3, (THIS->y + 3u) >> 3);
     }else if(data->state == 3){
-        colision = GetScrollTile((THIS->x + 10u) >> 3, (THIS->y + 4u) >> 3);
+        colision = GetScrollTile((THIS->x + 3u) >> 3, (THIS->y + 4u) >> 3);
+    }else if(data->state == 4){
+        colision = GetScrollTile((THIS->x + 9u) >> 3, (THIS->y + 12u) >> 3);
     }
 
 
-    if( colision == 107 && data->state != 1 ){
+    if( colision == 101 && data->state != 1 ){
         data->state = 1;
-    }else if( colision == 106 && data->state != 2 ){
-        data->state = 2;
-    }else if( colision == 105 && data->state != 3 ){
-        data->state = 3;
-    }else if( colision == 104 && data->state != 4 ){
+    }else if( colision == 102 && data->state != 4 ){
         data->state = 4;
+    }else if( colision == 103 && data->state != 3 ){
+        data->state = 3;
+    }else if( colision == 104 && data->state != 2 ){
+        data->state = 2;
     }
     if(current_level > 11){
-        if(colision == 98 && data->state != 1 ){
+        if(colision == 97 && data->state != 1 ){
             data->state = 1;
             data->initial_speed = 1;
-        }else if( colision == 99 && data->state != 4){
+        }else if( colision == 98 && data->state != 4){
             data->state = 4;
             data->initial_speed = 1;
-        }else if( colision == 100 && data->state != 3){
+        }else if( colision == 99 && data->state != 3){
             data->state = 3;
             data->initial_speed = 1;
-        }else if( colision == 101 && data->state != 2){
+        }else if( colision == 100 && data->state != 2){
             data->state = 2;
             data->initial_speed = 1;
         }
     }
+    
 }
 
 void START()
@@ -58,6 +61,13 @@ void START()
     THIS->y -= 4;
     THIS->x -= 3;
     THIS->lim_x = 80;
+    UINT8 colision = GetScrollTile((THIS->x + 16u) >> 3, (THIS->y + 6u) >> 3);
+    if(colision == 105){
+        data->state = 1;
+    }else if (colision == 106){
+        data->state = 2;
+        THIS->x += 7;
+    }
 }
 
 void UPDATE()
@@ -65,7 +75,7 @@ void UPDATE()
     CUSTOM_DATA_ORB* data = (CUSTOM_DATA_ORB*)THIS->custom_data;
     UINT8 i;
 	Sprite* spr;
-    CheckCollisionTilePlt(data);
+ 
 
     switch (data->state)
     {
@@ -96,6 +106,7 @@ void UPDATE()
     default:
         break;
     }
+    CheckCollisionTilePlt(data);
 }
 
 void DESTROY()

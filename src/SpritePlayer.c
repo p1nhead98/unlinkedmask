@@ -338,6 +338,19 @@ void UPDATE()
                 SpriteManagerAdd(SpritePlayerVfx, THIS->x - 4, THIS->y + 8);
 			}
 		}
+        if(spr->type == SpriteSpinOrbFall && player_accel_y > 0) {
+            CUSTOM_DATA_ORB* sprData = (CUSTOM_DATA_ORB*)spr->custom_data;
+			if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && (player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 1))) {
+                player_state = 3;
+                player_accel_y = -82;
+                PlayFx(CHANNEL_4, 10, 0x02, 0xf1, 0x40, 0xc0);
+                if(sprData->state == 0){
+                    sprData->state = 1;
+                }
+                SetSpriteAnim(THIS, anim_spin, 20);
+                SpriteManagerAdd(SpritePlayerVfx, THIS->x - 4, THIS->y + 8);
+			}
+		}
         if(spr->type == SpriteSpinOrbActivable  && player_accel_y > 0) {
             CUSTOM_DATA_ORB* sprData = (CUSTOM_DATA_ORB*)spr->custom_data;
 			if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && (player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 1))) {
@@ -346,15 +359,15 @@ void UPDATE()
                 if(sprData->state == 0){
                     sprData->state = 1;
                 }
-                 PlayFx(CHANNEL_4, 10, 0x02, 0xf1, 0x40, 0xc0);
+                PlayFx(CHANNEL_4, 10, 0x02, 0xf1, 0x40, 0xc0);
                 SetSpriteAnim(THIS, anim_spin, 20);
                 SpriteManagerAdd(SpritePlayerVfx, THIS->x - 4, THIS->y + 8);
 			}
 		}
         if(spr->type == SpriteJumpBox && player_accel_y > 0)  {
             CUSTOM_DATA_BOX* sprData = (CUSTOM_DATA_BOX*)spr->custom_data;
-			if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && sprData->state == 0 && (player_state == 1 || player_state == 2 || player_state == 4 || (player_state == 10))  ) {
-                if(player_state == 1 || player_state == 4 || (player_state == 10 && player_last_state == 0)){
+			if(CheckCollision(THIS, spr) && sprData->state == 0 && (player_state == 1 || player_state == 2 || player_state == 4 || (player_state == 10))  ) {
+                if(player_state == 1 || player_state == 4 || (player_state == 10 && player_last_state == 0) && THIS->y < (spr->y - 5)){
                     player_state = 4;
                     player_accel_y = -82;
                     SetSpriteAnim(THIS, anim_jump, 40);   
@@ -386,7 +399,7 @@ void UPDATE()
 
         if(spr->type == SpriteOnOffBtn) {
             CUSTOM_DATA_BOX* sprData = (CUSTOM_DATA_BOX*)spr->custom_data;
-			if(CheckCollision(THIS, spr) && THIS->y > (spr->y) && (player_state == 1 || player_state == 2 || player_state == 3 || player_state == 4) && player_accel_y < 0) {
+			if(CheckCollision(THIS, spr) && THIS->y >= (spr->y) && (player_state == 1 || player_state == 2 || player_state == 3 || player_state == 4) && player_accel_y < 0) {
                 // THIS->y -= 5;
                 player_accel_y = 20;
                 if(player_state == 1 || player_state == 4){
