@@ -13,7 +13,7 @@
 #include "BankManager.h"
 #include "MapInfo.h"
 #include <string.h>
-
+#include "SGB.h"
 
 IMPORT_MAP(titleScreen);
 IMPORT_MAP(lvl_1);
@@ -32,7 +32,11 @@ IMPORT_MAP(lvl_13);
 IMPORT_MAP(lvl_14);
 IMPORT_MAP(lvl_15);
 IMPORT_MAP(lvl_16);
+
+IMPORT_MAP(gb_border);
+
 IMPORT_MAP(window);
+
 DECLARE_MUSIC(song1);
 DECLARE_MUSIC(unlinkedmaskwip_1);
 
@@ -121,7 +125,11 @@ const START_POS start_positions[] = {
 
 void START()
 {
-
+	if(current_level == 0){
+		
+		LOAD_SGB_BORDER(gb_border);
+		
+	}
 	// LY_REG  = 0;
 	// disable_interrupts();
 	// add_LCD(LCD_Interrupt);
@@ -146,13 +154,16 @@ void START()
 	OBP0_REG = PAL_DEF(3, 0, 1, 2);
 	OBP1_REG = PAL_DEF(1, 3, 1, 0);
 
-	
+
+
 	if(current_level != 0){
 		INIT_HUD(window);
 		
 	}else{
 		HIDE_WIN;
 	}
+
+
 
 	if( current_level < 11){
 		InitScroll(level->bank, level->map, collision_tiles, 0);
