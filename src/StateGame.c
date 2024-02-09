@@ -34,7 +34,8 @@ IMPORT_MAP(lvl_15);
 IMPORT_MAP(lvl_16);
 IMPORT_MAP(window);
 DECLARE_MUSIC(song1);
-DECLARE_MUSIC(unlinkedmaskwip_1);
+DECLARE_MUSIC(unlinkedchainedsoul);
+DECLARE_MUSIC(unlinkedunchainedsoul);
 
 UINT8 collision_tiles[] = {4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 33, 34, 35, 36, 37, 38, 62, 63, 64, 65, 66, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 0};
 UINT8 collision_tiles2[] = {4, 5, 6 ,7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 56, 57, 58, 59, 60, 61, 62, 63, 0};
@@ -45,7 +46,7 @@ UINT8 door_time_btwn = 0;
 UINT8 door_time_btwn_start = 0;
 UINT8 door_open = 0;
 BOOLEAN door_button = 0;
-UINT8 current_level = 0;
+UINT8 current_level = 15;
 
 UINT8 doAnimCount = 0;
 UINT8 AnimCounter = 0;
@@ -170,7 +171,7 @@ void START()
 	{
 		
 	case 1:
-		
+		PlayMusic(unlinkedunchainedsoul, 1);
 		ScrollRelocateMapTo(0,48);
 		break;
 	case 2:
@@ -186,6 +187,7 @@ void START()
 		ScrollRelocateMapTo(0,48);
 		break;
 	case 6:
+		PlayMusic(unlinkedchainedsoul, 1);
 		ScrollRelocateMapTo(0,48);
 		break;
 	case 7:
@@ -248,7 +250,7 @@ void START()
 	if(current_level != 0){
 
 		RefreshLife();
-		PlayMusic(unlinkedmaskwip_1, 1);
+		
 		
 	}else{
 		HIDE_WIN;

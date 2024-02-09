@@ -15,7 +15,7 @@ void CheckCollisionTilePlt3(CUSTOM_DATA_ORB* data)
 {
     
     UINT8 colision = GetScrollTile((THIS->x + 16u) >> 3, (THIS->y + 6u) >> 3);
-    // UINT8 colision2 = GetScrollTile((THIS->x + 3u) >> 3, (THIS->y + 16u) >> 3);
+    UINT8 colision2 = GetScrollTile((THIS->x + 4u) >> 3, (THIS->y - 4u) >> 3);
     if(data->state == 2){
         colision = GetScrollTile((THIS->x + 12) >> 3, (THIS->y + 4u) >> 3);
     }else if (data->state == 3){
@@ -25,7 +25,7 @@ void CheckCollisionTilePlt3(CUSTOM_DATA_ORB* data)
     }else if(data->state == 5){
         colision = data->initial_speed == 3 ? GetScrollTile((THIS->x + 9u) >> 3, (THIS->y + 13u) >> 3) : GetScrollTile((THIS->x + 9u) >> 3, (THIS->y + 12u) >> 3);
     }
-
+  
     if(colision == 92 && data->state != 7 ){
         data->state = 7;
     }else if( colision == 101 && data->state != 2 ){
@@ -78,7 +78,16 @@ void CheckCollisionTilePlt3(CUSTOM_DATA_ORB* data)
         data->initial_speed = 3;
     }
 
-
+    if(colision2 == 93 && (data->state == 2 || data->state == 9)){
+        data->initial_state = 8;
+        data->state = 6;
+        data->initial_speed = 3;
+    }else if(colision2 == 101 && (data->state == 2 || data->state == 8)){
+        data->initial_state = 9;
+        data->state = 6;
+        data->initial_speed = 2;
+        data->speed = 1;
+    }
         
     
    
@@ -125,6 +134,9 @@ void UPDATE()
             data->initial_speed = 1;
         }else if (colision == 101){
             data->state = 2;
+        }else if (colision == 93){
+            data->state = 2;
+            data->initial_speed = 3;
         }else if(colision == 105){
             if(current_level == 14){
                 data->state = 4;
@@ -180,6 +192,18 @@ void UPDATE()
         break;
     case 7:
     break;
+
+    case 8:
+        THIS->x += data->initial_speed;
+    break;
+
+    case 9:
+        if(--data->speed == 0 && data->initial_speed != 3){
+            THIS->x++;
+            data->speed = data->initial_speed;
+        }
+    break;
+
     default:
         break;
     }

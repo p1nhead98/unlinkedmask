@@ -364,7 +364,7 @@ void UPDATE()
                 SpriteManagerAdd(SpritePlayerVfx, THIS->x - 4, THIS->y + 8);
 			}
 		}
-        if(spr->type == SpriteSpinOrbStoppable  && player_accel_y > 0) {
+        if((spr->type == SpriteSpinOrbStoppable || spr->type == SpriteSpinOrbStoppable2 || spr->type == SpriteSpinOrbStoppable3)  && player_accel_y > 0) {
             CUSTOM_DATA_ORB* sprData = (CUSTOM_DATA_ORB*)spr->custom_data;
 			if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && (player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 1))) {
                 player_state = 3;
