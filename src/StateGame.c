@@ -10,6 +10,9 @@
 #include "TileAnimation.h"
 #include <gb/gb.h>
 #include "Keys.h"
+#include "BankManager.h"
+#include "MapInfo.h"
+#include <string.h>
 
 
 IMPORT_MAP(titleScreen);
@@ -31,20 +34,19 @@ IMPORT_MAP(lvl_15);
 IMPORT_MAP(lvl_16);
 IMPORT_MAP(window);
 DECLARE_MUSIC(song1);
-DECLARE_MUSIC(unlinkedmaskwip_1);
+DECLARE_MUSIC(unlinkedchainedsoul);
+DECLARE_MUSIC(unlinkedunchainedsoul);
 
 UINT8 collision_tiles[] = {4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 33, 34, 35, 36, 37, 38, 62, 63, 64, 65, 66, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 0};
 UINT8 collision_tiles2[] = {4, 5, 6 ,7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 56, 57, 58, 59, 60, 61, 62, 63, 0};
 
-UBYTE counter;
-UINT16 p1, p2;
 
 UINT8 door_time = 0;
 UINT8 door_time_btwn = 0;
 UINT8 door_time_btwn_start = 0;
 UINT8 door_open = 0;
 BOOLEAN door_button = 0;
-UINT8 current_level = 13;
+UINT8 current_level = 15;
 
 UINT8 doAnimCount = 0;
 UINT8 AnimCounter = 0;
@@ -114,6 +116,10 @@ const START_POS start_positions[] = {
 	{8, 144},  //Level 16 Player Start Position
 };
 
+
+
+
+
 void START()
 {
 
@@ -165,7 +171,7 @@ void START()
 	{
 		
 	case 1:
-		
+		PlayMusic(unlinkedunchainedsoul, 1);
 		ScrollRelocateMapTo(0,48);
 		break;
 	case 2:
@@ -181,6 +187,7 @@ void START()
 		ScrollRelocateMapTo(0,48);
 		break;
 	case 6:
+		PlayMusic(unlinkedchainedsoul, 1);
 		ScrollRelocateMapTo(0,48);
 		break;
 	case 7:
@@ -243,7 +250,7 @@ void START()
 	if(current_level != 0){
 
 		RefreshLife();
-		PlayMusic(unlinkedmaskwip_1, 1);
+		
 		
 	}else{
 		HIDE_WIN;
@@ -256,7 +263,7 @@ void UPDATE()
 {
 	// vsync();
 	// scanline_offsets = scanline_offsets_tbl + ((sys_time >> 2) & 0x07u)
-	if(--doAnimCount == 0 ){
+	if(--doAnimCount == 0 && current_level > 0){
 		
 		
 		AnimCounter++;
@@ -264,7 +271,7 @@ void UPDATE()
 		Tile_Anim(AnimCounter , 2, &spikesAnim2, 114, BANK(spikesAnim2));
 		Tile_Anim(AnimCounter , 2, &spikesAnim3, 113, BANK(spikesAnim3));
 		Tile_Anim(AnimCounter , 2, &spikesAnim4, 115, BANK(spikesAnim4));
-		// Tile_Anim(AnimCounter + 8, 16, &cloudAnim1, 46, BANK(cloudAnim1));
+	
 		doAnimCount = 5;
 	}
 	if(current_level == 0 && KEY_TICKED(J_START)){
@@ -295,7 +302,7 @@ void UPDATE()
 		SetState(current_state);
 	}
 
-	if(KEY_TICKED(J_START)){
+	// if(KEY_TICKED(J_START)){
 		
-	}
+	// }
 }

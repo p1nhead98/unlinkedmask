@@ -241,8 +241,8 @@ void SetOnOffCols(UINT8 cols[], UINT8 onOff ) BANKED{
 void SetDoorCols(UINT8 off) BANKED{
     if(off == 1){
         Door_Anim(&darkTileAnim, 0, BANK(darkTileAnim), 64, 1);
-        Tile_Anim(9 , 12, &doorAnim, 64, BANK(doorAnim));
-        Tile_Anim(11 , 12, &doorAnim, 66, BANK(doorAnim));
+        // Tile_Anim(9 , 12, &doorAnim, 64, BANK(doorAnim));
+        // Tile_Anim(11 , 12, &doorAnim, 66, BANK(doorAnim));
     }else{
         Door_Anim(&doorAnim, 0, BANK(doorAnim), 64, 0);
     }
