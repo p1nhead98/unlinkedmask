@@ -46,7 +46,7 @@ UINT8 door_time_btwn = 0;
 UINT8 door_time_btwn_start = 0;
 UINT8 door_open = 0;
 BOOLEAN door_button = 0;
-UINT8 current_level = 15;
+UINT8 current_level = 0;
 
 UINT8 doAnimCount = 0;
 UINT8 AnimCounter = 0;
