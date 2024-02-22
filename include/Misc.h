@@ -14,16 +14,16 @@
 #include "Music.h"
 
 
-typedef struct {
-	INT16 accel_y;
-	INT16 accel_x;
-	INT8 state;
-	INT8 life;
-	UINT8 collision;
-	UINT8 counter;
-	UINT16 initial_x;
-	UINT16 initial_y;
-} CUSTOM_DATA;
+// typedef struct {
+// 	INT16 accel_y;
+// 	INT16 accel_x;
+// 	INT8 state;
+// 	INT8 life;
+// 	UINT8 collision;
+// 	UINT8 counter;
+// 	UINT16 initial_x;
+// 	UINT16 initial_y;
+// } CUSTOM_DATA;
 
 typedef struct {
 	INT8 state;
@@ -37,6 +37,12 @@ typedef struct {
 	UINT8 speed;
 	UINT8 initial_speed;
 } CUSTOM_DATA_ORB;
+
+typedef struct {
+	UINT8 state;
+} CUSTOM_DATA_BTN;
+
+
 
 void RefreshLife() BANKED;
 // void ScreenVerticalShake(UINT8 framesBtw, UINT8 seconds, UINT8 intensity) BANKED;

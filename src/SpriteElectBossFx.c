@@ -8,22 +8,19 @@
 #include "Math.h"
 #include "ZGBMain.h"
 
-extern UINT8 door_time;
-extern UINT8 door_open;
+const UINT8 elec_boss_fx_anim[] = {3, 0, 1, 1};
 
 void START()
 {
-    // CUSTOM_DATA* data = (CUSTOM_DATA*)THIS->custom_data;
+    SetSpriteAnim(THIS, elec_boss_fx_anim, 20);
 
 }
 
 void UPDATE()
 {
-    // CUSTOM_DATA* data = (CUSTOM_DATA*)THIS->custom_data;
-
-    //  if(door_open == 0){
-    //     SpriteManagerRemove(THIS_IDX);
-    //  }
+  if(THIS->anim_frame == 2){
+     SpriteManagerRemove(THIS_IDX);
+  }
 }
 
 void DESTROY()

@@ -18,13 +18,13 @@ extern UINT8 door_button;
 
 void START()
 {
-    CUSTOM_DATA* data = (CUSTOM_DATA*)THIS->custom_data;
+    CUSTOM_DATA_BTN* data = (CUSTOM_DATA_BTN*)THIS->custom_data;
     data->state = 0;
 }
 
 void UPDATE()
 {
-    CUSTOM_DATA* data = (CUSTOM_DATA*)THIS->custom_data;
+    CUSTOM_DATA_BTN* data = (CUSTOM_DATA_BTN*)THIS->custom_data;
     UINT8 i;
 	Sprite* spr;
 

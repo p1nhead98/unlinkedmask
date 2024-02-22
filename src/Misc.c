@@ -160,6 +160,14 @@ void ScrollRelocateMapTo(UINT16 new_x, UINT16 new_y) BANKED{
     for(i = 0u; i != (SCREEN_TILE_REFRES_H) && y != scroll_h; ++i, y ++) {
         ScrollUpdateRow((scroll_x >> 3) - SCREEN_PAD_LEFT,  y - SCREEN_PAD_TOP);
     }
+    // for (UINT8 y = 0; y < 7; y++)
+	// {
+	// 	for (UINT8 x = 0; x < 32; x++)
+	// 	{
+	// 			ScrollUpdateColumn(x, y);
+	// 	}
+			
+	// }
     // POP_BANK;
 }
 

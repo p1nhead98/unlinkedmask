@@ -1,5 +1,4 @@
 #include "Banks/SetAutoBank.h"
-#include "Keys.h"
 #include "Misc.h"
 #include "SpriteManager.h"
 #include <gb/gb.h>
@@ -14,11 +13,10 @@ extern UINT8 current_level;
 void CheckCollisionTilePlt2(CUSTOM_DATA_ORB* data)
 {
     UINT8 colision = GetScrollTile((THIS->x + 16u) >> 3, (THIS->y + 6u) >> 3);
-    UINT8 colision2 = GetScrollTile((THIS->x + 16u) >> 3, (THIS->y + 6u) >> 3);
     if(data->state == 2){
-        colision = data->initial_speed == 3 ? GetScrollTile((THIS->x + 12) >> 3, (THIS->y + 4u) >> 3) : GetScrollTile((THIS->x + 12) >> 3, (THIS->y + 4u) >> 3);
+        colision = data->initial_speed == 4 ? GetScrollTile((THIS->x + 14) >> 3, (THIS->y + 4u) >> 3) : GetScrollTile((THIS->x + 12) >> 3, (THIS->y + 4u) >> 3);
     }else if (data->state == 3){
-         colision = data->initial_speed == 3 ? GetScrollTile((THIS->x + 9u) >> 3, (THIS->y + 2u) >> 3) : GetScrollTile((THIS->x + 9u) >> 3, (THIS->y + 3u) >> 3);
+         colision = data->initial_speed == 4 ? GetScrollTile((THIS->x + 9u) >> 3, (THIS->y + 2u) >> 3) : GetScrollTile((THIS->x + 9u) >> 3, (THIS->y + 3u) >> 3);
     }else if(data->state == 4){
         colision = GetScrollTile((THIS->x + 3u) >> 3, (THIS->y + 4u) >> 3);
     }else if(data->state == 5){
@@ -61,16 +59,21 @@ void CheckCollisionTilePlt2(CUSTOM_DATA_ORB* data)
             data->initial_speed = 1;
         }if(colision == 93 && data->state != 2 ){
             data->state = 2;
-            data->initial_speed = 3;
+            data->initial_speed = 4;
         }else if( colision == 94 && data->state != 5){
             data->state = 5;
-            data->initial_speed = 3;
+            data->initial_speed = 4;
         }else if( colision == 95 && data->state != 4){
             data->state = 4;
-            data->initial_speed = 3;
+            data->initial_speed = 4;
         }else if( colision == 96 && data->state != 3){
+            if(data->initial_speed == 4){
+                THIS->x-=1;
+            }else{
+                data->initial_speed = 4;    
+            }
             data->state = 3;
-            data->initial_speed = 3;
+            
         }
 
 
@@ -84,6 +87,7 @@ void START()
 {
     CUSTOM_DATA_ORB* data = (CUSTOM_DATA_ORB*)THIS->custom_data;
     data->state = 0;
+    data->initial_state = 0;
     if(current_level == 10 || current_level == 11){
         data->initial_speed = 1;
     }else{
@@ -92,10 +96,10 @@ void START()
     data->speed = data->initial_speed;
     THIS->y -= 4;
     THIS->x -= 3;
-    THIS->lim_x = 80;
-    THIS->lim_y = 80;
-    UINT8 colision = GetScrollTile((THIS->x + 16u) >> 3, (THIS->y + 6u) >> 3);
-    if (colision == 106){
+    THIS->lim_x = 100;
+    THIS->lim_y = 160;
+    UINT8 col = GetScrollTile((THIS->x + 16u) >> 3, (THIS->y + 6u) >> 3);
+    if (col == 106){
         THIS->x += 7;
     }
 }
@@ -103,8 +107,6 @@ void START()
 void UPDATE()
 {
     CUSTOM_DATA_ORB* data = (CUSTOM_DATA_ORB*)THIS->custom_data;
-    UINT8 i;
-	Sprite* spr;
 
     if(data->state != 0){
         CheckCollisionTilePlt2(data);
@@ -120,7 +122,7 @@ void UPDATE()
             data->initial_speed = 1;
         }else if (colision == 93){
             data->state = 2;
-            data->initial_speed = 3;
+            data->initial_speed = 4;
         }else if (colision == 101){
             data->state = 2;
         }else if(colision == 105){
@@ -131,12 +133,12 @@ void UPDATE()
         }else if(colision2 == 106){
            
             data->state = 5;
-            data->initial_speed = 3;
+            data->initial_speed = 4;
             
         }
         break;
     case 2:
-        if(--data->speed == 0 && data->initial_speed != 3){
+        if(--data->speed == 0 && data->initial_speed == 1){
             THIS->x++;
             data->speed = data->initial_speed;
         }else{
@@ -146,7 +148,7 @@ void UPDATE()
         break;
     case 3:
      
-        if(--data->speed == 0 && data->initial_speed != 3){
+        if(--data->speed == 0 && data->initial_speed == 1){
             THIS->y--;
             data->speed = data->initial_speed;
         }else{
@@ -154,7 +156,7 @@ void UPDATE()
         }
         break;
     case 4:
-        if(--data->speed == 0 && data->initial_speed != 3){
+        if(--data->speed == 0 && data->initial_speed == 1){
             THIS->x--;
             data->speed = data->initial_speed;
         }else{
@@ -163,7 +165,7 @@ void UPDATE()
     
         break;
     case 5:
-        if(--data->speed == 0 && data->initial_speed != 3){
+        if(--data->speed == 0 && data->initial_speed == 1){
             THIS->y++;
             data->speed = data->initial_speed;
         }else{
@@ -171,11 +173,12 @@ void UPDATE()
         }
       
         break;
-    default:
-        break;
+
     }
 }
 
 void DESTROY()
 {
+    CUSTOM_DATA_ORB* data = (CUSTOM_DATA_ORB*)THIS->custom_data;
+
 }

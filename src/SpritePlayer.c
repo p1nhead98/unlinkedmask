@@ -42,7 +42,7 @@ UINT8 player_last_state = 0;
 void CheckCollisionTile()
 {
 
-
+// if(current_level != 18 && current_level != 17){
 
     UINT8 colision = GetScrollTile((THIS->x + 3u) >> 3, (THIS->y + 12u) >> 3);
     UINT8 colision2 = GetScrollTile((THIS->x + 1u) >> 3, (THIS->y + 16u) >> 3);
@@ -81,7 +81,7 @@ void CheckCollisionTile()
     }
 
 
-
+// }
 
    
 
@@ -138,9 +138,12 @@ void UPDATE()
         
         // SetState(current_state);
     }
-    if( (THIS->x >= scroll_x + 150) && player_state != 9 && player_state != 8){
-        player_state = 9;
+    if(current_level != 17 && current_level != 18){
+        if( (THIS->x >= scroll_x + 150) && player_state != 9 && player_state != 8){
+            player_state = 9;
+        }
     }
+
 
 
     switch( player_state ){
@@ -331,7 +334,7 @@ void UPDATE()
 		if(spr->type == SpriteSpinOrb && player_accel_y > 0) {
 			if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && (player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 1))) {
                 player_state = 3;
-                player_accel_y = -82;
+                player_accel_y = -83;
                  PlayFx(CHANNEL_4, 10, 0x02, 0xf1, 0x40, 0xc0);
                  
                 SetSpriteAnim(THIS, anim_spin, 20);
@@ -342,7 +345,7 @@ void UPDATE()
             CUSTOM_DATA_ORB* sprData = (CUSTOM_DATA_ORB*)spr->custom_data;
 			if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && (player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 1))) {
                 player_state = 3;
-                player_accel_y = -82;
+                player_accel_y = -83;
                 PlayFx(CHANNEL_4, 10, 0x02, 0xf1, 0x40, 0xc0);
                 if(sprData->state == 0){
                     sprData->state = 1;
@@ -355,7 +358,7 @@ void UPDATE()
             CUSTOM_DATA_ORB* sprData = (CUSTOM_DATA_ORB*)spr->custom_data;
 			if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && (player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 1))) {
                 player_state = 3;
-                player_accel_y = -82;
+                player_accel_y = -83;
                 if(sprData->state == 0){
                     sprData->state = 1;
                 }
@@ -368,7 +371,7 @@ void UPDATE()
             CUSTOM_DATA_ORB* sprData = (CUSTOM_DATA_ORB*)spr->custom_data;
 			if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && (player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 1))) {
                 player_state = 3;
-                player_accel_y = -82;
+                player_accel_y = -83;
                 if(sprData->state == 0){
                     sprData->state = 1;
                 }else if(sprData->state == 6){
@@ -431,6 +434,18 @@ void UPDATE()
                 
 			}
 		}
+
+        if(spr->type == SpriteCrystalAttack){
+            if(CheckCollision(THIS, spr)) {
+                if(canHurt && player_state != 11){
+                    inmunity = 30;
+                    canHurt = 0;
+                    current_life--;
+                    ScreenShake(1,1);
+                    RefreshLife();
+                }
+            }
+        }
 
 
 	}

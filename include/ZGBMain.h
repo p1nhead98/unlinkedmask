@@ -24,6 +24,10 @@ _SPRITE_DMG(SpriteSpinOrbFall, plataforma1)\
 _SPRITE_DMG(SpriteSpinOrbStoppable, plataforma1)\
 _SPRITE_DMG(SpriteSpinOrbStoppable2, plataforma1)\
 _SPRITE_DMG(SpriteSpinOrbStoppable3, plataforma1)\
+_SPRITE_DMG(SpriteBossElec, elecBoss)\
+_SPRITE_DMG(SpriteElectBossFx, elecBossFx)\
+_SPRITE_DMG(SpriteCrystalBoss, crystalBoss)\
+_SPRITE_DMG(SpriteCrystalAttack, crystalAttack)\
 SPRITE_DEF_END
 
 #include "ZGBMain_Init.h"

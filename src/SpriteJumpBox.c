@@ -27,7 +27,7 @@ void START()
 void UPDATE()
 {
     CUSTOM_DATA_BOX* data = (CUSTOM_DATA_BOX*)THIS->custom_data;
-    CUSTOM_DATA* playerData = (CUSTOM_DATA*)scroll_target->custom_data;
+  
     UINT8 i;
 	Sprite* spr;
 

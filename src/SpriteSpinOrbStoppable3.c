@@ -18,18 +18,21 @@ void CheckCollisionTilePlt5(CUSTOM_DATA_ORB* data)
     UINT8 colision2 = GetScrollTile((THIS->x + 4u) >> 3, (THIS->y - 4u) >> 3);
     if(data->state == 2){
      
-        colision = data->initial_speed == 5 ? GetScrollTile((THIS->x + 9) >> 3, (THIS->y + 1u) >> 3) : GetScrollTile((THIS->x + 12) >> 3, (THIS->y + 4u) >> 3);
+        colision = data->initial_speed == 5 ? GetScrollTile((THIS->x + 12u) >> 3, (THIS->y + 5u) >> 3) : GetScrollTile((THIS->x + 12u) >> 3, (THIS->y + 4u) >> 3);
     }else if (data->state == 3){
         colision = data->initial_speed == 5 ? GetScrollTile((THIS->x + 9u) >> 3, (THIS->y + 1u) >> 3) : GetScrollTile((THIS->x + 9u) >> 3, (THIS->y + 3u) >> 3);
     }else if(data->state == 4){
         colision = GetScrollTile((THIS->x + 3u) >> 3, (THIS->y + 4u) >> 3);
     }else if(data->state == 5){
-        colision = data->initial_speed == 5 ? GetScrollTile((THIS->x + 9u) >> 3, (THIS->y + 15u) >> 3) : GetScrollTile((THIS->x + 9u) >> 3, (THIS->y + 12u) >> 3);
+        colision = data->initial_speed == 5 ? GetScrollTile((THIS->x + 9u) >> 3, (THIS->y + 14u) >> 3) : GetScrollTile((THIS->x + 9u) >> 3, (THIS->y + 12u) >> 3);
     }
   
     if(colision == 92 && data->state != 7 ){
         data->state = 7;
     }if(colision == 93 && data->state != 2 ){
+        if(data->speed < 2){
+            THIS->y-=2;
+        }
         data->initial_state = 2;
         data->state = 2;
         
@@ -39,10 +42,13 @@ void CheckCollisionTilePlt5(CUSTOM_DATA_ORB* data)
         data->speed++;
       
     }else if( colision == 95 && data->state != 3){
+        THIS->x-=2;
         data->initial_state = 3;
         data->state = 3;
     }else if( colision == 96 && data->state != 3 ){
+
        if(data->speed < 2 ){
+            THIS->x-=4;
             data->initial_state = 3;
             data->state = 3;
        }

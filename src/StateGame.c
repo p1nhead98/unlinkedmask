@@ -32,14 +32,20 @@ IMPORT_MAP(lvl_13);
 IMPORT_MAP(lvl_14);
 IMPORT_MAP(lvl_15);
 IMPORT_MAP(lvl_16);
+IMPORT_MAP(boss2Electric);
+IMPORT_MAP(boss3ground);
 IMPORT_MAP(window);
+IMPORT_MAP(window2);
+
 DECLARE_MUSIC(song1);
 DECLARE_MUSIC(unlinkedchainedsoul);
 DECLARE_MUSIC(unlinkedunchainedsoul);
+DECLARE_MUSIC(unlinkedrooftop);
 
 UINT8 collision_tiles[] = {4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 33, 34, 35, 36, 37, 38, 62, 63, 64, 65, 66, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 0};
 UINT8 collision_tiles2[] = {4, 5, 6 ,7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 56, 57, 58, 59, 60, 61, 62, 63, 0};
 
+UINT8 bossfight_col[] = {4, 5, 8, 10, 12, 14, 16, 17, 0};
 
 UINT8 door_time = 0;
 UINT8 door_time_btwn = 0;
@@ -51,6 +57,7 @@ UINT8 current_level = 0;
 UINT8 doAnimCount = 0;
 UINT8 AnimCounter = 0;
 
+extern UINT8 state_interrupts;
 
 
 extern UINT8 max_life;
@@ -63,6 +70,15 @@ IMPORT_TILES(spikesAnim);
 IMPORT_TILES(spikesAnim2);
 IMPORT_TILES(spikesAnim3);
 IMPORT_TILES(spikesAnim4);
+
+IMPORT_TILES(waterAnim);
+IMPORT_TILES(waterfallAnim);
+IMPORT_TILES(waterfallAnim2);
+
+
+Sprite* player_sprite = 0;
+
+
 
 struct MapInfoBanked {
 	UINT8 bank;
@@ -88,8 +104,11 @@ const struct MapInfoBanked levels[] = {
 	BANKED_MAP(lvl_13),
 	BANKED_MAP(lvl_14),
 	BANKED_MAP(lvl_15),
-	BANKED_MAP(lvl_16),
 };
+	// BANKED_MAP(lvl_16),
+	// BANKED_MAP(boss2Electric),
+	// BANKED_MAP(boss3ground),
+
 
 typedef struct {
     UINT16 start_x;
@@ -113,8 +132,12 @@ const START_POS start_positions[] = {
 	{8, 96},  //Level 13 Player Start Position
 	{8, 96},  //Level 14 Player Start Position
 	{8, 96},  //Level 15 Player Start Position
-	{8, 144},  //Level 16 Player Start Position
 };
+
+	// {8, 144},  //Level 16 Player Start Position
+	// {100, 130},  //Level 17 Player Start Position
+	// {22, 130},  //Level 18 Player Start Position
+
 
 
 
@@ -145,11 +168,16 @@ void START()
 	current_life = max_life;
 
 	OBP0_REG = PAL_DEF(3, 0, 1, 2);
-	OBP1_REG = PAL_DEF(1, 3, 1, 0);
+	OBP1_REG = PAL_DEF(1, 0, 0, 0);
 
 	
 	if(current_level != 0){
-		INIT_HUD(window);
+		if(current_level != 17 && current_level != 18){
+			INIT_HUD(window);
+		}else{
+			INIT_HUD(window2);
+		}
+		
 		
 	}else{
 		HIDE_WIN;
@@ -160,10 +188,26 @@ void START()
 	}else if( current_level > 10){
 		InitScroll(level->bank, level->map, collision_tiles2, 0);
 	}
+	// InitScroll(level->bank, level->map, bossfight_col, 0);
+
 	
 
 	if(current_level != 0){
-		scroll_target = SpriteManagerAdd(SpritePlayer, start_positions[current_level].start_x, start_positions[current_level].start_y);
+		// if(current_level != 17 && current_level != 18){
+			player_sprite = scroll_target = SpriteManagerAdd(SpritePlayer, start_positions[current_level].start_x, start_positions[current_level].start_y);
+		// }else{
+			
+		// 	if(current_level == 17){
+		// 		SpriteManagerAdd(SpriteBossElec, 8, 121);
+		// 		player_sprite = SpriteManagerAdd(SpritePlayer, start_positions[current_level].start_x, start_positions[current_level].start_y);
+		// 	}
+		// 	if(current_level == 18){
+		// 		player_sprite = SpriteManagerAdd(SpritePlayer, start_positions[current_level].start_x, start_positions[current_level].start_y);
+		// 		SpriteManagerAdd(SpriteCrystalBoss, 123, 128);
+		// 	}
+			
+		// }
+
 	}
 	
 	
@@ -203,6 +247,8 @@ void START()
 		ScrollRelocateMapTo(0,48);
 		break;
 	case 11:
+		PlayMusic(unlinkedrooftop, 1);
+		
 		ScrollRelocateMapTo(0,48);
 		door_time_btwn_start = door_time_btwn = 35;
 		SetOnOffCols(collision_tiles2, on_off);
@@ -232,6 +278,18 @@ void START()
 		door_time_btwn_start = door_time_btwn = 220;
 		SetOnOffCols(collision_tiles2, on_off);
 		break;
+	case 17:
+		ScrollRelocateMapTo(0,48);
+		state_interrupts = 1;
+		// door_time_btwn_start = door_time_btwn = 220;
+		// SetOnOffCols(collision_tiles2, on_off);
+		break;
+	case 18:
+		ScrollRelocateMapTo(0,40);
+		state_interrupts = 2;
+		// door_time_btwn_start = door_time_btwn = 220;
+		// SetOnOffCols(collision_tiles2, on_off);
+		break;
 	}
 
 	
@@ -244,7 +302,12 @@ void START()
 		#ifdef CGB
 		TMA_REG = _cpu == CGB_TYPE ? 120U : 0xBCU;
 #else
-		TMA_REG = 180u;
+		if(current_level > 10){
+			TMA_REG = 192u;
+		}else{
+			TMA_REG = 180u;
+		}
+		
 #endif
 
 	if(current_level != 0){
@@ -263,6 +326,10 @@ void UPDATE()
 {
 	// vsync();
 	// scanline_offsets = scanline_offsets_tbl + ((sys_time >> 2) & 0x07u)
+
+	if(current_level != 17 && current_level != 18){
+
+
 	if(--doAnimCount == 0 && current_level > 0){
 		
 		
@@ -300,6 +367,20 @@ void UPDATE()
 	{
 		current_level--;
 		SetState(current_state);
+	}
+
+	} else if(current_level == 18){
+		if(--doAnimCount == 0 && current_level > 0){
+			
+			
+			
+			AnimCounter++;
+			Tile_Anim(AnimCounter , 2, &waterAnim, 47, BANK(waterAnim));
+			Tile_Anim(AnimCounter , 8, &waterfallAnim2, 72, BANK(waterfallAnim2));
+	
+		
+			doAnimCount = 5;
+		}
 	}
 
 	// if(KEY_TICKED(J_START)){
