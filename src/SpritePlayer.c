@@ -8,7 +8,7 @@
 #include "Math.h"
 #include "Scroll.h"
 #include "ZGBMain.h"
-
+#include "Music.h"
 
 const UINT8 anim_idle[] = {2, 0, 1};
 const UINT8 anim_walk[] = {4, 2, 1, 3, 1};
@@ -16,7 +16,11 @@ const UINT8 anim_jump[] = {2, 4, 5};
 const UINT8 anim_fall[] = {2, 6, 7};
 const UINT8 anim_spin[] = {6, 8, 9, 10, 11, 12, 13};
 const UINT8 anim_death[] = {4, 14, 15, 15, 15};
+const UINT8 anim_dab[] = {2, 16, 17};
+const UINT8 anim_patinar[] = {2, 18, 18};
 
+
+DECLARE_MUSIC(unlinkedunchainedsoul);
 
 extern INT16 inmunity;
 extern INT8 pal_tick;
@@ -24,6 +28,7 @@ extern UINT8 current_pal;
 extern UINT8 current_life;
 extern UINT8 current_level;
 extern UINT8 door_open;
+extern UINT8 IsFirstLvl;
 BOOLEAN canHurt;
 
 
@@ -32,7 +37,7 @@ INT16 player_accel_x = 0;
 INT8 player_state = 0;
 UINT8 player_collision = 0;
 UINT8 player_last_state = 0;
-
+UINT8 player_counter = 0;
 
 
 // void UpdateMapTile(INT16 map_x, INT16 map_y, UINT8 tile_id, UINT8 c) {
@@ -79,6 +84,13 @@ void CheckCollisionTile()
         SetSpriteAnim(THIS, anim_death, 15);
         player_state = 11;
     }
+    if(colision == 116){
+        current_life = 0;
+        player_state = 55;
+        ScreenShake(1,1);
+        RefreshLife();
+        SetState(current_state);
+    }
 
 
 // }
@@ -91,7 +103,7 @@ void CheckCollisionTile()
 
 void START()
 {
-    player_state = 0;
+    player_state = 8;
     player_accel_y = 0;
     player_collision = 0;
     THIS->lim_x = 80;
@@ -100,8 +112,14 @@ void START()
     // player_canDo = TRUE;
     player_last_state = 0;
     player_accel_x = 0;
-    // THIS->x -= 17;
+    THIS->x -= 8;
+    if(IsFirstLvl){
+        THIS->y -= 8;
+    }
+    player_counter =  0;
+    inmunity = 0;
     canHurt = inmunity < 1 ? 1 : 0;
+
 }
 
 void UPDATE()
@@ -239,15 +257,24 @@ void UPDATE()
                 THIS->mirror = NO_MIRROR;
             }
         break;
-        case 8:
-            TranslateSprite(THIS, 1, 0);
-            SetSpriteAnim(THIS, anim_walk, 15);
-            THIS->mirror = NO_MIRROR;
-            if(THIS->x == 16){
-                player_state = 0;
+        case 8: //animacion al entrar a un nivel
+            if(IsFirstLvl){
+                player_accel_y = -80;
+                THIS->mirror = NO_MIRROR;
+                
+                SetSpriteAnim(THIS, anim_jump, 15);
+                player_state = 12;
+            }else{  
+                TranslateSprite(THIS, 1, 0);
+                SetSpriteAnim(THIS, anim_walk, 15);
+                THIS->mirror = NO_MIRROR;
+                if(THIS->x == 16){
+                    player_state = 0;
+                }
             }
+  
         break;
-        case 9:
+        case 9: //animacion al llegar al limite del nivel
             THIS->x++;
             THIS->mirror = NO_MIRROR;
             if(THIS->x >= (scroll_x + 172)){
@@ -294,6 +321,38 @@ void UPDATE()
                 SpriteManagerAdd(SpritePlayerDeath, THIS->x - 12, THIS->y - 8);
             }
         break;
+        case 12: //salto intro escena
+            TranslateSprite(THIS, 2, 0);
+            if (player_accel_y > 2)
+            {
+                SetSpriteAnim(THIS, anim_fall, 15);
+            }
+        break;
+        case 13: //animacion patinar
+            TranslateSprite(THIS, 1, 0);
+            if(THIS->anim_frame == 1){
+                player_counter++;
+            }
+            if(player_counter == 10){
+                player_counter = 0;
+                SetSpriteAnim(THIS, anim_dab, 15);
+                player_state++;
+                SpriteManagerAdd(SpriteIntroBigShine, THIS->x + 8, THIS->y - 8);
+            }
+             
+        break;
+        case 14: //animacion dab
+         
+            if(THIS->anim_frame == 1){
+                player_counter++;
+            }
+            if(player_counter == 30){
+                player_counter = 0;
+                player_state = 0;
+                PlayMusic(unlinkedunchainedsoul, 1);
+            }
+             
+        break;
     }
 
    
@@ -318,6 +377,10 @@ void UPDATE()
             {
                 player_state = 0;
                 SetSpriteAnim(THIS, anim_idle, 15);
+            }
+            if(player_state == 12){
+                player_state++;
+                SetSpriteAnim(THIS, anim_patinar, 30);
             }
         }
         if (player_state == 0 && player_accel_y >= 20)

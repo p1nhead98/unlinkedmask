@@ -13,7 +13,7 @@
 #include "BankManager.h"
 #include "MapInfo.h"
 #include <string.h>
-
+#include "SGB.h"
 
 IMPORT_MAP(titleScreen);
 IMPORT_MAP(lvl_1);
@@ -37,9 +37,12 @@ IMPORT_MAP(boss3ground);
 IMPORT_MAP(window);
 IMPORT_MAP(window2);
 
+IMPORT_MAP(linkedborder);
+
+
 DECLARE_MUSIC(song1);
 DECLARE_MUSIC(unlinkedchainedsoul);
-DECLARE_MUSIC(unlinkedunchainedsoul);
+
 DECLARE_MUSIC(unlinkedrooftop);
 
 UINT8 collision_tiles[] = {4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 33, 34, 35, 36, 37, 38, 62, 63, 64, 65, 66, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 0};
@@ -56,6 +59,8 @@ UINT8 current_level = 0;
 
 UINT8 doAnimCount = 0;
 UINT8 AnimCounter = 0;
+
+UINT8 IsFirstLvl = 0;
 
 extern UINT8 state_interrupts;
 
@@ -151,11 +156,18 @@ void START()
 	// add_LCD(LCD_Interrupt);
 	// add_VBL(VBL_Interrupt);
 	// enable_interrupts();
-
+	
+	if(current_level == 0){
+		DISPLAY_OFF;
+		LOAD_SGB_BORDER(linkedborder);
+		DISPLAY_ON;
+	}
+	
 	stop_music_on_new_state = 0;
 	// current_level = 9;
 	const struct MapInfoBanked* level = &levels[current_level];
-
+	
+	
 	door_open = 0;
 	door_button = 1;
 	door_time = 6;
@@ -177,11 +189,12 @@ void START()
 		}else{
 			INIT_HUD(window2);
 		}
-		
-		
 	}else{
 		HIDE_WIN;
 	}
+
+
+	
 
 	if( current_level < 11){
 		InitScroll(level->bank, level->map, collision_tiles, 0);
@@ -190,11 +203,20 @@ void START()
 	}
 	// InitScroll(level->bank, level->map, bossfight_col, 0);
 
-	
+	if(current_level == 1){
+		IsFirstLvl = 1;
+	}else{
+		IsFirstLvl = 0;
+	}
 
 	if(current_level != 0){
 		// if(current_level != 17 && current_level != 18){
-			player_sprite = scroll_target = SpriteManagerAdd(SpritePlayer, start_positions[current_level].start_x, start_positions[current_level].start_y);
+			if( current_level < 6){
+				player_sprite = scroll_target = SpriteManagerAdd(SpritePlayerNoCape, start_positions[current_level].start_x, start_positions[current_level].start_y);
+			}else if( current_level > 5){
+				player_sprite = scroll_target = SpriteManagerAdd(SpritePlayer, start_positions[current_level].start_x, start_positions[current_level].start_y);
+			}
+			
 		// }else{
 			
 		// 	if(current_level == 17){
@@ -209,14 +231,15 @@ void START()
 		// }
 
 	}
-	
+
 	
 	switch (current_level)
 	{
 		
 	case 1:
-		PlayMusic(unlinkedunchainedsoul, 1);
+	
 		ScrollRelocateMapTo(0,48);
+		
 		break;
 	case 2:
 		ScrollRelocateMapTo(0,48);

@@ -6,7 +6,7 @@ _STATE(StateGame)\
 STATE_DEF_END
 
 #define SPRITES \
-_SPRITE_DMG(SpritePlayer, player)\
+_SPRITE_DMG(SpritePlayer, playerCape)\
 _SPRITE_DMG(SpriteSpinOrb, plataforma1)\
 _SPRITE_DMG(SpriteJumpBox, plataforma2)\
 _SPRITE_DMG(SpriteCrusherDown, crusherDown)\
@@ -28,6 +28,10 @@ _SPRITE_DMG(SpriteBossElec, elecBoss)\
 _SPRITE_DMG(SpriteElectBossFx, elecBossFx)\
 _SPRITE_DMG(SpriteCrystalBoss, crystalBoss)\
 _SPRITE_DMG(SpriteCrystalAttack, crystalAttack)\
+_SPRITE_DMG(SpritePlayerNoCape, playerNoCape)\
+_SPRITE_DMG(SpriteIntroBigShine, introBigShine)\
+_SPRITE_DMG(SpriteIntroMiniShine, introMiniShine)\
+_SPRITE_DMG(SpriteIntroFx, introFx)\
 SPRITE_DEF_END
 
 #include "ZGBMain_Init.h"
