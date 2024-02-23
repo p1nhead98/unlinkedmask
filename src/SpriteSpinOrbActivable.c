@@ -33,7 +33,9 @@ void CheckCollisionTilePlt2(CUSTOM_DATA_ORB* data)
     }else if( colision == 104 && data->state != 3 ){
         data->state = 3;
     }
-
+    if(colision == 116){
+        SpriteManagerRemove(THIS_IDX);
+    }
    
     // UINT8 colision2 = GetScrollTile((THIS->x + 3u) >> 3, (THIS->y + 16u) >> 3);
   
