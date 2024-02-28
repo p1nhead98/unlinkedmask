@@ -32,6 +32,7 @@ _SPRITE_DMG(SpritePlayerNoCape, playerNoCape)\
 _SPRITE_DMG(SpriteIntroBigShine, introBigShine)\
 _SPRITE_DMG(SpriteIntroMiniShine, introMiniShine)\
 _SPRITE_DMG(SpriteIntroFx, introFx)\
+_SPRITE_DMG(SpriteWindEnemy, windEnemy)\
 SPRITE_DEF_END
 
 #include "ZGBMain_Init.h"

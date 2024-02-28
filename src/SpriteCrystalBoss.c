@@ -41,7 +41,7 @@ void UPDATE()
         }
         if(THIS->anim_frame == 2){
             cryst_boss_counter++;
-            if(cryst_boss_counter > 30){
+            if(cryst_boss_counter > 5){
                 cryst_boss_counter = 0;
                 cryst_boss_state = 1; 
                 SetSpriteAnim(THIS, crystal_boss_walk, 15);
@@ -57,7 +57,7 @@ void UPDATE()
         }
         if(THIS->anim_frame == 2){
             cryst_boss_counter++;
-            if(cryst_boss_counter > 7){
+            if(cryst_boss_counter > 2){
                 cryst_boss_counter = 0;
                 cryst_boss_state++;
                 player_last_x = player_sprite->x;
