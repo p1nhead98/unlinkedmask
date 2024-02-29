@@ -16,7 +16,7 @@
 #include "SGB.h"
 
 IMPORT_MAP(titleScreen);
-IMPORT_MAP(lvl_1);
+IMPORT_MAP(lvl_1gp);
 IMPORT_MAP(lvl_2);
 IMPORT_MAP(lvl_3);
 IMPORT_MAP(lvl_4);
@@ -103,7 +103,7 @@ struct MapInfoBanked {
 
 const struct MapInfoBanked levels[] = {
 	BANKED_MAP(titleScreen),
-	BANKED_MAP(lvl_1),
+	BANKED_MAP(lvl_1gp),
 	BANKED_MAP(lvl_2),
 	BANKED_MAP(lvl_3),
 	BANKED_MAP(lvl_4),
@@ -198,15 +198,15 @@ void START()
 	start_screen = 0;
 
 	
-	if(current_level != 0){
-		if(current_level != 17 && current_level != 18){
-			INIT_HUD(window);
-		}else{
-			INIT_HUD(window2);
-		}
-	}else{
-		HIDE_WIN;
-	}
+	// if(current_level != 0){
+	// 	if(current_level != 17 && current_level != 18){
+	// 		INIT_HUD(window);
+	// 	}else{
+	// 		INIT_HUD(window2);
+	// 	}
+	// }else{
+	// 	HIDE_WIN;
+	// }
 
 
 	
@@ -355,14 +355,14 @@ void START()
 		
 #endif
 
-	if(current_level != 0){
+	// if(current_level != 0){
 
-		RefreshLife();
+	// 	RefreshLife();
 		
 		
-	}else{
-		HIDE_WIN;
-	}
+	// }else{
+	// 	HIDE_WIN;
+	// }
 	
 	
 }
