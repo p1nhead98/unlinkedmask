@@ -9,6 +9,7 @@
 
 
 extern UINT8 current_level;
+extern UINT8 start_screen;
 
 void CheckCollisionTilePlt2(CUSTOM_DATA_ORB* data)
 {
@@ -88,6 +89,11 @@ void CheckCollisionTilePlt2(CUSTOM_DATA_ORB* data)
 void START()
 {
     CUSTOM_DATA_ORB* data = (CUSTOM_DATA_ORB*)THIS->custom_data;
+
+    data->initial_frame_speed = 0;
+    data->initial_y = THIS->y;
+    data->start = 1;
+
     data->state = 0;
     data->initial_state = 0;
     if(current_level == 10 || current_level == 11){
@@ -110,72 +116,89 @@ void UPDATE()
 {
     CUSTOM_DATA_ORB* data = (CUSTOM_DATA_ORB*)THIS->custom_data;
 
-    if(data->state != 0){
-        CheckCollisionTilePlt2(data);
-    }
+     if(start_screen == 0){
 
-    switch (data->state)
-    {
-    case 1:
-        UINT8 colision = GetScrollTile((THIS->x ) >> 3, (THIS->y + 6u) >> 3);
-        UINT8 colision2 = GetScrollTile((THIS->x + 7u) >> 3, (THIS->y + 6u) >> 3);
-        if(colision == 97){
-            data->state = 2;
-            data->initial_speed = 1;
-        }else if (colision == 93){
-            data->state = 2;
-            data->initial_speed = 4;
-        }else if (colision == 101){
-            data->state = 2;
-        }else if(colision == 105){
-            if(current_level == 14){
-                data->state = 4;
+        if(data->start == 0){
+            data->start = 1;
+            THIS->y = data->initial_y;
+            THIS->anim_speed = data->initial_frame_speed;
+        }
+
+        if(data->state != 0){
+            CheckCollisionTilePlt2(data);
+        }
+
+        switch (data->state)
+        {
+        case 1:
+            UINT8 colision = GetScrollTile((THIS->x ) >> 3, (THIS->y + 6u) >> 3);
+            UINT8 colision2 = GetScrollTile((THIS->x + 7u) >> 3, (THIS->y + 6u) >> 3);
+            if(colision == 97){
+                data->state = 2;
                 data->initial_speed = 1;
+            }else if (colision == 93){
+                data->state = 2;
+                data->initial_speed = 4;
+            }else if (colision == 101){
+                data->state = 2;
+            }else if(colision == 105){
+                if(current_level == 14){
+                    data->state = 4;
+                    data->initial_speed = 1;
+                }
+            }else if(colision2 == 106){
+            
+                data->state = 5;
+                data->initial_speed = 4;
+                
             }
-        }else if(colision2 == 106){
-           
-            data->state = 5;
-            data->initial_speed = 4;
-            
-        }
-        break;
-    case 2:
-        if(--data->speed == 0 && data->initial_speed == 1){
-            THIS->x++;
-            data->speed = data->initial_speed;
-        }else{
-            THIS->x += data->initial_speed;
-        }
-            
-        break;
-    case 3:
-     
-        if(--data->speed == 0 && data->initial_speed == 1){
-            THIS->y--;
-            data->speed = data->initial_speed;
-        }else{
-            THIS->y -= data->initial_speed;
-        }
-        break;
-    case 4:
-        if(--data->speed == 0 && data->initial_speed == 1){
-            THIS->x--;
-            data->speed = data->initial_speed;
-        }else{
-            THIS->x -= data->initial_speed;
-        }
-    
-        break;
-    case 5:
-        if(--data->speed == 0 && data->initial_speed == 1){
-            THIS->y++;
-            data->speed = data->initial_speed;
-        }else{
-            THIS->y += data->initial_speed;
-        }
-      
-        break;
+            break;
+        case 2:
+            if(--data->speed == 0 && data->initial_speed == 1){
+                THIS->x++;
+                data->speed = data->initial_speed;
+            }else{
+                THIS->x += data->initial_speed;
+            }
+                
+            break;
+        case 3:
+        
+            if(--data->speed == 0 && data->initial_speed == 1){
+                THIS->y--;
+                data->speed = data->initial_speed;
+            }else{
+                THIS->y -= data->initial_speed;
+            }
+            break;
+        case 4:
+            if(--data->speed == 0 && data->initial_speed == 1){
+                THIS->x--;
+                data->speed = data->initial_speed;
+            }else{
+                THIS->x -= data->initial_speed;
+            }
+        
+            break;
+        case 5:
+            if(--data->speed == 0 && data->initial_speed == 1){
+                THIS->y++;
+                data->speed = data->initial_speed;
+            }else{
+                THIS->y += data->initial_speed;
+            }
+        
+            break;
 
+        }
+    }else{
+        if(THIS->y != 0  && data->start == 1){
+            data->start = 0;
+            data->initial_y = THIS->y;
+            THIS->y = 0;
+            data->initial_frame_speed = THIS->anim_speed;
+            THIS->anim_speed =0;
+        } 
     }
 }
 

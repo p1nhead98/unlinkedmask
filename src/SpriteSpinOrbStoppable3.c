@@ -10,6 +10,7 @@
 
 
 extern UINT8 current_level;
+extern UINT8 start_screen;
 
 void CheckCollisionTilePlt5(CUSTOM_DATA_ORB* data)
 {
@@ -75,6 +76,11 @@ void CheckCollisionTilePlt5(CUSTOM_DATA_ORB* data)
 void START()
 {
     CUSTOM_DATA_ORB* data = (CUSTOM_DATA_ORB*)THIS->custom_data;
+
+    data->initial_frame_speed = 0;
+    data->initial_y = THIS->y;
+    data->start = 1;
+
     data->initial_state = data->state = 0;
     data->speed = 0;
     data->initial_speed = 5;
@@ -92,34 +98,51 @@ void UPDATE()
     UINT8 i;
 	Sprite* spr;
 
-    if(data->state != 0){
-        CheckCollisionTilePlt5(data);
-    }
+    if(start_screen == 0){
 
-    switch (data->state)
-    {
-    case 1:
-        data->state = 5;
-        data->initial_speed = 5;
-        data->speed++;
-        
-        break;
-    case 2:
-        THIS->x += data->initial_speed;
-        break;
-    case 3:
-        THIS->y -= data->initial_speed;
-        break;
-    case 4:
-        THIS->x -= data->initial_speed;
-        break;
-    case 5:
-        THIS->y += data->initial_speed;
-        break;
+        if(data->start == 0){
+            data->start = 1;
+            THIS->y = data->initial_y;
+            THIS->anim_speed = data->initial_frame_speed;
+        }
+
+        if(data->state != 0){
+            CheckCollisionTilePlt5(data);
+        }
+
+        switch (data->state)
+        {
+        case 1:
+            data->state = 5;
+            data->initial_speed = 5;
+            data->speed++;
+            
+            break;
+        case 2:
+            THIS->x += data->initial_speed;
+            break;
+        case 3:
+            THIS->y -= data->initial_speed;
+            break;
+        case 4:
+            THIS->x -= data->initial_speed;
+            break;
+        case 5:
+            THIS->y += data->initial_speed;
+            break;
 
 
-    default:
-        break;
+        default:
+            break;
+        }
+    }else{
+        if(THIS->y != 0  && data->start == 1){
+            data->start = 0;
+            data->initial_y = THIS->y;
+            THIS->y = 0;
+            data->initial_frame_speed = THIS->anim_speed;
+            THIS->anim_speed =0;
+        } 
     }
 }
 

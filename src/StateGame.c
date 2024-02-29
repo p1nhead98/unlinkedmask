@@ -16,7 +16,7 @@
 #include "SGB.h"
 
 IMPORT_MAP(titleScreen);
-IMPORT_MAP(lvl_1);
+IMPORT_MAP(lvl_1gp);
 IMPORT_MAP(lvl_2);
 IMPORT_MAP(lvl_3);
 IMPORT_MAP(lvl_4);
@@ -36,19 +36,22 @@ IMPORT_MAP(boss2Electric);
 IMPORT_MAP(boss3ground);
 IMPORT_MAP(window);
 IMPORT_MAP(window2);
+IMPORT_MAP(windTowerDemo);
 
 IMPORT_MAP(linkedborder);
 
 
 DECLARE_MUSIC(song1);
 DECLARE_MUSIC(unlinkedchainedsoul);
-
 DECLARE_MUSIC(unlinkedrooftop);
+DECLARE_MUSIC(unlinkedinside1);
 
 UINT8 collision_tiles[] = {4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 33, 34, 35, 36, 37, 38, 62, 63, 64, 65, 66, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 0};
 UINT8 collision_tiles2[] = {4, 5, 6 ,7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 56, 57, 58, 59, 60, 61, 62, 63, 0};
 
 UINT8 bossfight_col[] = {4, 5, 8, 10, 12, 14, 16, 17, 0};
+
+UINT8 windtower_tiles[] = {10,7,8,9,15,16,17,4,5,6,82,83,84,85,86,87,88,89,18,12, 0};
 
 UINT8 door_time = 0;
 UINT8 door_time_btwn = 0;
@@ -61,6 +64,12 @@ UINT8 doAnimCount = 0;
 UINT8 AnimCounter = 0;
 
 UINT8 IsFirstLvl = 0;
+
+UINT8 start_screen = 0;
+
+
+struct TilesInfo* original_tiles = 0;
+UINT8 original_lvl_bank = 0;
 
 extern UINT8 state_interrupts;
 
@@ -94,7 +103,7 @@ struct MapInfoBanked {
 
 const struct MapInfoBanked levels[] = {
 	BANKED_MAP(titleScreen),
-	BANKED_MAP(lvl_1),
+	BANKED_MAP(lvl_1gp),
 	BANKED_MAP(lvl_2),
 	BANKED_MAP(lvl_3),
 	BANKED_MAP(lvl_4),
@@ -109,10 +118,12 @@ const struct MapInfoBanked levels[] = {
 	BANKED_MAP(lvl_13),
 	BANKED_MAP(lvl_14),
 	BANKED_MAP(lvl_15),
+	BANKED_MAP(lvl_16),
+	BANKED_MAP(boss2Electric),
+	BANKED_MAP(boss3ground),
+	BANKED_MAP(windTowerDemo),
 };
-	// BANKED_MAP(lvl_16),
-	// BANKED_MAP(boss2Electric),
-	// BANKED_MAP(boss3ground),
+
 
 
 typedef struct {
@@ -137,11 +148,13 @@ const START_POS start_positions[] = {
 	{8, 96},  //Level 13 Player Start Position
 	{8, 96},  //Level 14 Player Start Position
 	{8, 96},  //Level 15 Player Start Position
+	{8, 144},  //Level 16 Player Start Position
+	{100, 130},  //Level 17 Player Start Position
+	{22, 130},  //Level 18 Player Start Position
+	{22, 126},  //Level 19 Player Start Position
 };
 
-	// {8, 144},  //Level 16 Player Start Position
-	// {100, 130},  //Level 17 Player Start Position
-	// {22, 130},  //Level 18 Player Start Position
+
 
 
 
@@ -182,16 +195,18 @@ void START()
 	OBP0_REG = PAL_DEF(3, 0, 1, 2);
 	OBP1_REG = PAL_DEF(1, 0, 0, 0);
 
+	start_screen = 0;
+
 	
-	if(current_level != 0){
-		if(current_level != 17 && current_level != 18){
-			INIT_HUD(window);
-		}else{
-			INIT_HUD(window2);
-		}
-	}else{
-		HIDE_WIN;
-	}
+	// if(current_level != 0){
+	// 	if(current_level != 17 && current_level != 18){
+	// 		INIT_HUD(window);
+	// 	}else{
+	// 		INIT_HUD(window2);
+	// 	}
+	// }else{
+	// 	HIDE_WIN;
+	// }
 
 
 	
@@ -201,7 +216,8 @@ void START()
 	}else if( current_level > 10){
 		InitScroll(level->bank, level->map, collision_tiles2, 0);
 	}
-	// InitScroll(level->bank, level->map, bossfight_col, 0);
+	
+	//InitScroll(level->bank, level->map, windtower_tiles, 0);
 
 	if(current_level == 1){
 		IsFirstLvl = 1;
@@ -210,25 +226,25 @@ void START()
 	}
 
 	if(current_level != 0){
-		// if(current_level != 17 && current_level != 18){
+		if(current_level != 17 && current_level != 18){
 			if( current_level < 6){
 				player_sprite = scroll_target = SpriteManagerAdd(SpritePlayerNoCape, start_positions[current_level].start_x, start_positions[current_level].start_y);
 			}else if( current_level > 5){
 				player_sprite = scroll_target = SpriteManagerAdd(SpritePlayer, start_positions[current_level].start_x, start_positions[current_level].start_y);
 			}
 			
-		// }else{
+		}else{
 			
-		// 	if(current_level == 17){
-		// 		SpriteManagerAdd(SpriteBossElec, 8, 121);
-		// 		player_sprite = SpriteManagerAdd(SpritePlayer, start_positions[current_level].start_x, start_positions[current_level].start_y);
-		// 	}
-		// 	if(current_level == 18){
-		// 		player_sprite = SpriteManagerAdd(SpritePlayer, start_positions[current_level].start_x, start_positions[current_level].start_y);
-		// 		SpriteManagerAdd(SpriteCrystalBoss, 123, 128);
-		// 	}
+			if(current_level == 17){
+				SpriteManagerAdd(SpriteBossElec, 8, 121);
+				player_sprite = SpriteManagerAdd(SpritePlayer, start_positions[current_level].start_x, start_positions[current_level].start_y);
+			}
+			if(current_level == 18){
+				player_sprite = SpriteManagerAdd(SpritePlayer, start_positions[current_level].start_x, start_positions[current_level].start_y);
+				SpriteManagerAdd(SpriteCrystalBoss, 123, 128);
+			}
 			
-		// }
+		}
 
 	}
 
@@ -270,7 +286,7 @@ void START()
 		ScrollRelocateMapTo(0,48);
 		break;
 	case 11:
-		PlayMusic(unlinkedrooftop, 1);
+		PlayMusic(unlinkedinside1, 1);
 		
 		ScrollRelocateMapTo(0,48);
 		door_time_btwn_start = door_time_btwn = 35;
@@ -313,6 +329,12 @@ void START()
 		// door_time_btwn_start = door_time_btwn = 220;
 		// SetOnOffCols(collision_tiles2, on_off);
 		break;
+	case 19:
+		ScrollRelocateMapTo(0,48);
+
+		// door_time_btwn_start = door_time_btwn = 220;
+		// SetOnOffCols(collision_tiles2, on_off);
+		break;
 	}
 
 	
@@ -326,21 +348,21 @@ void START()
 		TMA_REG = _cpu == CGB_TYPE ? 120U : 0xBCU;
 #else
 		if(current_level > 10){
-			TMA_REG = 192u;
+			TMA_REG = 175u;
 		}else{
 			TMA_REG = 180u;
 		}
 		
 #endif
 
-	if(current_level != 0){
+	// if(current_level != 0){
 
-		RefreshLife();
+	// 	RefreshLife();
 		
 		
-	}else{
-		HIDE_WIN;
-	}
+	// }else{
+	// 	HIDE_WIN;
+	// }
 	
 	
 }
@@ -350,63 +372,77 @@ void UPDATE()
 	// vsync();
 	// scanline_offsets = scanline_offsets_tbl + ((sys_time >> 2) & 0x07u)
 
-	if(current_level != 17 && current_level != 18){
+	if(current_level != 17 && current_level != 18 && start_screen == 0 ){
 
 
-	if(--doAnimCount == 0 && current_level > 0){
-		
-		
-		AnimCounter++;
-		Tile_Anim(AnimCounter , 2, &spikesAnim, 112, BANK(spikesAnim));
-		Tile_Anim(AnimCounter , 2, &spikesAnim2, 114, BANK(spikesAnim2));
-		Tile_Anim(AnimCounter , 2, &spikesAnim3, 113, BANK(spikesAnim3));
-		Tile_Anim(AnimCounter , 2, &spikesAnim4, 115, BANK(spikesAnim4));
-	
-		doAnimCount = 5;
-	}
-	if(current_level == 0 && KEY_TICKED(J_START)){
-		current_level++;
-		SetState(current_state);		
-	}
-	if(door_open == 1 && --door_time_btwn == 0){
-		
-		door_time--; 
-		RefreshTimer(door_time);
-		door_time_btwn = door_time_btwn_start;
-		
-	}
-	if(door_time == 0){
-		door_open = 0;
-		door_time = 6;
-		door_button = 1;
-		SetDoorCols( 0 );
-		
-	}
-	if (KEY_TICKED(J_SELECT) && !KEY_PRESSED(J_LEFT))
-	{
-		current_level++;
-		SetState(current_state);
-	} else if (KEY_TICKED(J_SELECT) && KEY_PRESSED(J_LEFT))
-	{
-		current_level--;
-		SetState(current_state);
-	}
-
-	} else if(current_level == 18){
 		if(--doAnimCount == 0 && current_level > 0){
 			
 			
-			
 			AnimCounter++;
-			Tile_Anim(AnimCounter , 2, &waterAnim, 47, BANK(waterAnim));
-			Tile_Anim(AnimCounter , 8, &waterfallAnim2, 72, BANK(waterfallAnim2));
-	
+			Tile_Anim(AnimCounter , 2, &spikesAnim, 112, BANK(spikesAnim));
+			Tile_Anim(AnimCounter , 2, &spikesAnim2, 114, BANK(spikesAnim2));
+			Tile_Anim(AnimCounter , 2, &spikesAnim3, 113, BANK(spikesAnim3));
+			Tile_Anim(AnimCounter , 2, &spikesAnim4, 115, BANK(spikesAnim4));
 		
 			doAnimCount = 5;
 		}
+		if(current_level == 0 && KEY_TICKED(J_START)){
+			current_level++;
+			SetState(current_state);		
+		}
+		if(door_open == 1 && --door_time_btwn == 0){
+			
+			door_time--; 
+			RefreshTimer(door_time);
+			door_time_btwn = door_time_btwn_start;
+			
+		}
+		if(door_time == 0){
+			door_open = 0;
+			door_time = 6;
+			door_button = 1;
+			SetDoorCols( 0 );
+			
+		}
+		if (KEY_TICKED(J_SELECT) && !KEY_PRESSED(J_LEFT))
+		{
+			current_level++;
+			SetState(current_state);
+		} else if (KEY_TICKED(J_SELECT) && KEY_PRESSED(J_LEFT))
+		{
+			current_level--;
+			SetState(current_state);
+		}
+
+		} else if(current_level == 18){
+			if(--doAnimCount == 0 && current_level > 0){
+				
+				
+				
+				AnimCounter++;
+				Tile_Anim(AnimCounter , 2, &waterAnim, 47, BANK(waterAnim));
+				Tile_Anim(AnimCounter , 8, &waterfallAnim2, 72, BANK(waterfallAnim2));
+		
+			
+				doAnimCount = 5;
+			}
 	}
 
-	// if(KEY_TICKED(J_START)){
-		
-	// }
+	if(KEY_TICKED(J_START)){
+		start_screen = start_screen == 0 ? 1 : 0;		
+		if( start_screen == 1 ){
+			DISPLAY_OFF;
+			SetWindowY(0);
+			SetPauseMenu();
+		}else{
+			SetWindowY(128);
+			SetPauseMenu();
+			RefreshLife();
+			RefreshTimer(0);
+			if(player_sprite->y != 0){
+				pDelay(40);
+			}
+			
+		}
+	}
 }
