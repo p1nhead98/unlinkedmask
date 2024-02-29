@@ -45,6 +45,7 @@ DECLARE_MUSIC(song1);
 DECLARE_MUSIC(unlinkedchainedsoul);
 DECLARE_MUSIC(unlinkedrooftop);
 DECLARE_MUSIC(unlinkedinside1);
+DECLARE_MUSIC(unlinkedtitlescreen);
 
 UINT8 collision_tiles[] = {4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 33, 34, 35, 36, 37, 38, 62, 63, 64, 65, 66, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 0};
 UINT8 collision_tiles2[] = {4, 5, 6 ,7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 56, 57, 58, 59, 60, 61, 62, 63, 0};
@@ -251,9 +252,11 @@ void START()
 	
 	switch (current_level)
 	{
-		
+	case 0:
+		PlayMusic(unlinkedtitlescreen, 1);
+	break;
 	case 1:
-	
+		
 		ScrollRelocateMapTo(0,48);
 		
 		break;
@@ -349,7 +352,10 @@ void START()
 #else
 		if(current_level > 10){
 			TMA_REG = 175u;
+		}else if(current_level == 0){
+			TMA_REG = 154u;
 		}else{
+		
 			TMA_REG = 180u;
 		}
 		
@@ -357,7 +363,8 @@ void START()
 
 	// if(current_level != 0){
 
-	// 	RefreshLife();
+	// 	RefreshLife(current_level == 0);}
+	
 		
 		
 	// }else{
@@ -371,6 +378,31 @@ void UPDATE()
 {
 	// vsync();
 	// scanline_offsets = scanline_offsets_tbl + ((sys_time >> 2) & 0x07u)
+
+	if(KEY_TICKED(J_START) ){
+		if(current_level == 0){
+		
+			current_level++;
+			SetState(current_state);		
+		
+		}else{
+		start_screen = start_screen == 0 ? 1 : 0;		
+		if( start_screen == 1 ){
+			DISPLAY_OFF;
+			SetWindowY(0);
+			SetPauseMenu();
+		}else{
+			SetWindowY(128);
+			SetPauseMenu();
+			RefreshLife();
+			RefreshTimer(0);
+			if(player_sprite->y != 0){
+				pDelay(40);
+			}
+			
+		}
+		}
+	}
 
 	if(current_level != 17 && current_level != 18 && start_screen == 0 ){
 
@@ -386,10 +418,7 @@ void UPDATE()
 		
 			doAnimCount = 5;
 		}
-		if(current_level == 0 && KEY_TICKED(J_START)){
-			current_level++;
-			SetState(current_state);		
-		}
+		
 		if(door_open == 1 && --door_time_btwn == 0){
 			
 			door_time--; 
@@ -428,21 +457,5 @@ void UPDATE()
 			}
 	}
 
-	if(KEY_TICKED(J_START)){
-		start_screen = start_screen == 0 ? 1 : 0;		
-		if( start_screen == 1 ){
-			DISPLAY_OFF;
-			SetWindowY(0);
-			SetPauseMenu();
-		}else{
-			SetWindowY(128);
-			SetPauseMenu();
-			RefreshLife();
-			RefreshTimer(0);
-			if(player_sprite->y != 0){
-				pDelay(40);
-			}
-			
-		}
-	}
+	
 }
