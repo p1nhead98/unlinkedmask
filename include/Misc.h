@@ -65,7 +65,7 @@ void SetOnOffCols(UINT8 cols[], UINT8 onOff ) BANKED;
 void SetDoorCols(UINT8 off) BANKED;
 void SetPauseMenu() BANKED;
 void cleanWindow() BANKED;
-
+void SetOnOffColsEvent(UINT8 cols[], UINT8 onOff ) BANKED;
 
 
 #endif

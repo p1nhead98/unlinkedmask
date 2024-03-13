@@ -48,7 +48,7 @@ DECLARE_MUSIC(unlinkedinside1);
 DECLARE_MUSIC(unlinkedtitlescreen);
 
 UINT8 collision_tiles[] = {4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 33, 34, 35, 36, 37, 38, 62, 63, 64, 65, 66, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 0};
-UINT8 collision_tiles2[] = {4, 5, 6 ,7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 56, 57, 58, 59, 60, 61, 62, 63, 0};
+UINT8 collision_tiles2[] = {4, 5, 6 ,7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 56, 57, 58, 59, 60, 61, 62, 63, 77, 78, 79, 80, 81, 82, 83, 84, 0};
 
 UINT8 bossfight_col[] = {4, 5, 8, 10, 12, 14, 16, 17, 0};
 
@@ -59,7 +59,7 @@ UINT8 door_time_btwn = 0;
 UINT8 door_time_btwn_start = 0;
 UINT8 door_open = 0;
 BOOLEAN door_button = 0;
-UINT8 current_level = 0;
+UINT8 current_level = 14;
 
 UINT8 doAnimCount = 0;
 UINT8 AnimCounter = 0;
@@ -79,6 +79,11 @@ extern UINT8 max_life;
 extern UINT8 current_life;
 extern UINT8 stop_music_on_new_state;
 extern UINT8 on_off;
+
+extern UINT8 can_scroll_x;
+extern UINT8 can_scroll_y;
+
+UINT8 event = 0;
 
 
 IMPORT_TILES(spikesAnim);
@@ -176,8 +181,9 @@ void START()
 		LOAD_SGB_BORDER(linkedborder);
 		DISPLAY_ON;
 	}
-	
+	can_scroll_x = 1;
 	stop_music_on_new_state = 0;
+	event = 0;
 	// current_level = 9;
 	const struct MapInfoBanked* level = &levels[current_level];
 	
@@ -199,15 +205,15 @@ void START()
 	start_screen = 0;
 
 	
-	// if(current_level != 0){
-	// 	if(current_level != 17 && current_level != 18){
-	// 		INIT_HUD(window);
-	// 	}else{
-	// 		INIT_HUD(window2);
-	// 	}
-	// }else{
-	// 	HIDE_WIN;
-	// }
+	if(current_level != 0){
+		if(current_level != 17 && current_level != 18){
+			INIT_HUD(window);
+		}else{
+			INIT_HUD(window2);
+		}
+	}else{
+		HIDE_WIN;
+	}
 
 
 	
@@ -307,8 +313,9 @@ void START()
 		break;
 	case 14:
 		ScrollRelocateMapTo(0,48);
-		door_time_btwn_start = door_time_btwn = 120;
+		door_time_btwn_start = door_time_btwn = 200;
 		SetOnOffCols(collision_tiles2, on_off);
+		SetOnOffColsEvent(collision_tiles2, 0);
 		break;
 	case 15:
 		ScrollRelocateMapTo(0,48);
@@ -361,15 +368,11 @@ void START()
 		
 #endif
 
-	// if(current_level != 0){
-
-	// 	RefreshLife(current_level == 0);}
-	
-		
-		
-	// }else{
-	// 	HIDE_WIN;
-	// }
+	if(current_level != 0){
+		RefreshLife();
+	}else{
+		HIDE_WIN;
+	}
 	
 	
 }
@@ -456,6 +459,13 @@ void UPDATE()
 				doAnimCount = 5;
 			}
 	}
-
+	if(current_level == 14 && player_sprite->x > 1142 && can_scroll_x == 1 && event == 0){
+		can_scroll_x = 0;
+		SetOnOffColsEvent(collision_tiles2, 1);
+	}
+	if(event == 1){
+		can_scroll_x = 1;
+		SetOnOffColsEvent(collision_tiles2, 2);
+	}
 	
 }

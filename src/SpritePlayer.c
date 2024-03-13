@@ -475,7 +475,7 @@ void UPDATE()
                     SpriteManagerAdd(SpritePlayerVfx, THIS->x - 4, THIS->y + 8);
                 }
             }
-            if(spr->type == SpriteJumpBox && player_accel_y > 0)  {
+            if((spr->type == SpriteJumpBox || spr->type == SpriteJumpBoxEvent) && player_accel_y > 0)  {
                 CUSTOM_DATA_BOX* sprData = (CUSTOM_DATA_BOX*)spr->custom_data;
                 if(CheckCollision(THIS, spr) && sprData->state == 0 && (player_state == 1 || player_state == 2 || player_state == 4 || (player_state == 10))  ) {
                     if(player_state == 1 || player_state == 4 || (player_state == 10 && player_last_state == 0) && THIS->y < (spr->y - 5)){

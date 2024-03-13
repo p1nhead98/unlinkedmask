@@ -33,6 +33,8 @@ _SPRITE_DMG(SpriteIntroBigShine, introBigShine)\
 _SPRITE_DMG(SpriteIntroMiniShine, introMiniShine)\
 _SPRITE_DMG(SpriteIntroFx, introFx)\
 _SPRITE_DMG(SpriteWindEnemy, windEnemy)\
+_SPRITE_DMG(SpriteSpinOrbEvent, plataforma1)\
+_SPRITE_DMG(SpriteJumpBoxEvent, plataforma2)\
 SPRITE_DEF_END
 
 #include "ZGBMain_Init.h"

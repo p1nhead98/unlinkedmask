@@ -282,6 +282,49 @@ void RefreshTimer( UINT8 timer ) BANKED{
   
 }
 
+void SetOnOffColsEvent(UINT8 cols[], UINT8 onOff ) BANKED{
+
+    UINT8 i = 0;
+    
+    if(onOff == 0){
+		for(i = 0u; cols[i] != 0u; ++i) {
+            if(i > 24u){
+				scroll_collisions[cols[i]] = 0u;
+				scroll_collisions_down[cols[i]] = 0u;
+			}
+            
+		}
+        Onoff_tile_anim(&OffAnim, 0, BANK(OffAnim), 77);
+       
+        
+    }else if(onOff == 1){
+        for(i = 0u; cols[i] != 0u; ++i) {
+            if(i > 24u && i < 28u){
+				scroll_collisions[cols[i]] = 1u;
+				scroll_collisions_down[cols[i]] = 1u;
+			}
+		}
+
+        Onoff_tile_anim(&OnAnim, 0, BANK(OnAnim), 77);
+        pDelay(10);
+        SpriteManagerAdd(SpriteSpinOrbEvent, 1095, 192);
+    }else if (onOff == 2){
+        for(i = 0u; cols[i] != 0u; ++i) {
+            if(i > 24u && i < 29u){
+				scroll_collisions[cols[i]] = 0u;
+				scroll_collisions_down[cols[i]] = 0u;
+			}else if(i > 28u){
+                scroll_collisions[cols[i]] = 1u;
+				scroll_collisions_down[cols[i]] = 1u;
+            }
+            
+		}
+        Onoff_tile_anim(&OffAnim, 0, BANK(OffAnim), 77);
+        Onoff_tile_anim(&OnAnim, 0, BANK(OffAnim), 81);
+    }
+
+}
+
 void SetOnOffCols(UINT8 cols[], UINT8 onOff ) BANKED{
 
     UINT8 i = 0;
@@ -291,7 +334,7 @@ void SetOnOffCols(UINT8 cols[], UINT8 onOff ) BANKED{
             if(i > 15u && i < 20u){
 				scroll_collisions[cols[i]] = 1u;
 				scroll_collisions_down[cols[i]] = 1u;
-			}else if(i > 19u){
+			}else if(i > 19u && i < 25u){
 				scroll_collisions[cols[i]] = 0u;
 				scroll_collisions_down[cols[i]] = 0u;
 			}
@@ -305,7 +348,7 @@ void SetOnOffCols(UINT8 cols[], UINT8 onOff ) BANKED{
             if(i > 15u && i < 20u){
 				scroll_collisions[cols[i]] = 0u;
 				scroll_collisions_down[cols[i]] = 0u;
-			}else if(i > 19u){
+			}else if(i > 19u && i < 25u){
 				scroll_collisions[cols[i]] = 1u;
 				scroll_collisions_down[cols[i]] = 1u;
 			}
