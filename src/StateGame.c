@@ -84,6 +84,7 @@ extern UINT8 can_scroll_x;
 extern UINT8 can_scroll_y;
 
 UINT8 event = 0;
+UINT8 canDo = 0;
 
 
 IMPORT_TILES(spikesAnim);
@@ -124,10 +125,7 @@ const struct MapInfoBanked levels[] = {
 	BANKED_MAP(lvl_13),
 	BANKED_MAP(lvl_14),
 	BANKED_MAP(lvl_15),
-	BANKED_MAP(lvl_16),
-	BANKED_MAP(boss2Electric),
-	BANKED_MAP(boss3ground),
-	BANKED_MAP(windTowerDemo),
+	BANKED_MAP(lvl_16)
 };
 
 
@@ -155,9 +153,7 @@ const START_POS start_positions[] = {
 	{8, 96},  //Level 14 Player Start Position
 	{8, 96},  //Level 15 Player Start Position
 	{8, 144},  //Level 16 Player Start Position
-	{100, 130},  //Level 17 Player Start Position
-	{22, 130},  //Level 18 Player Start Position
-	{22, 126},  //Level 19 Player Start Position
+
 };
 
 
@@ -175,7 +171,7 @@ void START()
 	// add_LCD(LCD_Interrupt);
 	// add_VBL(VBL_Interrupt);
 	// enable_interrupts();
-	
+
 	if(current_level == 0){
 		DISPLAY_OFF;
 		LOAD_SGB_BORDER(linkedborder);
@@ -186,15 +182,15 @@ void START()
 	event = 0;
 	// current_level = 9;
 	const struct MapInfoBanked* level = &levels[current_level];
-	
-	
+
+
 	door_open = 0;
 	door_button = 1;
 	door_time = 6;
 
 	doAnimCount = 3;
 	AnimCounter = 0;
-	
+
 	on_off = 0;
 
 	current_life = max_life;
@@ -204,26 +200,27 @@ void START()
 
 	start_screen = 0;
 
-	
-	if(current_level != 0){
-		if(current_level != 17 && current_level != 18){
-			INIT_HUD(window);
-		}else{
-			INIT_HUD(window2);
-		}
-	}else{
-		HIDE_WIN;
-	}
 
 
-	
+
+INIT_HUD(window);
 
 	if( current_level < 11){
 		InitScroll(level->bank, level->map, collision_tiles, 0);
 	}else if( current_level > 10){
 		InitScroll(level->bank, level->map, collision_tiles2, 0);
 	}
-	
+
+	// if(current_level != 0){
+	// 	// if(current_level < 11){
+			
+	// 	// }else{
+	// 	// 	INIT_HUD(window2);
+	// 	// }
+	// }else{
+	// 	HIDE_WIN;
+	// }
+
 	//InitScroll(level->bank, level->map, windtower_tiles, 0);
 
 	if(current_level == 1){
@@ -239,9 +236,9 @@ void START()
 			}else if( current_level > 5){
 				player_sprite = scroll_target = SpriteManagerAdd(SpritePlayer, start_positions[current_level].start_x, start_positions[current_level].start_y);
 			}
-			
+
 		}else{
-			
+
 			if(current_level == 17){
 				SpriteManagerAdd(SpriteBossElec, 8, 121);
 				player_sprite = SpriteManagerAdd(SpritePlayer, start_positions[current_level].start_x, start_positions[current_level].start_y);
@@ -250,21 +247,21 @@ void START()
 				player_sprite = SpriteManagerAdd(SpritePlayer, start_positions[current_level].start_x, start_positions[current_level].start_y);
 				SpriteManagerAdd(SpriteCrystalBoss, 123, 128);
 			}
-			
+
 		}
 
 	}
 
-	
+
 	switch (current_level)
 	{
 	case 0:
 		PlayMusic(unlinkedtitlescreen, 1);
 	break;
 	case 1:
-		
+
 		ScrollRelocateMapTo(0,48);
-		
+
 		break;
 	case 2:
 		ScrollRelocateMapTo(0,48);
@@ -296,7 +293,7 @@ void START()
 		break;
 	case 11:
 		PlayMusic(unlinkedinside1, 1);
-		
+
 		ScrollRelocateMapTo(0,48);
 		door_time_btwn_start = door_time_btwn = 35;
 		SetOnOffCols(collision_tiles2, on_off);
@@ -347,8 +344,8 @@ void START()
 		break;
 	}
 
-	
-	
+
+
 
 	//set_interrupts(LCD_IFLAG | VBL_IFLAG );
 	NR52_REG = 0x80; //Enables sound, you should always setup this first
@@ -362,10 +359,10 @@ void START()
 		}else if(current_level == 0){
 			TMA_REG = 154u;
 		}else{
-		
+
 			TMA_REG = 180u;
 		}
-		
+
 #endif
 
 	if(current_level != 0){
@@ -373,8 +370,8 @@ void START()
 	}else{
 		HIDE_WIN;
 	}
-	
-	
+
+
 }
 
 void UPDATE()
@@ -384,12 +381,12 @@ void UPDATE()
 
 	if(KEY_TICKED(J_START) ){
 		if(current_level == 0){
-		
+
 			current_level++;
-			SetState(current_state);		
-		
+			SetState(current_state);
+
 		}else{
-		start_screen = start_screen == 0 ? 1 : 0;		
+		start_screen = start_screen == 0 ? 1 : 0;
 		if( start_screen == 1 ){
 			DISPLAY_OFF;
 			SetWindowY(0);
@@ -402,7 +399,7 @@ void UPDATE()
 			if(player_sprite->y != 0){
 				pDelay(40);
 			}
-			
+
 		}
 		}
 	}
@@ -411,30 +408,30 @@ void UPDATE()
 
 
 		if(--doAnimCount == 0 && current_level > 0){
-			
-			
+
+
 			AnimCounter++;
 			Tile_Anim(AnimCounter , 2, &spikesAnim, 112, BANK(spikesAnim));
 			Tile_Anim(AnimCounter , 2, &spikesAnim2, 114, BANK(spikesAnim2));
 			Tile_Anim(AnimCounter , 2, &spikesAnim3, 113, BANK(spikesAnim3));
 			Tile_Anim(AnimCounter , 2, &spikesAnim4, 115, BANK(spikesAnim4));
-		
+
 			doAnimCount = 5;
 		}
-		
+
 		if(door_open == 1 && --door_time_btwn == 0){
-			
-			door_time--; 
+
+			door_time--;
 			RefreshTimer(door_time);
 			door_time_btwn = door_time_btwn_start;
-			
+
 		}
 		if(door_time == 0){
 			door_open = 0;
 			door_time = 6;
 			door_button = 1;
 			SetDoorCols( 0 );
-			
+
 		}
 		if (KEY_TICKED(J_SELECT) && !KEY_PRESSED(J_LEFT))
 		{
@@ -448,24 +445,24 @@ void UPDATE()
 
 		} else if(current_level == 18){
 			if(--doAnimCount == 0 && current_level > 0){
-				
-				
-				
+
+
+
 				AnimCounter++;
 				Tile_Anim(AnimCounter , 2, &waterAnim, 47, BANK(waterAnim));
 				Tile_Anim(AnimCounter , 8, &waterfallAnim2, 72, BANK(waterfallAnim2));
-		
-			
+
+
 				doAnimCount = 5;
 			}
 	}
-	if(current_level == 14 && player_sprite->x > 1142 && can_scroll_x == 1 && event == 0){
-		can_scroll_x = 0;
+	if(current_level == 14 && player_sprite->x > 1142 && canDo == 0 && event == 0){
+		canDo = 1;
 		SetOnOffColsEvent(collision_tiles2, 1);
 	}
 	if(event == 1){
-		can_scroll_x = 1;
+		// can_scroll_x = 1;
 		SetOnOffColsEvent(collision_tiles2, 2);
 	}
-	
+
 }
