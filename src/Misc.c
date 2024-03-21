@@ -12,7 +12,7 @@
 #include "rand.h"
 #include "TileAnimation.h"
 #include "Banks/SetAutoBank.h"
-
+#include "Print.h"
 
 #define SCREEN_TILES_W       20 // 160 >> 3 = 20
 #define SCREEN_TILES_H       18 // 144 >> 3 = 18
@@ -370,3 +370,49 @@ void SetDoorCols(UINT8 off) BANKED{
     }
      
 }
+void AutomaticOnOff(UINT8 cols[], UINT8 onOff ) BANKED{
+  UINT8 i = 0;
+
+    if(onOff == 0){
+		for(i = 0u; cols[i] != 0u; ++i) {
+            if(i > 15u && i < 20u){
+				scroll_collisions[cols[i]] = 1u;
+				scroll_collisions_down[cols[i]] = 1u;
+			}else if(i > 19u && i < 25u){
+				scroll_collisions[cols[i]] = 0u;
+				scroll_collisions_down[cols[i]] = 0u;
+			}
+            
+		}
+        Onoff_tile_anim(&OffAnim, 0, BANK(OffAnim), 60);
+        Onoff_tile_anim(&OnAnim, 0, BANK(OnAnim), 56);
+        
+    }else if(onOff == 1){
+        for(i = 0u; cols[i] != 0u; ++i) {
+            if(i > 15u && i < 20u){
+				scroll_collisions[cols[i]] = 0u;
+				scroll_collisions_down[cols[i]] = 0u;
+			}else if(i > 19u && i < 25u){
+				scroll_collisions[cols[i]] = 1u;
+				scroll_collisions_down[cols[i]] = 1u;
+			}
+		}
+
+        Onoff_tile_anim(&OnAnim, 0, BANK(OnAnim), 60);
+        Onoff_tile_anim(&OffAnim, 0, BANK(OffAnim), 56);
+    }
+
+}
+
+void TextWithDelay(const char* txt) BANKED{
+    UINT8 i = 0;
+    char* name = "Dragon";
+    char char_ptr = name[2];
+    PRINT(i, 0, char_ptr);
+    for(i = 0u; i < 5; ++i) {
+        //char_ptr = &name[i];
+        //PRINT(i, 0, "A");
+        pDelay(10);
+	}
+}
+

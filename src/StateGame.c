@@ -14,6 +14,7 @@
 #include "MapInfo.h"
 #include <string.h>
 #include "SGB.h"
+#include "Print.h"
 
 IMPORT_MAP(titleScreen);
 IMPORT_MAP(lvl_1gp);
@@ -31,7 +32,7 @@ IMPORT_MAP(lvl_12);
 IMPORT_MAP(lvl_13);
 IMPORT_MAP(lvl_14);
 IMPORT_MAP(lvl_15);
-IMPORT_MAP(lvl_16);
+IMPORT_MAP(lvl_167);
 IMPORT_MAP(boss2Electric);
 IMPORT_MAP(boss3ground);
 IMPORT_MAP(window);
@@ -39,6 +40,8 @@ IMPORT_MAP(window2);
 IMPORT_MAP(windTowerDemo);
 
 IMPORT_MAP(linkedborder);
+
+IMPORT_TILES(font);
 
 
 DECLARE_MUSIC(song1);
@@ -59,7 +62,7 @@ UINT8 door_time_btwn = 0;
 UINT8 door_time_btwn_start = 0;
 UINT8 door_open = 0;
 BOOLEAN door_button = 0;
-UINT8 current_level = 14;
+UINT8 current_level = 15;
 
 UINT8 doAnimCount = 0;
 UINT8 AnimCounter = 0;
@@ -68,6 +71,7 @@ UINT8 IsFirstLvl = 0;
 
 UINT8 start_screen = 0;
 
+UINT8 onoff_auto_time = 0;
 
 struct TilesInfo* original_tiles = 0;
 UINT8 original_lvl_bank = 0;
@@ -125,7 +129,7 @@ const struct MapInfoBanked levels[] = {
 	BANKED_MAP(lvl_13),
 	BANKED_MAP(lvl_14),
 	BANKED_MAP(lvl_15),
-	BANKED_MAP(lvl_16)
+	BANKED_MAP(lvl_167)
 };
 
 
@@ -152,7 +156,7 @@ const START_POS start_positions[] = {
 	{8, 96},  //Level 13 Player Start Position
 	{8, 96},  //Level 14 Player Start Position
 	{8, 96},  //Level 15 Player Start Position
-	{8, 144},  //Level 16 Player Start Position
+	{8, 96},  //Level 16 Player Start Position
 
 };
 
@@ -200,6 +204,7 @@ void START()
 
 	start_screen = 0;
 
+	onoff_auto_time = 20;
 
 
 
@@ -239,14 +244,14 @@ INIT_HUD(window);
 
 		}else{
 
-			if(current_level == 17){
-				SpriteManagerAdd(SpriteBossElec, 8, 121);
-				player_sprite = SpriteManagerAdd(SpritePlayer, start_positions[current_level].start_x, start_positions[current_level].start_y);
-			}
-			if(current_level == 18){
-				player_sprite = SpriteManagerAdd(SpritePlayer, start_positions[current_level].start_x, start_positions[current_level].start_y);
-				SpriteManagerAdd(SpriteCrystalBoss, 123, 128);
-			}
+			// if(current_level == 17){
+			// 	SpriteManagerAdd(SpriteBossElec, 8, 121);
+			// 	player_sprite = SpriteManagerAdd(SpritePlayer, start_positions[current_level].start_x, start_positions[current_level].start_y);
+			// }
+			// if(current_level == 18){
+			// 	player_sprite = SpriteManagerAdd(SpritePlayer, start_positions[current_level].start_x, start_positions[current_level].start_y);
+			// 	SpriteManagerAdd(SpriteCrystalBoss, 123, 128);
+			// }
 
 		}
 
@@ -321,18 +326,18 @@ INIT_HUD(window);
 		break;
 	case 16:
 		ScrollRelocateMapTo(0,48);
-		door_time_btwn_start = door_time_btwn = 220;
-		SetOnOffCols(collision_tiles2, on_off);
+		// door_time_btwn_start = door_time_btwn = 220;
+		// SetOnOffCols(collision_tiles2, on_off);
 		break;
 	case 17:
-		ScrollRelocateMapTo(0,48);
-		state_interrupts = 1;
+		// ScrollRelocateMapTo(0,48);
+		// state_interrupts = 1;
 		// door_time_btwn_start = door_time_btwn = 220;
 		// SetOnOffCols(collision_tiles2, on_off);
 		break;
 	case 18:
-		ScrollRelocateMapTo(0,40);
-		state_interrupts = 2;
+		// ScrollRelocateMapTo(0,40);
+		// state_interrupts = 2;
 		// door_time_btwn_start = door_time_btwn = 220;
 		// SetOnOffCols(collision_tiles2, on_off);
 		break;
@@ -345,7 +350,7 @@ INIT_HUD(window);
 	}
 
 
-
+	// INIT_FONT(font, PRINT_WIN);
 
 	//set_interrupts(LCD_IFLAG | VBL_IFLAG );
 	NR52_REG = 0x80; //Enables sound, you should always setup this first
@@ -371,7 +376,7 @@ INIT_HUD(window);
 		HIDE_WIN;
 	}
 
-
+	
 }
 
 void UPDATE()
@@ -379,60 +384,60 @@ void UPDATE()
 	// vsync();
 	// scanline_offsets = scanline_offsets_tbl + ((sys_time >> 2) & 0x07u)
 
-	if(KEY_TICKED(J_START) ){
-		if(current_level == 0){
+	// if(KEY_TICKED(J_START) ){
+	// 	if(current_level == 0){
 
-			current_level++;
-			SetState(current_state);
+	// 		current_level++;
+	// 		SetState(current_state);
 
-		}else{
-		start_screen = start_screen == 0 ? 1 : 0;
-		if( start_screen == 1 ){
-			DISPLAY_OFF;
-			SetWindowY(0);
-			SetPauseMenu();
-		}else{
-			SetWindowY(128);
-			SetPauseMenu();
-			RefreshLife();
-			RefreshTimer(0);
-			if(player_sprite->y != 0){
-				pDelay(40);
-			}
+	// 	}else{
+	// 	start_screen = start_screen == 0 ? 1 : 0;
+	// 	if( start_screen == 1 ){
+	// 		DISPLAY_OFF;
+	// 		SetWindowY(0);
+	// 		SetPauseMenu();
+	// 	}else{
+	// 		SetWindowY(128);
+	// 		SetPauseMenu();
+	// 		RefreshLife();
+	// 		RefreshTimer(0);
+	// 		if(player_sprite->y != 0){
+	// 			pDelay(40);
+	// 		}
 
-		}
-		}
-	}
+	// 	}
+	// 	}
+	// }
 
-	if(current_level != 17 && current_level != 18 && start_screen == 0 ){
-
-
-		if(--doAnimCount == 0 && current_level > 0){
+	// if(current_level != 17 && current_level != 18 && start_screen == 0 ){
 
 
-			AnimCounter++;
-			Tile_Anim(AnimCounter , 2, &spikesAnim, 112, BANK(spikesAnim));
-			Tile_Anim(AnimCounter , 2, &spikesAnim2, 114, BANK(spikesAnim2));
-			Tile_Anim(AnimCounter , 2, &spikesAnim3, 113, BANK(spikesAnim3));
-			Tile_Anim(AnimCounter , 2, &spikesAnim4, 115, BANK(spikesAnim4));
+	// 	if(--doAnimCount == 0 && current_level > 0){
 
-			doAnimCount = 5;
-		}
 
-		if(door_open == 1 && --door_time_btwn == 0){
+	// 		AnimCounter++;
+	// 		Tile_Anim(AnimCounter , 2, &spikesAnim, 112, BANK(spikesAnim));
+	// 		Tile_Anim(AnimCounter , 2, &spikesAnim2, 114, BANK(spikesAnim2));
+	// 		Tile_Anim(AnimCounter , 2, &spikesAnim3, 113, BANK(spikesAnim3));
+	// 		Tile_Anim(AnimCounter , 2, &spikesAnim4, 115, BANK(spikesAnim4));
 
-			door_time--;
-			RefreshTimer(door_time);
-			door_time_btwn = door_time_btwn_start;
+	// 		doAnimCount = 5;
+	// 	}
 
-		}
-		if(door_time == 0){
-			door_open = 0;
-			door_time = 6;
-			door_button = 1;
-			SetDoorCols( 0 );
+	// 	if(door_open == 1 && --door_time_btwn == 0){
 
-		}
+	// 		door_time--;
+	// 		RefreshTimer(door_time);
+	// 		door_time_btwn = door_time_btwn_start;
+
+	// 	}
+	// 	if(door_time == 0){
+	// 		door_open = 0;
+	// 		door_time = 6;
+	// 		door_button = 1;
+	// 		SetDoorCols( 0 );
+
+	// 	}
 		if (KEY_TICKED(J_SELECT) && !KEY_PRESSED(J_LEFT))
 		{
 			current_level++;
@@ -443,26 +448,37 @@ void UPDATE()
 			SetState(current_state);
 		}
 
-		} else if(current_level == 18){
-			if(--doAnimCount == 0 && current_level > 0){
+	// 	} else if(current_level == 18){
+	// 		if(--doAnimCount == 0 && current_level > 0){
 
 
 
-				AnimCounter++;
-				Tile_Anim(AnimCounter , 2, &waterAnim, 47, BANK(waterAnim));
-				Tile_Anim(AnimCounter , 8, &waterfallAnim2, 72, BANK(waterfallAnim2));
+	// 			AnimCounter++;
+	// 			Tile_Anim(AnimCounter , 2, &waterAnim, 47, BANK(waterAnim));
+	// 			Tile_Anim(AnimCounter , 8, &waterfallAnim2, 72, BANK(waterfallAnim2));
 
 
-				doAnimCount = 5;
-			}
+	// 			doAnimCount = 5;
+	// 		}
+	// }
+	// if(current_level == 14 && player_sprite->x > 1142 && canDo == 0 && event == 0){
+	// 	canDo = 1;
+	// 	SetOnOffColsEvent(collision_tiles2, 1);
+	// }
+	// if(event == 1){
+	// 	// can_scroll_x = 1;
+	// 	SetOnOffColsEvent(collision_tiles2, 2);
+	// }
+
+	if(current_level == 16){
+		if(--onoff_auto_time == 0){
+			onoff_auto_time = 20;
+			canDo = canDo == 0 ? 1 : 0;
+			AutomaticOnOff(collision_tiles2, canDo);
+		}	
 	}
-	if(current_level == 14 && player_sprite->x > 1142 && canDo == 0 && event == 0){
-		canDo = 1;
-		SetOnOffColsEvent(collision_tiles2, 1);
-	}
-	if(event == 1){
-		// can_scroll_x = 1;
-		SetOnOffColsEvent(collision_tiles2, 2);
-	}
-
+	// if(KEY_TICKED(J_A)){
+	// 	char name [6] = "Dragon";
+	// 	PRINT(0, 0, "hola mundo");
+	// }
 }
