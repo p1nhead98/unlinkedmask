@@ -533,12 +533,14 @@ void UPDATE()
                     player_accel_y = -83;
                     if(sprData->state == 0 ){
                         sprData->state = 1;
-                    }else if( sprData->state == 5 || sprData->state == 6 ){
-                        sprData->state = 1;
+                    }else if( sprData->state == 6  ){
+                        sprData->state = 3;
                         
                     }else if( sprData->state == 7 ){
-                        sprData->state = 3;
-                        sprData->speed = sprData->initial_speed = 1;
+                        sprData->state = 4;
+                        sprData->speed = sprData->initial_speed = 2;
+                    }else if( sprData->state == 8 ){
+                        sprData->state = 5;
                     }
                     // else if(sprData->state == 6){
                     //     sprData->state = sprData->initial_state;

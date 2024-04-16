@@ -26,29 +26,31 @@ void CheckCollisionTilePlt7(CUSTOM_DATA_ORB* data)
     // }else
     if(data->state == 3){
         colision =  GetScrollTile((THIS->x + 12u) >> 3, (THIS->y + 4u) >> 3) ;
-    }else{
-        colision =  GetScrollTile((THIS->x + 4u) >> 3, (THIS->y + 13u) >> 3) ;
+    }else if(data->state == 4){
+        colision = GetScrollTile((THIS->x ) >> 3, (THIS->y + 6u) >> 3);
+    }else if(data->state == 5){
+        colision = GetScrollTile((THIS->x + 4u) >> 3, (THIS->y + 4u) >> 3) ;
     }
 
-    if(colision2 == 104 && data->initial_state != 5){
-        data->initial_state = data->state = 5;
-    }
-
-    if(colision2 == 103 && data->initial_state != 6){
+    if(colision2 == 104 && data->initial_state != 6){
         data->initial_state = data->state = 6;
     }
 
-    if(colision == 102 && data->initial_state != 7){
+    if(colision == 103 && data->initial_state != 7){
         data->initial_state = data->state = 7;
     }
 
-    if(colision == 101 && data->initial_state != 8){
-        data->initial_state = 8; 
-        data->state = 4;
+    if(colision == 102 && data->initial_state != 8){
+        data->initial_state = data->state = 8;
     }
-    if(colision == 116 ){
-        SpriteManagerRemove(THIS_IDX);
+
+    if(colision == 101 && data->initial_state != 9){
+        data->initial_state = 9; 
+       data->state = 9;
     }
+    // if(colision == 116 ){
+    //     SpriteManagerRemove(THIS_IDX);
+    // }
 
     // if(colision == 92 && data->state != 7 ){
     //     data->state = 7;
@@ -168,28 +170,28 @@ void UPDATE()
             data->initial_speed = 3;
             break;
         case 2:
-            if(--data->speed == 0 && data->initial_speed != 3){
-                THIS->y++;
-                data->speed = data->initial_speed;
-            }else{
-                THIS->y += data->initial_speed;
-            }
-                
+            THIS->y += 3;
             break;
         case 3:
-            if(--data->speed == 0 ){
+          
                 THIS->x++;
-                data->speed = data->initial_speed;
-            }
+                
+            
                 
             break;
         case 4:
           
+            if(--data->speed == 0 && data->initial_speed != 3){
                 THIS->y--;
+                data->speed = data->initial_speed;
+            }
            
                 
             break;
- 
+         case 5:
+          
+            THIS->x--;    
+            break;
 
         default:
             break;

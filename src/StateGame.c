@@ -94,7 +94,7 @@ extern BOOLEAN door_button;
 
 
 
-UINT8 current_level = 25;
+UINT8 current_level = 0;
 
 UINT8 doAnimCount = 0;
 UINT8 AnimCounter = 0;
@@ -721,7 +721,7 @@ void UPDATE()
 
 	if(current_level == 25){
 		if(--onoff_auto_time == 0){
-			onoff_auto_time = 91;
+			onoff_auto_time = 90;
 			canDo = canDo == 0 ? 1 : 0;
 			AutomaticOnOff(collision_tiles2, canDo);
 		}	
