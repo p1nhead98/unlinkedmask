@@ -112,18 +112,18 @@ void UPDATE()
         break;
     case 4:
         if(TranslateSprite(THIS, 0, 8)){
-            cryst_boss_state++;
-            ScreenShake(1,1);
+            // cryst_boss_state++;
+            // ScreenShake(1,1);
             
-            Sprite* crystal1 = SpriteManagerAdd(SpriteCrystalAttack, THIS->x, THIS->y + 9);
-            CUSTOM_DATA_BTN* crystal1Data = (CUSTOM_DATA_BTN*)crystal1->custom_data;
-            crystal1Data->state = 2;
-            Sprite* crystal2 = SpriteManagerAdd(SpriteCrystalAttack, THIS->x, THIS->y + 9);
-            CUSTOM_DATA_BTN* crystal2Data = (CUSTOM_DATA_BTN*)crystal2->custom_data;
-            crystal2Data->state = 1;
+            // Sprite* crystal1 = SpriteManagerAdd(SpriteCrystalAttack, THIS->x, THIS->y + 9);
+            // CUSTOM_DATA_BTN* crystal1Data = (CUSTOM_DATA_BTN*)crystal1->custom_data;
+            // crystal1Data->state = 2;
+            // Sprite* crystal2 = SpriteManagerAdd(SpriteCrystalAttack, THIS->x, THIS->y + 9);
+            // CUSTOM_DATA_BTN* crystal2Data = (CUSTOM_DATA_BTN*)crystal2->custom_data;
+            // crystal2Data->state = 1;
 
-            SetSpriteAnim(THIS, crystal_boss_land, 10);
-            SPRITE_SET_DMG_PALETTE(THIS, 1);
+            // SetSpriteAnim(THIS, crystal_boss_land, 10);
+            // SPRITE_SET_DMG_PALETTE(THIS, 1);
 
         }
         

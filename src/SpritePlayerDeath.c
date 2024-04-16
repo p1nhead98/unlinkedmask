@@ -13,6 +13,8 @@ INT16 player_d_initial_y = 0;
 INT16 player_d_init_framespeed = 0;
 
 extern UINT8 start_screen;
+extern UINT8 deaths_u_count;
+extern UINT8 deaths_d_count;
 
 void START()
 {
@@ -35,6 +37,14 @@ void UPDATE()
         if(THIS->anim_frame == 2){
             SpriteManagerRemove(THIS_IDX);
             SetState(current_state);
+            if(deaths_u_count != 99){
+                deaths_u_count++;
+            }else{
+                if(deaths_d_count != 9){
+                    deaths_u_count = 0;
+                    deaths_d_count++;
+                }
+            }
         }
 
     }else{
