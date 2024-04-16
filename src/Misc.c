@@ -12,7 +12,8 @@
 #include "rand.h"
 #include "TileAnimation.h"
 #include "Banks/SetAutoBank.h"
-
+#include "Print.h"
+#include "Math.h"
 
 #define SCREEN_TILES_W       20 // 160 >> 3 = 20
 #define SCREEN_TILES_H       18 // 144 >> 3 = 18
@@ -25,8 +26,7 @@
 #define SCREEN_TILE_REFRES_H (SCREEN_TILES_H + SCREEN_PAD_TOP  + SCREEN_PAD_BOTTOM)
 
 
-UINT8 max_life = 2;
-UINT8 current_life = 2;
+
 INT16 inmunity = 0;
 INT8 pal_tick = 0;
 UINT8 current_pal = 0;
@@ -37,131 +37,19 @@ extern UINT8 start_screen;
 extern UINT8 original_lvl_bank;
 extern struct TilesInfo* original_tiles;
 
+UINT8 door_time = 0;
+UINT8 door_time_btwn = 0;
+UINT8 door_time_btwn_start = 0;
+UINT8 door_open = 0;
+BOOLEAN door_button = 0;
 
 IMPORT_TILES(OnAnim);
 IMPORT_TILES(OffAnim);
 IMPORT_TILES(darkTileAnim);
 IMPORT_TILES(doorAnim);
-IMPORT_TILES(pauseTiles);
-IMPORT_TILES(tiles);
 
 
-void cleanWindow() BANKED{
-    const UINT8 WHITETILE  = 0;
-    for (UINT8 i = 0; i != 20; ++i)
-        {
-            set_win_tiles(0 + i, 0, 1, 1,  &WHITETILE);
-            set_win_tiles(0 + i, 1, 1, 1,  &WHITETILE);
-          
-        }
-}
-void SetPauseMenu() BANKED
-{
 
-    if(start_screen == 1){
-        const UINT8 col1[] = { 0, 1, 2, 2, 2, 2, 2, 3, 4, 5, 6, 7, 8, 9, 2, 2, 2, 2 , 10, 11};
-        const UINT8 col2[] = { 12, 13, 13, 13, 13, 13, 13, 14, 15, 16, 17, 18, 19, 20, 21, 21, 21, 21, 21, 22};
-        const UINT8 col3[] = { 23, 13, 24, 25, 26, 27, 28, 29, 30, 31, 21, 21, 21, 21, 21, 21, 21, 21, 21, 32};
-        const UINT8 col4[] = { 23, 13, 33, 34, 35, 36, 37, 38, 39, 40, 21, 41, 42, 21, 21, 21, 21, 21, 21, 32};
-        const UINT8 col5[] = { 23, 13, 43, 44, 45, 46, 47, 48, 30, 49, 21, 50, 51, 52, 21, 21, 21, 21, 21, 32};
-        const UINT8 col6[] = { 23, 13, 54, 55, 56, 57, 58, 59, 60, 40, 21, 21, 21, 21, 21, 21, 21, 21, 21, 32};
-        const UINT8 col7[] = { 23, 61, 62, 63, 64, 65, 66, 67, 68, 69, 21, 21, 21, 21, 21, 21, 21, 21, 21, 32};
-        const UINT8 col8[] = { 23, 74, 75, 76, 77, 78, 79, 80, 81, 82, 21, 21, 21, 21, 21, 21, 21, 21, 21, 32};
-        const UINT8 col9[] = { 23, 87, 88, 89, 90, 91, 92, 93, 94, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 32};
-        const UINT8 col10[] = { 23, 95, 96, 97, 98, 21, 21, 99, 100, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 32};
-        const UINT8 col11[] = { 101, 102, 102, 102, 102, 102, 102, 102, 102, 102, 102, 102, 102, 102, 102, 102, 102, 102, 102, 103};
-        const UINT8 col12[] = { 23, 21, 21, 21, 21, 21, 21,21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 32};
-        const UINT8 col13[] = { 23, 21, 21, 21, 21, 104, 105, 106, 107, 108, 109, 110, 111, 105, 112, 21, 21, 21, 21, 32};
-        const UINT8 col14[] = { 23, 21, 21, 21, 21, 21, 21,21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 32};
-        const UINT8 col15[] = { 23, 21, 21, 104, 105, 105, 113, 114, 115, 116, 117, 118, 119, 120, 105, 105, 112, 21, 21, 32};
-        const UINT8 col16[] = { 23, 21, 21, 21, 21, 21, 21,21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 32};
-        const UINT8 col17[] = { 121, 122, 122, 122, 122, 122, 122, 122, 122, 122, 122, 122, 122, 122, 122, 122, 122, 122, 122, 123};
-        const UINT8 col18[] = { 124, 125, 102, 102, 102, 102, 102, 102, 102, 102, 102, 102, 102, 102, 102, 102, 102, 102, 126, 127};
-        DISPLAY_OFF;
-        Set_Start_Tiles(&pauseTiles, BANK(pauseTiles), 128);
-        
-        for (UINT8 i = 0; i != 20; ++i)
-        {
-            set_win_tiles(0 + i, 0, 1, 1,  &col1[i]);
-            set_win_tiles(0 + i, 1, 1, 1,  &col2[i]);
-            set_win_tiles(0 + i, 2, 1, 1,  &col3[i]);
-            set_win_tiles(0 + i, 3, 1, 1,  &col4[i]);
-            set_win_tiles(0 + i, 4, 1, 1,  &col5[i]);
-
-            set_win_tiles(0 + i, 5, 1, 1,  &col6[i]);
-            set_win_tiles(0 + i, 6, 1, 1,  &col7[i]);
-            set_win_tiles(0 + i, 7, 1, 1,  &col8[i]);
-            set_win_tiles(0 + i, 8, 1, 1,  &col9[i]);
-            set_win_tiles(0 + i, 9, 1, 1,  &col10[i]);
-
-            set_win_tiles(0 + i, 10, 1, 1,  &col11[i]);
-            set_win_tiles(0 + i, 11, 1, 1,  &col12[i]);
-            set_win_tiles(0 + i, 12, 1, 1,  &col13[i]);
-            set_win_tiles(0 + i, 13, 1, 1,  &col14[i]);
-            set_win_tiles(0 + i, 14, 1, 1,  &col15[i]);
-            set_win_tiles(0 + i, 15, 1, 1,  &col16[i]);
-
-            set_win_tiles(0 + i, 16, 1, 1,  &col17[i]);
-            set_win_tiles(0 + i, 17, 1, 1,  &col18[i]);
-        }
-        DISPLAY_ON;
-    }else{
-        DISPLAY_OFF;
-        Set_Start_Tiles(&tiles, BANK(tiles), 128);
-        cleanWindow();
-        DISPLAY_ON;
-    }
-}
-
-void RefreshLife() BANKED
-{
-
-    const UINT8 face_tiles_up[] = { 117, 119, 121, 123 };
-    const UINT8 face_tiles_down[] = { 118, 120, 122, 124 };
-
-    const UINT8 HEART_TILE  = 129;
-    const UINT8 HEART_TILE2 = 130;
-    const UINT8 HEART_TILE3 = 131;
-    const UINT8 HEART_TILE4 = 132;
-    const UINT8 EMPTY_HEART_TILE  = 125;
-    const UINT8 EMPTY_HEART_TILE2 = 126;
-    const UINT8 EMPTY_HEART_TILE3 = 127;
-    const UINT8 EMPTY_HEART_TILE4 = 128;
-
-    UINT8 i = 0;
-    UINT8 last_tile = 0;
-
-    last_tile = (current_life + 1) / 2;
-
-    for (i = 0; i != 4; ++i)
-    {
-        set_win_tiles(0 + i, 0, 1, 1,  &face_tiles_up[i]);
-        set_win_tiles(0 + i, 1, 1, 1,  &face_tiles_down[i]);
-    }
-
-    
-    for (i = 0; i != (max_life * 2); ++i)
-    {
-        if( i % 2 == 0){
-            set_win_tiles(4 + i, 0, 1, 1, &EMPTY_HEART_TILE);
-            set_win_tiles(4 + i, 1, 1, 1, &EMPTY_HEART_TILE2);
-        }else{
-            set_win_tiles(4 + i, 0, 1, 1, &EMPTY_HEART_TILE3);
-            set_win_tiles(4 + i, 1, 1, 1, &EMPTY_HEART_TILE4);
-        }
-    }
-   
-    for (i = 0; i != (current_life * 2); ++i)
-    {
-        if( i % 2 == 0){
-            set_win_tiles(4 + i, 0, 1, 1, &HEART_TILE);
-            set_win_tiles(4 + i, 1, 1, 1, &HEART_TILE2);
-        }else{
-            set_win_tiles(4 + i, 0, 1, 1, &HEART_TILE3);
-            set_win_tiles(4 + i, 1, 1, 1, &HEART_TILE4);
-        }
-    }
-}
 
 
 void pDelay(UINT8 numloops) BANKED
@@ -216,7 +104,16 @@ void JumpRandSound(BOOLEAN spin) BANKED{
     }
  
 }
-
+void FillDoorCinem() BANKED{
+    for (UINT8 y = 0u; y < 12u; y++)
+	{
+		for (UINT8 x = 0u; x < 20u; x++)
+		{
+				ScrollUpdateColumn(x, y);
+		}
+			
+	}
+}
 void ScrollRelocateMapTo(UINT16 new_x, UINT16 new_y) BANKED{
     UINT8 i;
     INT16 y;
@@ -306,7 +203,6 @@ void SetOnOffColsEvent(UINT8 cols[], UINT8 onOff ) BANKED{
 		}
 
         Onoff_tile_anim(&OnAnim, 0, BANK(OnAnim), 77);
-        pDelay(10);
         SpriteManagerAdd(SpriteSpinOrbEvent, 1095, 192);
     }else if (onOff == 2){
         for(i = 0u; cols[i] != 0u; ++i) {
@@ -370,3 +266,126 @@ void SetDoorCols(UINT8 off) BANKED{
     }
      
 }
+void AutomaticOnOff(UINT8 cols[], UINT8 onOff ) BANKED{
+  UINT8 i = 0;
+
+    if(onOff == 0){
+		for(i = 0u; cols[i] != 0u; ++i) {
+            if(i > 15u && i < 20u){
+				scroll_collisions[cols[i]] = 1u;
+				scroll_collisions_down[cols[i]] = 1u;
+			}else if(i > 19u && i < 25u){
+				scroll_collisions[cols[i]] = 0u;
+				scroll_collisions_down[cols[i]] = 0u;
+			}
+            
+		}
+        Onoff_tile_anim(&OffAnim, 0, BANK(OffAnim), 60);
+        Onoff_tile_anim(&OnAnim, 0, BANK(OnAnim), 56);
+        
+    }else if(onOff == 1){
+        for(i = 0u; cols[i] != 0u; ++i) {
+            if(i > 15u && i < 20u){
+				scroll_collisions[cols[i]] = 0u;
+				scroll_collisions_down[cols[i]] = 0u;
+			}else if(i > 19u && i < 25u){
+				scroll_collisions[cols[i]] = 1u;
+				scroll_collisions_down[cols[i]] = 1u;
+			}
+		}
+
+        Onoff_tile_anim(&OnAnim, 0, BANK(OnAnim), 60);
+        Onoff_tile_anim(&OffAnim, 0, BANK(OffAnim), 56);
+    }
+
+}
+
+void TextWithDelay(const char* txt) BANKED{
+    UINT8 i = 0;
+    char* name = "Dragon";
+    char char_ptr = name[2];
+    PRINT(i, 0, char_ptr);
+    for(i = 0u; i < 5; ++i) {
+        //char_ptr = &name[i];
+        //PRINT(i, 0, "A");
+        pDelay(10);
+	}
+}
+
+void FadeDMGCustom(UINT8 fadeout) BANKED {
+	
+	UINT8 pals3[] = {0, 1, 2, 3};
+    UINT8 pals2[] = {0, 0, 1, 2};
+    UINT8 pals1[] = {0, 0, 0, 1};
+	BGP_REG = OBP0_REG = OBP1_REG = PAL_DEF(0, pals1[fadeout], pals2[fadeout], pals3[fadeout] );
+		
+}
+
+void FadeColor() BANKED{
+    FadeDMGCustom(3);
+    pDelay(20);
+    FadeDMGCustom(2);
+    pDelay(20);
+    FadeDMGCustom(1);
+    pDelay(20);
+    FadeDMGCustom(0);
+    pDelay(20);
+}
+
+void FadeInColor() BANKED{
+    FadeDMGCustom(0);
+    pDelay(20);
+    FadeDMGCustom(1);
+    pDelay(20);
+    FadeDMGCustom(2);
+    pDelay(20);
+    FadeDMGCustom(3);
+}
+
+void FadeCapeCuts() BANKED{
+    FadeDMGCustom(0);
+    SHOW_WIN;
+    pDelay(30);
+    FadeDMGCustom(1);
+    pDelay(30);
+    FadeDMGCustom(2);
+    pDelay(30);
+    FadeDMGCustom(3);
+    pDelay(30);
+}
+void FadeColorAndMusic() BANKED{
+    FadeDMGCustom(3);
+    pDelay(20);
+    NR50_REG = 0x55;
+    FadeDMGCustom(2);
+    pDelay(20);
+    NR50_REG = 0x33;
+    FadeDMGCustom(1);
+    pDelay(20);
+    NR50_REG = 0x11;
+    FadeDMGCustom(0);
+    pDelay(20);
+    NR50_REG = 0x0;
+    StopMusic;
+}
+
+void FadeMusic(UINT8 pointer) BANKED{
+    UINT8 volume[] = {0x55,  0x33, 0x11, 0x0}; 
+    NR50_REG = volume[pointer];
+    if (pointer == 3)
+    {
+        StopMusic;
+    }
+    
+}
+// void SetDialogFace(UINT8 face) BANKED {
+//     switch (face)
+//     {
+//     case 0: //VIEWER
+        
+//         break;
+    
+//     case 1: ///ORB??
+        
+//         break;
+// }

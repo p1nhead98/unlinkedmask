@@ -24,10 +24,6 @@ _SPRITE_DMG(SpriteSpinOrbFall, plataforma1)\
 _SPRITE_DMG(SpriteSpinOrbStoppable, plataforma1)\
 _SPRITE_DMG(SpriteSpinOrbStoppable2, plataforma1)\
 _SPRITE_DMG(SpriteSpinOrbStoppable3, plataforma1)\
-_SPRITE_DMG(SpriteBossElec, elecBoss)\
-_SPRITE_DMG(SpriteElectBossFx, elecBossFx)\
-_SPRITE_DMG(SpriteCrystalBoss, crystalBoss)\
-_SPRITE_DMG(SpriteCrystalAttack, crystalAttack)\
 _SPRITE_DMG(SpritePlayerNoCape, playerNoCape)\
 _SPRITE_DMG(SpriteIntroBigShine, introBigShine)\
 _SPRITE_DMG(SpriteIntroMiniShine, introMiniShine)\
@@ -35,6 +31,14 @@ _SPRITE_DMG(SpriteIntroFx, introFx)\
 _SPRITE_DMG(SpriteWindEnemy, windEnemy)\
 _SPRITE_DMG(SpriteSpinOrbEvent, plataforma1)\
 _SPRITE_DMG(SpriteJumpBoxEvent, plataforma2)\
+_SPRITE_DMG(SpritePlayerCutscenes, playerNCinematic)\
+_SPRITE_DMG(SpriteViewerH, viewerHair)\
+_SPRITE_DMG(SpriteCapeCuts, capeCuts)\
+_SPRITE_DMG(SpriteExplosionCuts, explosionCuts)\
+_SPRITE_DMG(SpritePlayerStars, playerStars)\
+_SPRITE_DMG(SpritePlayerCutsTemple, playerTempleCuts)\
+_SPRITE_DMG(SpriteSpinOrbStoppable4, plataforma1)\
+_SPRITE_DMG(SpriteSpinOrbStoppable5, plataforma1)\
 SPRITE_DEF_END
 
 #include "ZGBMain_Init.h"

@@ -96,7 +96,7 @@ void START()
 
     data->state = 0;
     data->initial_state = 0;
-    if(current_level == 10 || current_level == 11){
+    if(current_level == 18 || current_level == 23){
         data->initial_speed = 1;
     }else{
         data->initial_speed = 2;
@@ -142,7 +142,7 @@ void UPDATE()
             }else if (colision == 101){
                 data->state = 2;
             }else if(colision == 105){
-                if(current_level == 14){
+                if(current_level == 23){
                     data->state = 4;
                     data->initial_speed = 1;
                 }

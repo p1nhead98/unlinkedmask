@@ -19,6 +19,12 @@
         "misc.h": "c",
         "palette.h": "c",
         "zgbmain_init.h": "c",
-        "tileanimation.h": "c"
+        "tileanimation.h": "c",
+        "print.h": "c",
+        "scroll.h": "c",
+        "window.h": "c",
+        "spritemanager.h": "c",
+        "music.h": "c",
+        "math.h": "c"
     }
 }

@@ -9,6 +9,7 @@
 #include "Scroll.h"
 #include "ZGBMain.h"
 #include "Music.h"
+#include "WinController.h"
 
 const UINT8 nc_anim_idle[] = {2, 0, 1};
 const UINT8 nc_anim_walk[] = {4, 2, 1, 3, 1};
@@ -29,6 +30,9 @@ extern UINT8 current_level;
 extern UINT8 door_open;
 extern UINT8 IsFirstLvl;
 extern UINT8 start_screen;
+
+extern UINT8 deaths_u_count;
+extern UINT8 deaths_d_count;
 BOOLEAN canHurtNc;
 
 
@@ -67,8 +71,18 @@ void CheckCollisionTileNc()
         //SpriteManagerRemove(THIS_IDX);
     }
 
-    if(colision == 116){
+    if(colision == 116){  // MUERE POR CAIDA
         current_life = 0;
+
+        if(deaths_u_count != 99){
+            deaths_u_count++;
+        }else{
+            if(deaths_d_count != 9){
+                deaths_u_count = 0;
+                deaths_d_count++;
+            }
+        }
+
         player_nc_state = 55;
         ScreenShake(1,1);
         RefreshLife();

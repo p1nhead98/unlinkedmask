@@ -10,18 +10,17 @@
 
 void Tile_Anim(UINT8 x, UINT8 tilesAmount, struct TilesInfo *tile, UINT8 first_tile, UINT8 bank) __nonbanked
 {
-
-    UINT16 tileData[16];
-    PUSH_BANK(bank);
-    memcpy(tileData, &tile->data[16 * (x % tilesAmount)], 16);
-    set_bkg_data(first_tile, 1, tileData);
-    POP_BANK;
+        UINT16 tileData[16];
+        PUSH_BANK(bank);
+        memcpy(tileData, &tile->data[16 * (x % tilesAmount)], 16);
+        set_bkg_data(first_tile, 1, tileData);
+        POP_BANK;
 }
 
 void Spike_anim(struct TilesInfo *tile, UINT8 tileStart, UINT8 bank) __nonbanked{
-    UINT16 tileData[16];
+    
     PUSH_BANK(bank);
-    Tile_Anim(tileStart, 128, tile, 126, bank);
+     set_bkg_data(112, 4, tile->data);
 
     POP_BANK;
 }
@@ -30,6 +29,20 @@ void Set_Start_Tiles(struct TilesInfo *tile, UINT8 bank, UINT8 tile_amount) __no
    
     PUSH_BANK(bank);
     set_bkg_data(0, tile_amount, tile->data);
+    POP_BANK;
+}
+
+void SetMugTiles(struct TilesInfo *tile, UINT8 bank, UINT8 init_tile) __nonbanked{
+    PUSH_BANK(bank);
+    Tile_Anim(init_tile, 36, tile, 247, bank);
+    Tile_Anim(init_tile + 1, 36, tile, 248, bank);
+    Tile_Anim(init_tile + 2, 36, tile, 249, bank);
+    Tile_Anim(init_tile + 3, 36, tile, 250, bank);
+    Tile_Anim(init_tile + 4, 36, tile, 251, bank);
+    Tile_Anim(init_tile + 5, 36, tile, 252, bank);
+    Tile_Anim(init_tile + 6, 36, tile, 253, bank);
+    Tile_Anim(init_tile + 7, 36, tile, 254, bank);
+    Tile_Anim(init_tile + 8, 36, tile, 255, bank);
     POP_BANK;
 }
 

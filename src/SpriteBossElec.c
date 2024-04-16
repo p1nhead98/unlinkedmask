@@ -51,7 +51,7 @@ void UPDATE()
         THIS->x += elec_boss_dash_speed;
         if((THIS->anim_frame == 1 || THIS->anim_frame == 3) && elec_boss_fx == 0){
             elec_boss_fx = 1;
-            SpriteManagerAdd(SpriteElectBossFx, THIS->x + 28, THIS->y+ 16);
+            // SpriteManagerAdd(SpriteElectBossFx, THIS->x + 28, THIS->y+ 16);
         }
         if(THIS->anim_frame == 0 || THIS->anim_frame == 2){
             elec_boss_fx = 0;
@@ -90,7 +90,7 @@ void UPDATE()
         THIS->x += elec_boss_dash_speed;
         if((THIS->anim_frame == 1 || THIS->anim_frame == 3) && elec_boss_fx == 0){
             elec_boss_fx = 1;
-            SpriteManagerAdd(SpriteElectBossFx, THIS->x, THIS->y+ 16);
+            // SpriteManagerAdd(SpriteElectBossFx, THIS->x, THIS->y+ 16);
         }
         if(THIS->anim_frame == 0 || THIS->anim_frame == 2){
             elec_boss_fx = 0;

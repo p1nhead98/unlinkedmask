@@ -1,6 +1,7 @@
 #include "Banks/SetAutoBank.h"
 #include "Keys.h"
 #include "Misc.h"
+#include "WinController.h"
 #include "SpriteManager.h"
 #include <gb/gb.h>
 #include "Sound.h"
@@ -30,6 +31,10 @@ extern UINT8 current_level;
 extern UINT8 door_open;
 extern UINT8 IsFirstLvl;
 extern UINT8 start_screen;
+
+extern UINT8 deaths_u_count;
+extern UINT8 deaths_d_count;
+
 BOOLEAN canHurt;
 
 
@@ -53,7 +58,7 @@ INT16 player_init_framespeed = 0;
 void CheckCollisionTile()
 {
 
-if(current_level != 18 && current_level != 17){
+// if(current_level != 18 && current_level != 17){
 
     UINT8 colision = GetScrollTile((THIS->x + 3u) >> 3, (THIS->y + 12u) >> 3);
     UINT8 colision2 = GetScrollTile((THIS->x + 1u) >> 3, (THIS->y + 16u) >> 3);
@@ -96,10 +101,18 @@ if(current_level != 18 && current_level != 17){
         ScreenShake(1,1);
         RefreshLife();
         SetState(current_state);
+        if(deaths_u_count != 99){
+            deaths_u_count++;
+        }else{
+            if(deaths_d_count != 9){
+                deaths_u_count = 0;
+                deaths_d_count++;
+            }
+        }
     }
 
 
-}
+// }
 
    
 
@@ -176,11 +189,11 @@ void UPDATE()
             
             // SetState(current_state);
         }
-        if(current_level != 17 && current_level != 18){
+        // if(current_level != 17 && current_level != 18){
             if( (THIS->x >= scroll_x + 150) && player_state != 9 && player_state != 8){
                 player_state = 9;
             }
-        }
+        // }
 
 
 
@@ -395,6 +408,8 @@ void UPDATE()
             }
 
             player_collision = TranslateSprite(THIS, 0, (player_accel_y >> (4)));
+
+            
             if (!player_collision && delta_time != 0 && player_accel_y < 40)
             {
                 player_accel_y += 6;
@@ -412,6 +427,8 @@ void UPDATE()
                     player_state++;
                     SetSpriteAnim(THIS, anim_patinar, 30);
                 }
+            }else if(player_collision && player_accel_y < 0){
+                player_accel_y = 0;
             }
             if (player_state == 0 && player_accel_y >= 20)
             {
@@ -460,16 +477,72 @@ void UPDATE()
                     SpriteManagerAdd(SpritePlayerVfx, THIS->x - 4, THIS->y + 8);
                 }
             }
+            if(spr->type == SpriteSpinOrbEvent  && player_accel_y > 0) {
+                if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && (player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 1))) {
+                    player_state = 3;
+                    player_accel_y = -83;
+                    PlayFx(CHANNEL_4, 10, 0x02, 0xf1, 0x40, 0xc0);
+                    SetSpriteAnim(THIS, anim_spin, 20);
+                    SpriteManagerAdd(SpritePlayerVfx, THIS->x - 4, THIS->y + 8);
+                }
+            }
             if((spr->type == SpriteSpinOrbStoppable || spr->type == SpriteSpinOrbStoppable2 || spr->type == SpriteSpinOrbStoppable3)  && player_accel_y > 0) {
                 CUSTOM_DATA_ORB* sprData = (CUSTOM_DATA_ORB*)spr->custom_data;
                 if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && (player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 1))) {
                     player_state = 3;
                     player_accel_y = -83;
-                    if(sprData->state == 0){
+                    if(sprData->state == 0 ){
                         sprData->state = 1;
+                    }else if( sprData->state == 10 ){
+                        sprData->state = 0;
+                        spr->y++;
                     }else if(sprData->state == 6){
                         sprData->state = sprData->initial_state;
                     }
+                    PlayFx(CHANNEL_4, 10, 0x02, 0xf1, 0x40, 0xc0);
+                    SetSpriteAnim(THIS, anim_spin, 20);
+                    SpriteManagerAdd(SpritePlayerVfx, THIS->x - 4, THIS->y + 8);
+                }
+            }
+            if(( spr->type == SpriteSpinOrbStoppable4)  && player_accel_y > 0) {
+                CUSTOM_DATA_ORB* sprData = (CUSTOM_DATA_ORB*)spr->custom_data;
+                if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && (player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 1))) {
+                    player_state = 3;
+                    player_accel_y = -83;
+                    if(sprData->state == 0 ){
+                        sprData->state = 1;
+                    }else if( sprData->state == 5 || sprData->state == 6 ){
+                        sprData->state = 1;
+                        
+                    }else if( sprData->state == 7 ){
+                        sprData->state = 3;
+                        sprData->speed = sprData->initial_speed = 1;
+                    }
+                    // else if(sprData->state == 6){
+                    //     sprData->state = sprData->initial_state;
+                    // }
+                    PlayFx(CHANNEL_4, 10, 0x02, 0xf1, 0x40, 0xc0);
+                    SetSpriteAnim(THIS, anim_spin, 20);
+                    SpriteManagerAdd(SpritePlayerVfx, THIS->x - 4, THIS->y + 8);
+                }
+            }
+            if(( spr->type == SpriteSpinOrbStoppable5)  && player_accel_y > 0) {
+                CUSTOM_DATA_ORB* sprData = (CUSTOM_DATA_ORB*)spr->custom_data;
+                if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && (player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 1))) {
+                    player_state = 3;
+                    player_accel_y = -83;
+                    if(sprData->state == 0 ){
+                        sprData->state = 1;
+                    }else if( sprData->state == 5 || sprData->state == 6 ){
+                        sprData->state = 1;
+                        
+                    }else if( sprData->state == 7 ){
+                        sprData->state = 3;
+                        sprData->speed = sprData->initial_speed = 1;
+                    }
+                    // else if(sprData->state == 6){
+                    //     sprData->state = sprData->initial_state;
+                    // }
                     PlayFx(CHANNEL_4, 10, 0x02, 0xf1, 0x40, 0xc0);
                     SetSpriteAnim(THIS, anim_spin, 20);
                     SpriteManagerAdd(SpritePlayerVfx, THIS->x - 4, THIS->y + 8);
@@ -512,7 +585,7 @@ void UPDATE()
                 CUSTOM_DATA_BOX* sprData = (CUSTOM_DATA_BOX*)spr->custom_data;
                 if(CheckCollision(THIS, spr) && THIS->y >= (spr->y) && (player_state == 1 || player_state == 2 || player_state == 3 || player_state == 4) && player_accel_y < 0) {
                     // THIS->y -= 5;
-                    player_accel_y = 20;
+                    player_accel_y = 5;
                     if(player_state == 1 || player_state == 4){
                         player_state = 4;
                         SetSpriteAnim(THIS, anim_jump, 20);
@@ -528,17 +601,17 @@ void UPDATE()
                 }
             }
 
-            if(spr->type == SpriteCrystalAttack){
-                if(CheckCollision(THIS, spr)) {
-                    if(canHurt && player_state != 11){
-                        inmunity = 30;
-                        canHurt = 0;
-                        current_life--;
-                        ScreenShake(1,1);
-                        RefreshLife();
-                    }
-                }
-            }
+            // if(spr->type == SpriteCrystalAttack){
+            //     if(CheckCollision(THIS, spr)) {
+            //         if(canHurt && player_state != 11){
+            //             inmunity = 30;
+            //             canHurt = 0;
+            //             current_life--;
+            //             ScreenShake(1,1);
+            //             RefreshLife();
+            //         }
+            //     }
+            // }
 
 
         }
