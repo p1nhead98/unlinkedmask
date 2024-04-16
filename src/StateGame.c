@@ -38,6 +38,7 @@ IMPORT_MAP(lvl_13);
 IMPORT_MAP(lvl_14);
 IMPORT_MAP(lvl_15);
 IMPORT_MAP(lvl_16);
+IMPORT_MAP(lvl_17);
 
 //CUTSCENES
 IMPORT_MAP(intro_door);
@@ -56,7 +57,9 @@ IMPORT_TILES(capeCuts3Tiles);
 
 
 
-
+//BKG ANIM
+IMPORT_TILES(cloudAnim1);
+IMPORT_TILES(cloudAnim2);
 
 
 // IMPORT_MAP(window);
@@ -94,10 +97,12 @@ extern BOOLEAN door_button;
 
 
 
-UINT8 current_level = 0;
+UINT8 current_level = 26;
 
 UINT8 doAnimCount = 0;
 UINT8 AnimCounter = 0;
+UINT8 AnimCounter2 = 0;
+
 
 UINT8 IsFirstLvl = 0;
 
@@ -187,6 +192,7 @@ const struct MapInfoBanked levels[] = {
 	BANKED_MAP(lvl_14),
 	BANKED_MAP(lvl_15),
 	BANKED_MAP(lvl_16),
+	BANKED_MAP(lvl_17),
 };
 
 
@@ -223,6 +229,7 @@ const START_POS start_positions[] = {
 	{8, 96},  //Level 14 Player Start Position	----- current level = 23
 	{8, 96},  //Level 15 Player Start Position	----- current level = 24
 	{8, 96},  //Level 16 Player Start Position	----- current level = 25
+	{8, 96},  //Level 17 Player Start Position	----- current level = 26
 
 };
 
@@ -473,7 +480,7 @@ void START()
 	door_time = 6;
 
 	doAnimCount = 3;
-	// AnimCounter = 0;
+	AnimCounter2 = 0;
 
 
 
@@ -767,11 +774,16 @@ void UPDATE()
 		
 		AnimCounter = AnimCounter == 1 ? 0 : 1;
 		if(start_screen == 0){
+			
 			if(AnimCounter == 0){
 				Spike_anim(&spikesAnim, 112, BANK(spikesAnim));
 			}else{
 				Spike_anim(&spikesAnim2, 112, BANK(spikesAnim2));
 			}
+			AnimCounter2++;
+			Tile_Anim(AnimCounter2, 16, &cloudAnim1, 45, BANK(cloudAnim1));
+			Tile_Anim(AnimCounter2 + 8, 16, &cloudAnim1, 46, BANK(cloudAnim1));
+			// Tile_Anim(AnimCounter2, 8, &cloudAnim2, 44, BANK(cloudAnim2));
 			
 		}
 		doAnimCount = 5;
