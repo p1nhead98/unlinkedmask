@@ -48,7 +48,8 @@ IMPORT_TILES(OffAnim);
 IMPORT_TILES(darkTileAnim);
 IMPORT_TILES(doorAnim);
 
-
+IMPORT_TILES(spikesAnim);
+IMPORT_TILES(spikesAnim3);
 
 
 
@@ -282,6 +283,8 @@ void AutomaticOnOff(UINT8 cols[], UINT8 onOff ) BANKED{
 		}
         Onoff_tile_anim(&OffAnim, 0, BANK(OffAnim), 60);
         Onoff_tile_anim(&OnAnim, 0, BANK(OnAnim), 56);
+        Onoff_tile_anim(&spikesAnim, 0, BANK(spikesAnim), 81);
+        Onoff_tile_anim(&spikesAnim3, 0, BANK(spikesAnim3), 85);
         
     }else if(onOff == 1){
         for(i = 0u; cols[i] != 0u; ++i) {
@@ -296,6 +299,8 @@ void AutomaticOnOff(UINT8 cols[], UINT8 onOff ) BANKED{
 
         Onoff_tile_anim(&OnAnim, 0, BANK(OnAnim), 60);
         Onoff_tile_anim(&OffAnim, 0, BANK(OffAnim), 56);
+        Onoff_tile_anim(&spikesAnim3, 0, BANK(spikesAnim3), 81);
+        Onoff_tile_anim(&spikesAnim, 0, BANK(spikesAnim), 85);
     }
 
 }

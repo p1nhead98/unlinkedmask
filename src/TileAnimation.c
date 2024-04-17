@@ -20,7 +20,7 @@ void Tile_Anim(UINT8 x, UINT8 tilesAmount, struct TilesInfo *tile, UINT8 first_t
 void Spike_anim(struct TilesInfo *tile, UINT8 tileStart, UINT8 bank) __nonbanked{
     
     PUSH_BANK(bank);
-     set_bkg_data(112, 4, tile->data);
+     set_bkg_data(tileStart, 4, tile->data);
 
     POP_BANK;
 }

@@ -97,7 +97,7 @@ extern BOOLEAN door_button;
 
 
 
-UINT8 current_level = 26;
+UINT8 current_level = 25;
 
 UINT8 doAnimCount = 0;
 UINT8 AnimCounter = 0;
@@ -727,7 +727,7 @@ void UPDATE()
 
 
 	if(current_level == 25){
-		if(--onoff_auto_time == 0){
+		if(--onoff_auto_time == 0 && start_screen == 0){
 			onoff_auto_time = 90;
 			canDo = canDo == 0 ? 1 : 0;
 			AutomaticOnOff(collision_tiles2, canDo);
@@ -757,6 +757,12 @@ void UPDATE()
 				}else{
 					SetWindowY(128);
 					SetPauseMenu( level->map, level->bank );
+					if(current_level != 25){
+						SetOnOffCols(collision_tiles2, on_off);
+					}else{
+						AutomaticOnOff(collision_tiles2, canDo);
+					}
+					
 					RefreshLife();
 					RefreshTimer(0);
 					if(player_sprite->y != 0){
@@ -773,6 +779,7 @@ void UPDATE()
 
 		
 		AnimCounter = AnimCounter == 1 ? 0 : 1;
+		
 		if(start_screen == 0){
 			
 			if(AnimCounter == 0){
@@ -780,10 +787,34 @@ void UPDATE()
 			}else{
 				Spike_anim(&spikesAnim2, 112, BANK(spikesAnim2));
 			}
-			AnimCounter2++;
-			Tile_Anim(AnimCounter2, 16, &cloudAnim1, 45, BANK(cloudAnim1));
-			Tile_Anim(AnimCounter2 + 8, 16, &cloudAnim1, 46, BANK(cloudAnim1));
-			// Tile_Anim(AnimCounter2, 8, &cloudAnim2, 44, BANK(cloudAnim2));
+
+
+			if(current_level == 25){
+
+				if(canDo == 0){
+					if(AnimCounter == 0){
+						Spike_anim(&spikesAnim, 81, BANK(spikesAnim));
+					}else{
+						Spike_anim(&spikesAnim2, 81, BANK(spikesAnim2));
+					}
+				}else{
+					if(AnimCounter == 0){
+						Spike_anim(&spikesAnim, 85, BANK(spikesAnim));
+					}else{
+						Spike_anim(&spikesAnim2, 85, BANK(spikesAnim2));
+					}
+				}
+
+
+				
+			}
+			if(current_level > 25){
+				AnimCounter2++;
+				Tile_Anim(AnimCounter2, 16, &cloudAnim1, 45, BANK(cloudAnim1));
+				Tile_Anim(AnimCounter2 + 8, 16, &cloudAnim1, 46, BANK(cloudAnim1));
+				// Tile_Anim(AnimCounter2, 8, &cloudAnim2, 44, BANK(cloudAnim2));
+			}
+
 			
 		}
 		doAnimCount = 5;
