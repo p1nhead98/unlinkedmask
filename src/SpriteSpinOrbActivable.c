@@ -96,7 +96,7 @@ void START()
 
     data->state = 0;
     data->initial_state = 0;
-    if(current_level == 18 || current_level == 23 ||  current_level == 25){
+    if(current_level == 18 || current_level == 20 ||  current_level == 25){
         data->initial_speed = 1;
     }else{
         data->initial_speed = 2;
