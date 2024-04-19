@@ -35,6 +35,9 @@ extern UINT8 start_screen;
 extern UINT8 deaths_u_count;
 extern UINT8 deaths_d_count;
 
+extern UINT8 on_off;
+extern UINT8 canDo;
+
 BOOLEAN canHurt;
 
 
@@ -54,6 +57,26 @@ INT16 player_init_framespeed = 0;
 // void UpdateMapTile(INT16 map_x, INT16 map_y, UINT8 tile_id, UINT8 c) {
 //        UPDATE_TILE(map_x, map_y, &tile_id, &c);
 // }
+
+void CheckDeathTiles(){
+    if( ( THIS->x > 1281 && THIS->x < 1336 ) || ( THIS->x > 1449 && THIS->x < 1488) || ( THIS->x > 1697 && THIS->x < 1736) || ( THIS->x > 1825 && THIS->x < 1864)  ){
+        if(canDo == 0 && player_state != 11){
+            current_life = 0;
+            ScreenShake(1,1);
+            RefreshLife();
+            SetSpriteAnim(THIS, anim_death, 15);
+            player_state = 11;
+        }
+    }else if( ( THIS->x > 169 && THIS->x < 224 ) || ( THIS->x > 297 && THIS->x < 336) || ( THIS->x > 705 && THIS->x < 432) || ( THIS->x > 449 && THIS->x < 488) || ( THIS->x > 505 && THIS->x < 544) || ( THIS->x > 1369 && THIS->x < 1408) || ( THIS->x > 1553 && THIS->x < 1592 ) || ( THIS->x > 1761 && THIS->x < 1800) ){
+        if(canDo == 1 && player_state != 11){
+            current_life = 0;
+            ScreenShake(1,1);
+            RefreshLife();
+            SetSpriteAnim(THIS, anim_death, 15);
+            player_state = 11;
+        }
+    }
+}
 
 void CheckCollisionTile()
 {
@@ -437,7 +460,9 @@ void UPDATE()
         }
 
         CheckCollisionTile();
-
+        if(current_level == 25){
+            CheckDeathTiles();
+        }
 
 
         SPRITEMANAGER_ITERATE(i, spr) {
