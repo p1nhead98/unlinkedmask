@@ -39,6 +39,8 @@ _SPRITE_DMG(SpritePlayerStars, playerStars)\
 _SPRITE_DMG(SpritePlayerCutsTemple, playerTempleCuts)\
 _SPRITE_DMG(SpriteSpinOrbStoppable4, plataforma1)\
 _SPRITE_DMG(SpriteSpinOrbStoppable5, plataforma1)\
+_SPRITE_DMG(SpriteCrusherUp, crusherDown)\
+_SPRITE_DMG(SpriteSpinOrbRooftop, plataforma1)\
 SPRITE_DEF_END
 
 #include "ZGBMain_Init.h"

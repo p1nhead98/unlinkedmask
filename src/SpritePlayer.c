@@ -37,6 +37,7 @@ extern UINT8 deaths_d_count;
 
 extern UINT8 on_off;
 extern UINT8 canDo;
+extern UINT8 change_jump_count;
 
 BOOLEAN canHurt;
 
@@ -59,6 +60,12 @@ INT16 player_init_framespeed = 0;
 // }
 
 void CheckDeathTiles(){
+
+    UINT8 colision = GetScrollTile((THIS->x + 3u) >> 3, (THIS->y + 12u) >> 3);
+    
+
+    
+
     if( ( THIS->x > 1281 && THIS->x < 1336 ) || ( THIS->x > 1449 && THIS->x < 1488) || ( THIS->x > 1697 && THIS->x < 1736) || ( THIS->x > 1825 && THIS->x < 1864)  ){
         if(canDo == 0 && player_state != 11){
             current_life = 0;
@@ -75,6 +82,44 @@ void CheckDeathTiles(){
             SetSpriteAnim(THIS, anim_death, 15);
             player_state = 11;
         }
+    }else if((colision == 60 || colision == 61 || colision == 62 || colision == 63)){
+        if(canDo == 1 && player_state != 11){
+            current_life = 0;
+            ScreenShake(1,1);
+            RefreshLife();
+            SetSpriteAnim(THIS, anim_death, 15);
+            player_state = 11;
+        }
+    }else if((colision == 56 || colision == 57 || colision == 58 || colision == 59)){
+        if(canDo == 0 && player_state != 11){
+            current_life = 0;
+            ScreenShake(1,1);
+            RefreshLife();
+            SetSpriteAnim(THIS, anim_death, 15);
+            player_state = 11;
+        }
+    }
+
+    if ((colision == 81 || colision == 82 || colision == 83 || colision == 84) && canDo == 0)
+    {
+        if(canHurt && player_state != 11){
+            inmunity = 30;
+            canHurt = 0;
+            current_life--;
+            ScreenShake(1,1);
+            RefreshLife();
+        }
+        
+    }else if ((colision == 85 || colision == 86 || colision == 87 || colision == 88) && canDo == 1)
+    {
+        if(canHurt && player_state != 11){
+            inmunity = 30;
+            canHurt = 0;
+            current_life--;
+            ScreenShake(1,1);
+            RefreshLife();
+        }
+        
     }
 }
 
@@ -87,7 +132,25 @@ void CheckCollisionTile()
     UINT8 colision2 = GetScrollTile((THIS->x + 1u) >> 3, (THIS->y + 16u) >> 3);
     UINT8 colision3 = GetScrollTile((THIS->x + 10u) >> 3, (THIS->y + 16u) >> 3);
 
- 
+    if(current_level > 25){
+        if(colision == 47 && change_jump_count == 0){
+            change_jump_count = 20;
+            // if(player_state == 1){
+            //     player_state = 2;
+            //     SetSpriteAnim(THIS, anim_spin, 15);
+            // }else if(player_state == 2){
+            //     player_state = 1;
+            //     SetSpriteAnim(THIS, anim_jump, 15);
+            // }else 
+            if(player_state == 3){
+                player_state = 4;
+                SetSpriteAnim(THIS, anim_jump, 15);
+            }else if(player_state == 4){
+                player_state = 3;
+                SetSpriteAnim(THIS, anim_spin, 15);
+            }
+        } 
+    }
 
     if (colision == 112 || colision == 113 || colision == 114 || colision == 115)
     {
@@ -600,11 +663,17 @@ void UPDATE()
             }
 
             if(spr->type == SpriteCrusherDown) {
-                if(CheckCollision(THIS, spr) && THIS->y < (spr->y) && (player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 1)) ) {
+                if(CheckCollision(THIS, spr) && THIS->y < (spr->y) && (player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 1)) && player_accel_y > 0 ) {
                     // THIS->y -= 5;
                     player_state = 3;
                     player_accel_y = -82;
                     SetSpriteAnim(THIS, anim_spin, 20);
+                }else if(CheckCollision(THIS, spr) && THIS->y + 8 > (spr->y) && player_state != 11){
+                    current_life = 0;
+                    ScreenShake(1,1);
+                    RefreshLife();
+                    SetSpriteAnim(THIS, anim_death, 15);
+                    player_state = 11;
                 }
             }
 
@@ -625,6 +694,29 @@ void UPDATE()
                     }
                     
                     
+                }
+            }
+            if(( spr->type == SpriteSpinOrbRooftop)  && player_accel_y > 0) {
+                CUSTOM_DATA_ORB* sprData = (CUSTOM_DATA_ORB*)spr->custom_data;
+                if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && (player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 1))) {
+                    player_state = 3;
+                    player_accel_y = -83;
+                    if(sprData->state == 2 ){
+                        sprData->state = 3;
+                    }else if(sprData->state == 5 ){
+                        sprData->state = 6;
+                    }else if(sprData->state == 1 ){
+                        sprData->state = 4;
+                    }
+                    else if(sprData->state == 8 ){
+                        sprData->state = 7;
+                    }
+                    // else if(sprData->state == 6){
+                    //     sprData->state = sprData->initial_state;
+                    // }
+                    PlayFx(CHANNEL_4, 10, 0x02, 0xf1, 0x40, 0xc0);
+                    SetSpriteAnim(THIS, anim_spin, 20);
+                    SpriteManagerAdd(SpritePlayerVfx, THIS->x - 4, THIS->y + 8);
                 }
             }
 

@@ -9,9 +9,8 @@
 #include "ZGBMain.h"
 
 
-const UINT8 crusher_blink[] = {2, 0, 1};
-const UINT8 crusher_idle[] = {1, 0};
-extern UINT8 current_level;
+const UINT8 crusher_u_blink[] = {2, 0, 1};
+const UINT8 crusher_u_idle[] = {1, 0};
 void START()
 {
     CUSTOM_DATA* data = (CUSTOM_DATA*)THIS->custom_data;
@@ -22,8 +21,9 @@ void START()
     data->accel_y = 0;
     THIS->lim_x = 80;
     THIS->lim_y = 80;
-    THIS->x += 7;
     data->state = 0;
+    THIS->x += 7;
+    THIS->mirror = H_MIRROR;
 }
 
 void UPDATE()
@@ -33,21 +33,13 @@ void UPDATE()
 
     switch(data->state){
         case 0:
-        if(current_level == 26 && THIS->x > 288 && THIS->x < 320){
-            if(  ((THIS->y + 5) < scroll_target->y) && (U_LESS_THAN(DISTANCE(scroll_target->x, THIS->x + 16), 80))  ){
+            if(  ((THIS->y + 5) > scroll_target->y) && (U_LESS_THAN(DISTANCE(scroll_target->x, THIS->x + 40), 55))  ){
                 data->state = 1;
-                SetSpriteAnim(THIS, crusher_blink, 20);
+                SetSpriteAnim(THIS, crusher_u_blink, 20);
             }
-        }else{
-            if(  ((THIS->y + 5) < scroll_target->y) && (U_LESS_THAN(DISTANCE(scroll_target->x, THIS->x + 16), 55))  ){
-                data->state = 1;
-                SetSpriteAnim(THIS, crusher_blink, 20);
-            }
-        }
-            
         break;
         case 1:
-        if(TranslateSprite(THIS, 0, 4)){
+        if(TranslateSprite(THIS, 0, -4)){
             data->state = 2;
             data->counter = 50;
         }
@@ -60,10 +52,10 @@ void UPDATE()
         break;
         case 3:
             if(THIS->y > data->initial_y){
-                TranslateSprite(THIS, 0, -1);
+                TranslateSprite(THIS, 0, 1);
             }else{
                 data->state = 0;
-                SetSpriteAnim(THIS, crusher_idle, 20);
+                SetSpriteAnim(THIS, crusher_u_idle, 20);
             }
         break;
     }

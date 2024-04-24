@@ -81,6 +81,9 @@ DECLARE_MUSIC(unlinkedtitlescreen);
 UINT8 collision_tiles[] = {4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 33, 34, 35, 36, 37, 38, 62, 63, 64, 65, 66, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 0};
 UINT8 collision_tiles2[] = {4, 5, 6 ,7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 56, 57, 58, 59, 60, 61, 62, 63, 77, 78, 79, 80, 81, 82, 83, 84, 0};
 
+UINT8 ct_lvl25[] = {4, 5, 6 ,7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 56, 57, 58, 59, 60, 61, 62, 63, 77, 78, 79, 80, 0};
+
+
 UINT8 bossfight_col[] = {4, 5, 8, 10, 12, 14, 16, 17, 0};
 
 UINT8 windtower_tiles[] = {10,7,8,9,15,16,17,4,5,6,82,83,84,85,86,87,88,89,18,12, 0};
@@ -97,7 +100,7 @@ extern BOOLEAN door_button;
 
 
 
-UINT8 current_level = 25;
+UINT8 current_level = 26;
 
 UINT8 doAnimCount = 0;
 UINT8 AnimCounter = 0;
@@ -156,7 +159,7 @@ IMPORT_TILES(spikesAnim4);
 
 Sprite* player_sprite = 0;
 
-
+UINT8 change_jump_count = 0;
 
 struct MapInfoBanked {
 	UINT8 bank;
@@ -259,9 +262,11 @@ void START()
 
 	event = 0;
 	on_off = 0;
-	
+	change_jump_count = 0;
 	// if(current_level != 11){
-		if( current_level < 20){
+		if(current_level == 25){
+			InitScroll(level->bank, level->map, ct_lvl25, 0);
+		}else if( current_level < 20){
 			InitScroll(level->bank, level->map, collision_tiles, 0);
 		}else if( current_level > 19){
 			InitScroll(level->bank, level->map, collision_tiles2, 0);
@@ -860,6 +865,10 @@ void UPDATE()
 		SetOnOffColsEvent(collision_tiles2, 2);
 	}
 
+
+	if( change_jump_count > 0 ){
+		change_jump_count--;
+	}
 	
 	// if(KEY_TICKED(J_A)){
 	// 	char name [6] = "Dragon";
