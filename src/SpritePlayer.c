@@ -10,6 +10,7 @@
 #include "Scroll.h"
 #include "ZGBMain.h"
 #include "Music.h"
+#include "TileAnimation.h"
 
 const UINT8 anim_idle[] = {2, 0, 1};
 const UINT8 anim_walk[] = {4, 2, 1, 3, 1};
@@ -45,8 +46,8 @@ BOOLEAN canHurt;
 INT16 player_accel_y = 0;
 INT16 player_accel_x = 0;
 INT8 player_state = 0;
+INT8 player_last_state = 0;
 UINT8 player_collision = 0;
-UINT8 player_last_state = 0;
 UINT8 player_counter = 0;
 // UINT8 player_dj = 0;
 
@@ -123,6 +124,39 @@ void CheckDeathTiles(){
     }
 }
 
+void ChangeJumpCollision(){
+
+    UINT8 colision = GetScrollTile((THIS->x) >> 3, (THIS->y ) >> 3);
+    UINT8 colision2 = GetScrollTile((THIS->x + 8u) >> 3, (THIS->y ) >> 3);
+    UINT8 colision3 = GetScrollTile((THIS->x + 10u) >> 3, (THIS->y ) >> 3);
+
+    UINT8 colision4 = GetScrollTile((THIS->x) >> 3, (THIS->y + 8u) >> 3);
+    UINT8 colision5 = GetScrollTile((THIS->x + 8u) >> 3, (THIS->y + 8u ) >> 3);
+    UINT8 colision6 = GetScrollTile((THIS->x + 10u) >> 3, (THIS->y + 8u ) >> 3);
+
+    
+    if(current_level > 25){
+        if((colision == 47 || colision2 == 47 || colision3 == 47 || colision4 == 47 || colision5 == 47 || colision6 == 47) && change_jump_count == 0){
+            change_jump_count = 20;
+     
+            if(player_state == 1){
+                player_last_state = player_state;
+                player_state = 2;
+                SetSpriteAnim(THIS, anim_spin, 15);
+            }else if(player_state == 2){
+                player_last_state = player_state;
+                player_state = 1;
+                SetSpriteAnim(THIS, anim_jump, 15);
+            }else if(player_state == 3){
+                player_state = 4;
+                SetSpriteAnim(THIS, anim_jump, 15);
+            }else if(player_state == 4){
+                player_state = 3;
+                SetSpriteAnim(THIS, anim_spin, 15);
+            }
+        } 
+    }
+}
 void CheckCollisionTile()
 {
 
@@ -132,25 +166,7 @@ void CheckCollisionTile()
     UINT8 colision2 = GetScrollTile((THIS->x + 1u) >> 3, (THIS->y + 16u) >> 3);
     UINT8 colision3 = GetScrollTile((THIS->x + 10u) >> 3, (THIS->y + 16u) >> 3);
 
-    if(current_level > 25){
-        if(colision == 47 && change_jump_count == 0){
-            change_jump_count = 20;
-            // if(player_state == 1){
-            //     player_state = 2;
-            //     SetSpriteAnim(THIS, anim_spin, 15);
-            // }else if(player_state == 2){
-            //     player_state = 1;
-            //     SetSpriteAnim(THIS, anim_jump, 15);
-            // }else 
-            if(player_state == 3){
-                player_state = 4;
-                SetSpriteAnim(THIS, anim_jump, 15);
-            }else if(player_state == 4){
-                player_state = 3;
-                SetSpriteAnim(THIS, anim_spin, 15);
-            }
-        } 
-    }
+    
 
     if (colision == 112 || colision == 113 || colision == 114 || colision == 115)
     {
@@ -167,7 +183,7 @@ void CheckCollisionTile()
     if( (colision2 == 108 || colision2 == 110) ||  (colision3 == 108 || colision3 == 110)){
         if((player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 1))  && player_accel_y > 2 ){
             player_state = 3;
-            player_accel_y = -82;
+            player_accel_y = -83;
             PlayFx(CHANNEL_4, 10, 0x02, 0xf1, 0x40, 0xc0);
             // PlayFx(CHANNEL_2, 10, 0xc1, 0xb1, 0x2b, 0x87);
             SetSpriteAnim(THIS, anim_spin, 20);
@@ -208,7 +224,7 @@ void CheckCollisionTile()
 
 void START()
 {
-    player_state = 8;
+    player_state = 0;
     player_accel_y = 0;
     player_collision = 0;
     THIS->lim_x = 80;
@@ -287,19 +303,20 @@ void UPDATE()
             case 0:
 
                 if(KEY_PRESSED(J_LEFT) && !KEY_PRESSED(J_RIGHT) && THIS->x > scroll_x + 2){
-                    TranslateSprite(THIS, -2, 0);
+                    TranslateSprite(THIS, -2 << delta_time, 0);
                     SetSpriteAnim(THIS, anim_walk, 15);
                     THIS->mirror = V_MIRROR;
                 }else if(KEY_PRESSED(J_RIGHT) && !KEY_PRESSED(J_LEFT)){
-                    TranslateSprite(THIS, 2, 0);
+                    TranslateSprite(THIS, 2 << delta_time, 0);
                     SetSpriteAnim(THIS, anim_walk, 15);
                     THIS->mirror = NO_MIRROR;
                 }else if(!KEY_PRESSED(J_RIGHT) && !KEY_PRESSED(J_LEFT)){
                     SetSpriteAnim(THIS, anim_idle, 15);
                 }
                 if(KEY_TICKED(J_A)){
+                    player_last_state = player_state;
                     player_state = 1;
-                    player_accel_y = -82;
+                    player_accel_y = -83;
                     JumpRandSound(0);
                     SetSpriteAnim(THIS, anim_jump, 15);
                     player_last_state = 0;
@@ -307,8 +324,9 @@ void UPDATE()
                     // player_dj = 1;
                 }
                 if(KEY_TICKED(J_B)){
+                    player_last_state = player_state;
                     player_state = 2;
-                    player_accel_y = -82;
+                    player_accel_y = -83;
                     JumpRandSound(1);
                     SetSpriteAnim(THIS, anim_spin, 20);
                     player_last_state = 1;
@@ -316,42 +334,36 @@ void UPDATE()
                 }
             break;
             case 1:
-                if(!KEY_PRESSED(J_A) && player_accel_y < 0){
+                if(!KEY_PRESSED(J_A) && player_accel_y < 0 && player_last_state == 0){
+                    player_accel_y = 0;
+                }else if (!KEY_PRESSED(J_B) && player_accel_y < 0 && player_last_state == 2){
                     player_accel_y = 0;
                 }
-                // if(KEY_TICKED(J_A) &&  player_dj < 2){
-                     
-                //     player_accel_y = -82;
-                //     JumpRandSound(0);
-                //     SetSpriteAnim(THIS, anim_jump, 15);
-                //     player_last_state = 0;
-                //     SpriteManagerAdd(SpritePlayerVfx, THIS->x - 4, THIS->y + 8);
-                //     player_dj = 2;
-                // }
+      
                 if (player_accel_y > 2)
                 {
                     SetSpriteAnim(THIS, anim_fall, 15);
                 }
                 if(KEY_PRESSED(J_LEFT) && !KEY_PRESSED(J_RIGHT) && THIS->x > scroll_x + 2){
-                    TranslateSprite(THIS, -2, 0);
+                    TranslateSprite(THIS, -2 << delta_time, 0);
                     THIS->mirror = V_MIRROR;
                     
                 }else if(KEY_PRESSED(J_RIGHT) && !KEY_PRESSED(J_LEFT)){
-                    TranslateSprite(THIS, 2, 0);
+                    TranslateSprite(THIS, 2 << delta_time, 0);
                     THIS->mirror = NO_MIRROR;
                 }
             break;
         case 2:
-                if(!KEY_PRESSED(J_B) && player_accel_y < 0){
+                if(!KEY_PRESSED(J_B) && player_accel_y < 0  && player_last_state == 0){
                     player_accel_y = 0;
                 }
                 
                 if(KEY_PRESSED(J_LEFT) && !KEY_PRESSED(J_RIGHT) && THIS->x > scroll_x + 2){
-                    TranslateSprite(THIS, -2, 0);
+                    TranslateSprite(THIS, -2 << delta_time, 0);
                     // THIS->mirror = V_MIRROR;
                     
                 }else if(KEY_PRESSED(J_RIGHT) && !KEY_PRESSED(J_LEFT)){
-                    TranslateSprite(THIS, 2, 0);
+                    TranslateSprite(THIS, 2 << delta_time, 0);
                     // THIS->mirror = NO_MIRROR;
                 }
             break;
@@ -361,11 +373,11 @@ void UPDATE()
                 // }
                 
                 if(KEY_PRESSED(J_LEFT) && !KEY_PRESSED(J_RIGHT) && THIS->x > scroll_x + 2){
-                    TranslateSprite(THIS, -2, 0);
+                    TranslateSprite(THIS, -2 << delta_time, 0);
                     // THIS->mirror = V_MIRROR;
                     
                 }else if(KEY_PRESSED(J_RIGHT) && !KEY_PRESSED(J_LEFT)){
-                    TranslateSprite(THIS, 2, 0);
+                    TranslateSprite(THIS, 2 << delta_time, 0);
                     // THIS->mirror = NO_MIRROR;
                 }
             break;
@@ -378,11 +390,11 @@ void UPDATE()
                     SetSpriteAnim(THIS, anim_fall, 15);
                 }
                 if(KEY_PRESSED(J_LEFT) && !KEY_PRESSED(J_RIGHT) && THIS->x > scroll_x + 2){
-                    TranslateSprite(THIS, -2, 0);
+                    TranslateSprite(THIS, -2 << delta_time, 0);
                     THIS->mirror = V_MIRROR;
                     
                 }else if(KEY_PRESSED(J_RIGHT) && !KEY_PRESSED(J_LEFT)){
-                    TranslateSprite(THIS, 2, 0);
+                    TranslateSprite(THIS, 2 << delta_time, 0);
                     THIS->mirror = NO_MIRROR;
                 }
             break;
@@ -415,14 +427,14 @@ void UPDATE()
                 if(player_accel_y < 85){
                     if(KEY_TICKED(J_A)){
                         player_state = 1;
-                        player_accel_y = -82;
+                        player_accel_y = -83;
                         JumpRandSound(0);
                         SetSpriteAnim(THIS, anim_jump, 15);
                         SpriteManagerAdd(SpritePlayerVfx, THIS->x - 4, THIS->y + 8);
                     }
                     if(KEY_TICKED(J_B)){
                         player_state = 2;
-                        player_accel_y = -82;
+                        player_accel_y = -83;
                         JumpRandSound(1);
                         SetSpriteAnim(THIS, anim_spin, 20);
                         SpriteManagerAdd(SpritePlayerVfx, THIS->x - 4, THIS->y + 8);
@@ -436,11 +448,11 @@ void UPDATE()
                     SetSpriteAnim(THIS, player_last_state == 1 ? anim_spin : anim_fall, 15);
                 }
                 if(KEY_PRESSED(J_LEFT) && !KEY_PRESSED(J_RIGHT) && THIS->x > scroll_x + 2){
-                    TranslateSprite(THIS, -2, 0);
+                    TranslateSprite(THIS, -2 << delta_time, 0);
                     THIS->mirror = V_MIRROR;
                     
                 }else if(KEY_PRESSED(J_RIGHT) && !KEY_PRESSED(J_LEFT)){
-                    TranslateSprite(THIS, 2, 0);
+                    TranslateSprite(THIS, 2 << delta_time, 0);
                     THIS->mirror = NO_MIRROR;
                 }
             break;
@@ -525,6 +537,9 @@ void UPDATE()
         CheckCollisionTile();
         if(current_level == 25){
             CheckDeathTiles();
+        }
+        if(current_level > 25){
+            ChangeJumpCollision();
         }
 
 
@@ -638,12 +653,12 @@ void UPDATE()
                     SpriteManagerAdd(SpritePlayerVfx, THIS->x - 4, THIS->y + 8);
                 }
             }
-            if((spr->type == SpriteJumpBox || spr->type == SpriteJumpBoxEvent) && player_accel_y > 0)  {
+            if((spr->type == SpriteJumpBox || spr->type == SpriteSplitBox || spr->type == SpriteJumpBoxEvent) && player_accel_y > 0)  {
                 CUSTOM_DATA_BOX* sprData = (CUSTOM_DATA_BOX*)spr->custom_data;
                 if(CheckCollision(THIS, spr) && sprData->state == 0 && (player_state == 1 || player_state == 2 || player_state == 4 || (player_state == 10))  ) {
                     if(player_state == 1 || player_state == 4 || (player_state == 10 && player_last_state == 0) && THIS->y < (spr->y - 5)){
                         player_state = 4;
-                        player_accel_y = -82;
+                        player_accel_y = -83;
                         SetSpriteAnim(THIS, anim_jump, 40);   
                     }
                     PlayFx(CHANNEL_4, 10, 0x05, 0xf1, 0x70, 0xc0);
@@ -666,7 +681,7 @@ void UPDATE()
                 if(CheckCollision(THIS, spr) && THIS->y < (spr->y) && (player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 1)) && player_accel_y > 0 ) {
                     // THIS->y -= 5;
                     player_state = 3;
-                    player_accel_y = -82;
+                    player_accel_y = -83;
                     SetSpriteAnim(THIS, anim_spin, 20);
                 }else if(CheckCollision(THIS, spr) && THIS->y + 8 > (spr->y) && player_state != 11){
                     current_life = 0;
@@ -675,6 +690,22 @@ void UPDATE()
                     SetSpriteAnim(THIS, anim_death, 15);
                     player_state = 11;
                 }
+            }
+
+            if(spr->type == SpriteCrusherLeft) {
+                if(CheckCollision(THIS, spr) && THIS->y < (spr->y) && (player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 1)) && player_accel_y > 0 ) {
+                    // THIS->y -= 5;
+                    player_state = 3;
+                    player_accel_y = -83;
+                    SetSpriteAnim(THIS, anim_spin, 20);
+                }
+                // else if(CheckCollision(THIS, spr) && THIS->y + 8 > (spr->y) && player_state != 11){
+                //     current_life = 0;
+                //     ScreenShake(1,1);
+                //     RefreshLife();
+                //     SetSpriteAnim(THIS, anim_death, 15);
+                //     player_state = 11;
+                // }
             }
 
             if(spr->type == SpriteOnOffBtn) {
@@ -710,6 +741,13 @@ void UPDATE()
                     }
                     else if(sprData->state == 8 ){
                         sprData->state = 7;
+                    }else if(sprData->state == 0 ){
+                        sprData->state = 9;
+                    }
+                    else if(sprData->state == 12 ){
+                        sprData->state = 11;
+                    }else if(sprData->state == 14 ){
+                        sprData->state = 13;
                     }
                     // else if(sprData->state == 6){
                     //     sprData->state = sprData->initial_state;

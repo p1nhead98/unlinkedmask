@@ -27,6 +27,7 @@ typedef struct {
 	INT8 start;
 	UINT8 initial_frame_speed;
 	UINT8 initial_y;
+	UINT16 initial_x;
 	UINT8 can_change;
 } CUSTOM_DATA_BOX;
 

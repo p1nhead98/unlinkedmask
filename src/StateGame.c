@@ -39,6 +39,7 @@ IMPORT_MAP(lvl_14);
 IMPORT_MAP(lvl_15);
 IMPORT_MAP(lvl_16);
 IMPORT_MAP(lvl_17);
+IMPORT_MAP(lvl_18);
 
 //CUTSCENES
 IMPORT_MAP(intro_door);
@@ -60,6 +61,10 @@ IMPORT_TILES(capeCuts3Tiles);
 //BKG ANIM
 IMPORT_TILES(cloudAnim1);
 IMPORT_TILES(cloudAnim2);
+IMPORT_TILES(spinChangerAnim);
+IMPORT_TILES(spinChangerAnim2);
+IMPORT_TILES(spinChangerAnim3);
+IMPORT_TILES(spinChangerAnim4);
 
 
 // IMPORT_MAP(window);
@@ -100,7 +105,7 @@ extern BOOLEAN door_button;
 
 
 
-UINT8 current_level = 26;
+UINT8 current_level = 27;
 
 UINT8 doAnimCount = 0;
 UINT8 AnimCounter = 0;
@@ -196,6 +201,7 @@ const struct MapInfoBanked levels[] = {
 	BANKED_MAP(lvl_15),
 	BANKED_MAP(lvl_16),
 	BANKED_MAP(lvl_17),
+	BANKED_MAP(lvl_18),
 };
 
 
@@ -233,6 +239,7 @@ const START_POS start_positions[] = {
 	{8, 96},  //Level 15 Player Start Position	----- current level = 24
 	{8, 96},  //Level 16 Player Start Position	----- current level = 25
 	{8, 96},  //Level 17 Player Start Position	----- current level = 26
+	{8, 96},  //Level 18 Player Start Position	----- current level = 27
 
 };
 
@@ -815,9 +822,14 @@ void UPDATE()
 			}
 			if(current_level > 25){
 				AnimCounter2++;
-				Tile_Anim(AnimCounter2, 16, &cloudAnim1, 45, BANK(cloudAnim1));
-				Tile_Anim(AnimCounter2 + 8, 16, &cloudAnim1, 46, BANK(cloudAnim1));
-				// Tile_Anim(AnimCounter2, 8, &cloudAnim2, 44, BANK(cloudAnim2));
+				if(change_jump_count == 0){
+					Tile_Anim(AnimCounter2, 6, &spinChangerAnim, 47, BANK(spinChangerAnim));	
+				}else{
+					Tile_Anim(AnimCounter2, 6, &spinChangerAnim2, 47, BANK(spinChangerAnim2));
+				}
+		
+			// 	Tile_Anim(AnimCounter2 + 8, 16, &cloudAnim1, 46, BANK(cloudAnim1));
+			// 	// Tile_Anim(AnimCounter2, 8, &cloudAnim2, 44, BANK(cloudAnim2));
 			}
 
 			
@@ -867,6 +879,11 @@ void UPDATE()
 
 
 	if( change_jump_count > 0 ){
+		if(change_jump_count == 20){
+			Set_SpinChange_Tiles(&spinChangerAnim4, BANK(spinChangerAnim4), 8);
+		}else if(change_jump_count == 1){
+			Set_SpinChange_Tiles(&spinChangerAnim3, BANK(spinChangerAnim3), 8);
+		}
 		change_jump_count--;
 	}
 	

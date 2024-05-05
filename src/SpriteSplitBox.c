@@ -8,8 +8,8 @@
 #include "Math.h"
 #include "ZGBMain.h"
 
-const UINT8 anim_box[] = {2, 0, 1};
-const UINT8 anim_box2[] = {2, 2, 2};
+const UINT8 anim_sbox[] = {2, 0, 1};
+const UINT8 anim_sbox2[] = {2, 2, 2};
 
 
 extern UINT8 start_screen;
@@ -19,7 +19,6 @@ void START()
     CUSTOM_DATA_BOX* data = (CUSTOM_DATA_BOX*)THIS->custom_data;
     data->initial_frame_speed = 0;
     data->initial_y = THIS->y;
-    data->initial_x = THIS->x;
     data->start = 1;
     THIS->lim_x = 80;
     THIS->lim_y = 80;
@@ -42,30 +41,17 @@ void UPDATE()
 
         switch( data->state ){
             case 0:
-                SetSpriteAnim(THIS, anim_box, 20);
+                SetSpriteAnim(THIS, anim_sbox, 20);
             break;
             case 1:
-        
-                    SetSpriteAnim(THIS, anim_box2, 2);
-                if(THIS->anim_frame == 1){
-                    data->state = 0;
-                    SetSpriteAnim(THIS, anim_box, 20);
-                
-                }
-            break;
-            case 2:
-                if(THIS->x < (data->initial_x + 30)){
-                    THIS->x+=2;
-                }else{
-                    data->state = 0;
-                }
-            break;
-            case 3:
-                if(THIS->x > (data->initial_x - 28)){
-                    THIS->x-=2;
-                }else{
-                    data->state = 0;
-                }
+                SpriteManagerRemove(THIS_IDX);
+                Sprite* jbox1 = SpriteManagerAdd(SpriteJumpBox, THIS->x, THIS->y );
+                CUSTOM_DATA_BOX* dataj1 = (CUSTOM_DATA_BOX*)jbox1->custom_data;
+                Sprite* jbox2 = SpriteManagerAdd(SpriteJumpBox, THIS->x, THIS->y );
+                CUSTOM_DATA_BOX* dataj2 = (CUSTOM_DATA_BOX*)jbox2->custom_data;
+
+                dataj1->state = 2;
+                dataj2->state = 3;
             break;
         }
     }else{
