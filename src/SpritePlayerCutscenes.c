@@ -110,7 +110,7 @@ void UPDATE()
             player_c_counter = 60;
             SpriteManagerAdd(SpriteExplosionCuts, THIS->x - 8, THIS->y - 8);
             SetSpriteAnim(THIS, pcs_cape_stand, 15);
-            PlayMusic(unlinkedchainedsoul, 1);
+            // PlayMusic(unlinkedchainedsoul, 1);
            
         }
         break;

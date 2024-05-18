@@ -10,7 +10,7 @@
 
 const UINT8 anim_sbox[] = {2, 0, 1};
 const UINT8 anim_sbox2[] = {2, 2, 2};
-
+extern UINT8 current_level;
 
 extern UINT8 start_screen;
 
@@ -23,6 +23,9 @@ void START()
     THIS->lim_x = 80;
     THIS->lim_y = 80;
     data->state = 0;
+    if(current_level == 28 && THIS->x > 448){
+        THIS->x -= 12;
+    }
 }
 
 void UPDATE()

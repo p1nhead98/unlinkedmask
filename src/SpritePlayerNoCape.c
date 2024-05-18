@@ -315,7 +315,7 @@ void UPDATE()
                 if(player_nc_counter == 40){
                     player_nc_counter = 0;
                     player_nc_state = 0;
-                    PlayMusic(unlinkedunchainedsoul, 1);
+                    // PlayMusic(unlinkedunchainedsoul, 1);
                 }
                 
             break;

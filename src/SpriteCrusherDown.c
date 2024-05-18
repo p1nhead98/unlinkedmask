@@ -24,6 +24,20 @@ void START()
     THIS->lim_y = 80;
     THIS->x += 7;
     data->state = 0;
+    if(current_level == 28){
+        if(THIS->x > 768 && THIS->x < 840){
+            THIS->y -= 24;
+        }else if(THIS->x > 1080 && THIS->x < 1136){
+            THIS->y -= 8;
+            THIS->x += 8;
+        }else if(THIS->x > 1136 && THIS->x < 1192){
+            THIS->x += 8;
+            THIS->lim_y = 150;
+            THIS->y -= 16;
+        }else if(THIS->x > 1192){
+            THIS->y-=50;
+        }
+    }
 }
 
 void UPDATE()
@@ -38,6 +52,19 @@ void UPDATE()
                 data->state = 1;
                 SetSpriteAnim(THIS, crusher_blink, 20);
             }
+        }else if(current_level == 28){
+            if(THIS->x < 384){
+                if(  ((THIS->y + 5) < scroll_target->y) && (U_LESS_THAN(DISTANCE(scroll_target->x, THIS->x + 16), 34))  ){
+                    data->state = 1;
+                    SetSpriteAnim(THIS, crusher_blink, 20);
+                }
+            }else{
+                if(  ((THIS->y + 5) < scroll_target->y) && (U_LESS_THAN(DISTANCE(scroll_target->x, THIS->x + 16), 35))  ){
+                    data->state = 1;
+                    SetSpriteAnim(THIS, crusher_blink, 20);
+                }
+            }
+
         }else{
             if(  ((THIS->y + 5) < scroll_target->y) && (U_LESS_THAN(DISTANCE(scroll_target->x, THIS->x + 16), 55))  ){
                 data->state = 1;
@@ -47,7 +74,7 @@ void UPDATE()
             
         break;
         case 1:
-        if(TranslateSprite(THIS, 0, 4)){
+        if(TranslateSprite(THIS, 0, 4 << delta_time)){
             data->state = 2;
             data->counter = 50;
         }

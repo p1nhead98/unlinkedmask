@@ -490,7 +490,7 @@ void UPDATE()
                 if(player_counter == 30){
                     player_counter = 0;
                     player_state = 0;
-                    PlayMusic(unlinkedunchainedsoul, 1);
+                    // PlayMusic(unlinkedunchainedsoul, 1);
                 }
                 
             break;
@@ -748,6 +748,8 @@ void UPDATE()
                         sprData->state = 11;
                     }else if(sprData->state == 14 ){
                         sprData->state = 13;
+                    }else if(sprData->state == 17 ){
+                        sprData->state = 16;
                     }
                     // else if(sprData->state == 6){
                     //     sprData->state = sprData->initial_state;

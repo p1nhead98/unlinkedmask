@@ -40,6 +40,7 @@ IMPORT_MAP(lvl_15);
 IMPORT_MAP(lvl_16);
 IMPORT_MAP(lvl_17);
 IMPORT_MAP(lvl_18);
+IMPORT_MAP(lvl_19);
 
 //CUTSCENES
 IMPORT_MAP(intro_door);
@@ -105,7 +106,7 @@ extern BOOLEAN door_button;
 
 
 
-UINT8 current_level = 0;
+UINT8 current_level = 28;
 
 UINT8 doAnimCount = 0;
 UINT8 AnimCounter = 0;
@@ -202,6 +203,7 @@ const struct MapInfoBanked levels[] = {
 	BANKED_MAP(lvl_16),
 	BANKED_MAP(lvl_17),
 	BANKED_MAP(lvl_18),
+	BANKED_MAP(lvl_19),
 };
 
 
@@ -240,6 +242,7 @@ const START_POS start_positions[] = {
 	{8, 96},  //Level 16 Player Start Position	----- current level = 25
 	{8, 96},  //Level 17 Player Start Position	----- current level = 26
 	{8, 96},  //Level 18 Player Start Position	----- current level = 27
+	{8, 96},  //Level 19 Player Start Position	----- current level = 28
 
 };
 
@@ -286,7 +289,7 @@ void START()
 
 	switch (current_level){
 		case 0:
-			PlayMusic(unlinkedtitlescreen, 1);
+			// PlayMusic(unlinkedtitlescreen, 1);
 		break;
 		case 1:
 			SetHudWin(0);
@@ -375,7 +378,7 @@ void START()
 
 
 		case 20:
-			PlayMusic(unlinkedinside1, 1);
+			// PlayMusic(unlinkedinside1, 1);
 			door_time_btwn_start = door_time_btwn = 35;
 			SetOnOffCols(collision_tiles2, on_off);
 			ScrollRelocateMapTo(0,48);
@@ -428,7 +431,15 @@ void START()
 			state_interrupts = 0;
 			break;
 
-
+		case 28:
+		canDo = 0;
+		dialog = 0;
+		AutomaticOnOff(collision_tiles2, canDo);
+		ScrollRelocateMapTo(0,48);
+		SetHudWin(1);
+		IsCutscene = 0;
+		state_interrupts = 0;
+		break;
 		
 		default:
 			if(current_level != 1 && current_level != 2  && current_level != 8 && current_level != 9 && current_level != 13 && current_level != 19){
