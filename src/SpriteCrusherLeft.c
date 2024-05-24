@@ -29,7 +29,7 @@ void START()
         THIS->mirror = V_MIRROR;
     }else if(THIS->x < 104 && current_level == 28){
         THIS->mirror = V_MIRROR;
-    }else if(THIS->x > 105 && current_level == 28){
+    }else if(THIS->x > 105 && THIS->x < 960 && current_level == 28){
         data->initial_x = THIS->x = 272;
     }
     data->state = 0;
@@ -68,6 +68,11 @@ void UPDATE()
             }else if( current_level == 28 ){
                 if(THIS->x < 145){
                     if(  (U_LESS_THAN(DISTANCE(scroll_target->x, THIS->x + 16), 38)) && ((THIS->y - 24 ) < scroll_target->y ) ){
+                        data->state = 1;
+                        SetSpriteAnim(THIS, crusher_l_blink, 20);
+                    }
+                }else if(THIS->x > 960){
+                    if( ((scroll_target->x > 864) && (scroll_target->x <  (THIS->x + 3)))  ){
                         data->state = 1;
                         SetSpriteAnim(THIS, crusher_l_blink, 20);
                     }

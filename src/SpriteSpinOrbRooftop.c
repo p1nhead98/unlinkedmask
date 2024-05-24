@@ -190,6 +190,10 @@ void START()
                 data->state = 17;
             }
         break;
+        case 29:
+            THIS->y-=4;
+            data->state = 1;
+        break;
     }
   
 
@@ -246,6 +250,17 @@ void UPDATE()
             case 19:
             THIS->x += 4;
             break;
+            case 20:
+            THIS->y += 2;
+            break;
+            case 21:
+            THIS->x+=5;
+            break;
+            case 22:
+            THIS->y+=5;
+            break;
+        
+
             
         }
 
@@ -329,6 +344,14 @@ void UPDATE()
             }else if (data->state == 19 && THIS->x > 1346){
                 data->state = 10;
             }
+        }
+    }else if (current_level == 29 ){
+        if( data->state == 4 && THIS->x > 434 && THIS->y > 90 && THIS->x < 480){
+            data->state = 7;
+        }else if (data->state == 7 && THIS->y < 78 && THIS->x < 560){
+            data->state = 21;
+        }else if (data->state == 19 && THIS->x > 602 && THIS->y < 78){
+            data->state = 16;
         }
     }
         // switch (data->state)

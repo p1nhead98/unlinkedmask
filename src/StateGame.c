@@ -41,6 +41,7 @@ IMPORT_MAP(lvl_16);
 IMPORT_MAP(lvl_17);
 IMPORT_MAP(lvl_18);
 IMPORT_MAP(lvl_19);
+IMPORT_MAP(lvl_20);
 
 //CUTSCENES
 IMPORT_MAP(intro_door);
@@ -106,7 +107,7 @@ extern BOOLEAN door_button;
 
 
 
-UINT8 current_level = 28;
+UINT8 current_level = 27;
 
 UINT8 doAnimCount = 0;
 UINT8 AnimCounter = 0;
@@ -204,6 +205,7 @@ const struct MapInfoBanked levels[] = {
 	BANKED_MAP(lvl_17),
 	BANKED_MAP(lvl_18),
 	BANKED_MAP(lvl_19),
+	BANKED_MAP(lvl_20),
 };
 
 
@@ -243,7 +245,8 @@ const START_POS start_positions[] = {
 	{8, 96},  //Level 17 Player Start Position	----- current level = 26
 	{8, 96},  //Level 18 Player Start Position	----- current level = 27
 	{8, 96},  //Level 19 Player Start Position	----- current level = 28
-
+	{8, 96},  //Level 20 Player Start Position	----- current level = 29
+	{8, 96},  //Level 20 Player Start Position	----- current level = 29
 };
 
 
@@ -430,7 +433,7 @@ void START()
 			IsCutscene = 0;
 			state_interrupts = 0;
 			break;
-
+		
 		case 28:
 		canDo = 0;
 		dialog = 0;
@@ -441,6 +444,15 @@ void START()
 		state_interrupts = 0;
 		break;
 		
+		case 29:
+		ScrollRelocateMapTo(0,48);
+		onoff_auto_time = 20;
+		SetHudWin(1);
+		IsCutscene = 0;
+		state_interrupts = 0;
+		AutomaticOnOff(collision_tiles2, canDo);
+		break;
+
 		default:
 			if(current_level != 1 && current_level != 2  && current_level != 8 && current_level != 9 && current_level != 13 && current_level != 19){
 				ScrollRelocateMapTo(0,48);
@@ -749,7 +761,7 @@ void UPDATE()
 
 
 
-	if(current_level == 25){
+	if(current_level == 25 || current_level == 29){
 		if(--onoff_auto_time == 0 && start_screen == 0){
 			onoff_auto_time = 90;
 			canDo = canDo == 0 ? 1 : 0;
@@ -780,7 +792,7 @@ void UPDATE()
 				}else{
 					SetWindowY(128);
 					SetPauseMenu( level->map, level->bank );
-					if(current_level != 25){
+					if(current_level != 25 && current_level != 29){
 						SetOnOffCols(collision_tiles2, on_off);
 					}else{
 						AutomaticOnOff(collision_tiles2, canDo);
@@ -812,7 +824,7 @@ void UPDATE()
 			}
 
 
-			if(current_level == 25){
+			if(current_level == 25 || current_level == 29){
 
 				if(canDo == 0){
 					if(AnimCounter == 0){

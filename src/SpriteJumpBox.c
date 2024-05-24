@@ -61,7 +61,7 @@ void UPDATE()
                 }
             break;
             case 3:
-                if(THIS->x > (data->initial_x - 28)){
+                if(THIS->x > (data->initial_x - 31)){
                     THIS->x-=2;
                 }else{
                     data->state = 0;
