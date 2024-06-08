@@ -43,6 +43,7 @@ _SPRITE_DMG(SpriteCrusherUp, crusherDown)\
 _SPRITE_DMG(SpriteSpinOrbRooftop, plataforma1)\
 _SPRITE_DMG(SpriteCrusherLeft, crusherLeft)\
 _SPRITE_DMG(SpriteSplitBox, plataforma2)\
+_SPRITE_DMG(SpriteBoss1, boss1)\
 SPRITE_DEF_END
 
 #include "ZGBMain_Init.h"

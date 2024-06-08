@@ -42,6 +42,8 @@ IMPORT_MAP(lvl_17);
 IMPORT_MAP(lvl_18);
 IMPORT_MAP(lvl_19);
 IMPORT_MAP(lvl_20);
+IMPORT_MAP(lvl_20);
+IMPORT_MAP(bossfight1);
 
 //CUTSCENES
 IMPORT_MAP(intro_door);
@@ -107,7 +109,7 @@ extern BOOLEAN door_button;
 
 
 
-UINT8 current_level = 27;
+UINT8 current_level = 30;
 
 UINT8 doAnimCount = 0;
 UINT8 AnimCounter = 0;
@@ -206,6 +208,8 @@ const struct MapInfoBanked levels[] = {
 	BANKED_MAP(lvl_18),
 	BANKED_MAP(lvl_19),
 	BANKED_MAP(lvl_20),
+	BANKED_MAP(bossfight1),
+	
 };
 
 
@@ -447,6 +451,7 @@ void START()
 		case 29:
 		ScrollRelocateMapTo(0,48);
 		onoff_auto_time = 20;
+		canDo = 0;
 		SetHudWin(1);
 		IsCutscene = 0;
 		state_interrupts = 0;
@@ -490,6 +495,9 @@ void START()
 		
 	}
 
+	if(current_level == 30){
+		SpriteManagerAdd(SpriteBoss1, 30, 15);
+	}
 
 
 	// LY_REG  = 0;
@@ -763,7 +771,12 @@ void UPDATE()
 
 	if(current_level == 25 || current_level == 29){
 		if(--onoff_auto_time == 0 && start_screen == 0){
-			onoff_auto_time = 90;
+			if(current_level == 29){
+				onoff_auto_time = 60;
+			}else{
+				onoff_auto_time = 90;
+			}
+			
 			canDo = canDo == 0 ? 1 : 0;
 			AutomaticOnOff(collision_tiles2, canDo);
 		}	

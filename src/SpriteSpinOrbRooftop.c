@@ -259,6 +259,9 @@ void UPDATE()
             case 22:
             THIS->y+=5;
             break;
+            case 23:
+            THIS->y-=3;
+            break;
         
 
             
@@ -347,11 +350,15 @@ void UPDATE()
         }
     }else if (current_level == 29 ){
         if( data->state == 4 && THIS->x > 434 && THIS->y > 90 && THIS->x < 480){
-            data->state = 7;
-        }else if (data->state == 7 && THIS->y < 78 && THIS->x < 560){
-            data->state = 21;
-        }else if (data->state == 19 && THIS->x > 602 && THIS->y < 78){
+            data->state = 23;
+        }else if (data->state == 23 && THIS->y < 78 && THIS->x < 560){
+            data->state = 19;
+        }else if (data->state == 19 && THIS->x > 600 && THIS->y < 78){
             data->state = 16;
+        }else if (data->state == 16 && THIS->y > 187 && THIS->x < 712){
+            data->state = 15;
+        }else if (data->state == 15 && THIS->y > 187 && THIS->x > 779){
+            data->state = 23;
         }
     }
         // switch (data->state)

@@ -31,6 +31,8 @@ void START()
         THIS->mirror = V_MIRROR;
     }else if(THIS->x > 105 && THIS->x < 960 && current_level == 28){
         data->initial_x = THIS->x = 272;
+    }else if(current_level == 29){
+        THIS->mirror = V_MIRROR;
     }
     data->state = 0;
 }
@@ -83,6 +85,13 @@ void UPDATE()
                     }
                 }
                
+            }else if(current_level == 29){
+                if(THIS->x < 728){
+                    if( ((THIS->y + 5) > scroll_target->y) && (THIS->x + 16 < scroll_target->x) ){
+                        data->state = 1;
+                        SetSpriteAnim(THIS, crusher_l_blink, 20);
+                    }
+                }
             }
             
         
@@ -95,6 +104,11 @@ void UPDATE()
                 data->counter = 50;
             }
         }else if(THIS->x < 145 && current_level == 28){
+            if(TranslateSprite(THIS, 4, 0)){
+                data->state = 2;
+                data->counter = 50;
+            }
+        }else if (THIS->x < 728 && current_level == 29) {
             if(TranslateSprite(THIS, 4, 0)){
                 data->state = 2;
                 data->counter = 50;
@@ -126,6 +140,15 @@ void UPDATE()
                 }else{
                     data->state = 0;
                     SetSpriteAnim(THIS, crusher_l_idle, 20);
+                }
+            }else if(current_level == 29){
+                if(THIS->x < 728){
+                    if(THIS->x > data->initial_x){
+                        TranslateSprite(THIS, -1, 0);
+                    }else{
+                        data->state = 0;
+                        SetSpriteAnim(THIS, crusher_l_idle, 20);
+                    }
                 }
             }else{
                 if(THIS->x < data->initial_x){
