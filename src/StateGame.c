@@ -18,6 +18,7 @@
 #include "Dialogos.h"
 #include "Cinematicas.h"
 #include "WinController.h"
+#include "BossAttacks.h"
 
 IMPORT_MAP(titleScreen);
 
@@ -90,10 +91,12 @@ DECLARE_MUSIC(unlinkedtitlescreen);
 UINT8 collision_tiles[] = {4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 33, 34, 35, 36, 37, 38, 62, 63, 64, 65, 66, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 0};
 UINT8 collision_tiles2[] = {4, 5, 6 ,7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 56, 57, 58, 59, 60, 61, 62, 63, 77, 78, 79, 80, 81, 82, 83, 84, 0};
 
+UINT8 collision_boss1[] = {4, 8, 64, 68,  0};
+
 UINT8 ct_lvl25[] = {4, 5, 6 ,7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 56, 57, 58, 59, 60, 61, 62, 63, 77, 78, 79, 80, 0};
 
 
-UINT8 bossfight_col[] = {4, 5, 8, 10, 12, 14, 16, 17, 0};
+UINT8 bossfight_col[] = {74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 0};
 
 UINT8 windtower_tiles[] = {10,7,8,9,15,16,17,4,5,6,82,83,84,85,86,87,88,89,18,12, 0};
 
@@ -112,6 +115,9 @@ extern BOOLEAN door_button;
 UINT8 current_level = 30;
 
 UINT8 doAnimCount = 0;
+
+UINT8 bossAttackCounter = 0;
+UINT8 bossAttackState = 0;
 UINT8 AnimCounter = 0;
 UINT8 AnimCounter2 = 0;
 
@@ -161,12 +167,18 @@ IMPORT_TILES(spikesAnim2);
 IMPORT_TILES(spikesAnim3);
 IMPORT_TILES(spikesAnim4);
 
+IMPORT_TILES(flameBoss);
+IMPORT_TILES(flameBoss2);
+IMPORT_TILES(flameBoss3);
+
 // IMPORT_TILES(waterAnim);
 // IMPORT_TILES(waterfallAnim);
 // IMPORT_TILES(waterfallAnim2);
 
 
 Sprite* player_sprite = 0;
+
+Sprite* bossFireAttack_spr = 1;
 
 UINT8 change_jump_count = 0;
 
@@ -250,7 +262,7 @@ const START_POS start_positions[] = {
 	{8, 96},  //Level 18 Player Start Position	----- current level = 27
 	{8, 96},  //Level 19 Player Start Position	----- current level = 28
 	{8, 96},  //Level 20 Player Start Position	----- current level = 29
-	{8, 96},  //Level 20 Player Start Position	----- current level = 29
+	{8, 136},  //boss fight Player Start Position	----- current level = 30
 };
 
 
@@ -283,6 +295,8 @@ void START()
 	// if(current_level != 11){
 		if(current_level == 25){
 			InitScroll(level->bank, level->map, ct_lvl25, 0);
+		}else if(current_level == 30){
+			InitScroll(level->bank, level->map, bossfight_col, 0);
 		}else if( current_level < 20){
 			InitScroll(level->bank, level->map, collision_tiles, 0);
 		}else if( current_level > 19){
@@ -458,6 +472,23 @@ void START()
 		AutomaticOnOff(collision_tiles2, canDo);
 		break;
 
+		case 30:
+		ScrollRelocateMapTo(0,40);
+		// onoff_auto_time = 20;
+		// canDo = 0;
+		SetHudWin(1);
+		AnimCounter = 0;
+		IsCutscene = 0;
+		state_interrupts = 0;
+		can_scroll_x = 0;
+		canDoInterrupt = 0;
+		bossAttackCounter = 10;
+		bossAttackState = 0;
+		doAnimCount = 3;
+		bossFireAttack_spr = SpriteManagerAdd(SpriteBossFireFlash, 0, 138);
+		// AutomaticOnOff(collision_tiles2, canDo);
+		break;
+
 		default:
 			if(current_level != 1 && current_level != 2  && current_level != 8 && current_level != 9 && current_level != 13 && current_level != 19){
 				ScrollRelocateMapTo(0,48);
@@ -496,7 +527,7 @@ void START()
 	}
 
 	if(current_level == 30){
-		SpriteManagerAdd(SpriteBoss1, 30, 15);
+		SpriteManagerAdd(SpriteBoss1, 104, 68);
 	}
 
 
@@ -823,7 +854,7 @@ void UPDATE()
 
 
 
-	if(--doAnimCount == 0 && IsCutscene == 0  ){
+	if(--doAnimCount == 0 && IsCutscene == 0  && current_level != 30 ){
 
 		
 		AnimCounter = AnimCounter == 1 ? 0 : 1;
@@ -856,7 +887,7 @@ void UPDATE()
 
 				
 			}
-			if(current_level > 25){
+			if(current_level > 25 && current_level != 30){
 				AnimCounter2++;
 				if(change_jump_count == 0){
 					Tile_Anim(AnimCounter2, 6, &spinChangerAnim, 47, BANK(spinChangerAnim));	
@@ -874,20 +905,20 @@ void UPDATE()
 		
 	}
 
-		if(door_open == 1 && --door_time_btwn == 0){
+	if(door_open == 1 && --door_time_btwn == 0){
 
-			door_time--;
-			RefreshTimer(door_time);
-			door_time_btwn = door_time_btwn_start;
+		door_time--;
+		RefreshTimer(door_time);
+		door_time_btwn = door_time_btwn_start;
 
-		}
-		if(door_time == 0){
-			door_open = 0;
-			door_time = 6;
-			door_button = 1;
-			SetDoorCols( 0 );
+	}
+	if(door_time == 0){
+		door_open = 0;
+		door_time = 6;
+		door_button = 1;
+		SetDoorCols( 0 );
 
-		}
+	}
 		
 
 	// 	} else if(current_level == 18){
@@ -922,9 +953,35 @@ void UPDATE()
 		}
 		change_jump_count--;
 	}
+
+	if( current_level == 30){
+
+	
+		
+			
+	
+			if(AnimCounter < 3){
+				AnimCounter++;
+
+					if(AnimCounter == 0){
+						Spike_anim(&flameBoss2, 108, BANK(flameBoss2));
+					}else if(AnimCounter == 1){
+						Spike_anim(&flameBoss3, 108, BANK(flameBoss3));
+					} else if(AnimCounter == 2){
+						Spike_anim(&flameBoss, 108, BANK(flameBoss));
+					}
+				if(AnimCounter == 3){
+					AnimCounter = 0;
+				}
+			}
+		
+		
+	}
 	
 	// if(KEY_TICKED(J_A)){
 	// 	char name [6] = "Dragon";
 	// 	PRINT(0, 0, "hola mundo");
 	// }
+
+
 }

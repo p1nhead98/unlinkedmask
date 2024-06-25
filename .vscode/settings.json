@@ -25,6 +25,8 @@
         "window.h": "c",
         "spritemanager.h": "c",
         "music.h": "c",
-        "math.h": "c"
+        "math.h": "c",
+        "dialogos.h": "c",
+        "bossattacks.h": "c"
     }
 }

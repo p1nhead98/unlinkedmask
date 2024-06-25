@@ -31,6 +31,14 @@ void Set_Start_Tiles(struct TilesInfo *tile, UINT8 bank, UINT8 tile_amount) __no
     set_bkg_data(0, tile_amount, tile->data);
     POP_BANK;
 }
+
+void Set_Sprite_Tiles(struct TilesInfo *tile, UINT8 bank, UINT8 tile_amount, UINT8 first_tile) __nonbanked{
+    PUSH_BANK(bank);
+    set_sprite_data(first_tile, tile_amount,  tile->data);
+    POP_BANK;
+ 
+}
+
 void Set_SpinChange_Tiles(struct TilesInfo *tile, UINT8 bank, UINT8 tile_amount) __nonbanked{
    
     PUSH_BANK(bank);

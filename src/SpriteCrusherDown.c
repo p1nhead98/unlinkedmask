@@ -37,6 +37,10 @@ void START()
         }else if(THIS->x > 1192){
             THIS->y+=32;
         }
+    }else if(current_level == 26){
+        if(THIS->x > 128 && THIS->x < 200){
+            THIS->mirror = H_MIRROR;
+        }
     }
 }
 
@@ -47,7 +51,12 @@ void UPDATE()
 
     switch(data->state){
         case 0:
-        if(current_level == 26 && THIS->x > 288 && THIS->x < 320){
+        if(current_level == 26 && THIS->x > 128 && THIS->x < 200){
+                if(  ((THIS->y + 5) > scroll_target->y) && (U_LESS_THAN(DISTANCE(scroll_target->x, THIS->x + 16), 40))  ){
+                    data->state = 1;
+                    SetSpriteAnim(THIS, crusher_blink, 20);
+                }
+        }else if(current_level == 26 && THIS->x > 288 && THIS->x < 320){
             if(  ((THIS->y + 5) < scroll_target->y) && (U_LESS_THAN(DISTANCE(scroll_target->x, THIS->x + 16), 80))  ){
                 data->state = 1;
                 SetSpriteAnim(THIS, crusher_blink, 20);
@@ -91,6 +100,13 @@ void UPDATE()
                     data->counter = 50;
                 } 
             }
+        }else if(current_level == 26 && THIS->x > 128 && THIS->x < 200){
+          
+            if(TranslateSprite(THIS, 0, -4 << delta_time)){
+                data->state = 2;
+                data->counter = 50;
+            }
+            
         }else{ 
             if(TranslateSprite(THIS, 0, 4 << delta_time)){
                 data->state = 2;
