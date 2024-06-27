@@ -262,7 +262,7 @@ const START_POS start_positions[] = {
 	{8, 96},  //Level 18 Player Start Position	----- current level = 27
 	{8, 96},  //Level 19 Player Start Position	----- current level = 28
 	{8, 96},  //Level 20 Player Start Position	----- current level = 29
-	{8, 136},  //boss fight Player Start Position	----- current level = 30
+	{48, 136},  //boss fight Player Start Position	----- current level = 30
 };
 
 
@@ -473,7 +473,7 @@ void START()
 		break;
 
 		case 30:
-		ScrollRelocateMapTo(0,40);
+		ScrollRelocateMapTo(40,40);
 		// onoff_auto_time = 20;
 		// canDo = 0;
 		SetHudWin(1);
@@ -527,7 +527,7 @@ void START()
 	}
 
 	if(current_level == 30){
-		SpriteManagerAdd(SpriteBoss1, 104, 68);
+		SpriteManagerAdd(SpriteBoss1, 144, 68);
 	}
 
 

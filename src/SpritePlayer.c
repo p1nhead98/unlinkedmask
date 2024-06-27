@@ -22,7 +22,7 @@ const UINT8 anim_dab[] = {2, 16, 17};
 const UINT8 anim_patinar[] = {2, 18, 18};
 
 
-DECLARE_MUSIC(unlinkedunchainedsoul);
+// DECLARE_MUSIC(unlinkedunchainedsoul);
 
 extern INT16 inmunity;
 extern INT8 pal_tick;

@@ -13,16 +13,16 @@
 const UINT8 boss_fire_anim[] = {2, 0, 1};
 
 // posiciones x de primer ataque 
-const UINT8 pos_state_0[] = { 0, 8, 16, 24, 32, 40, 48, 56, 64};
-const UINT8 pos_state_1[] = { 80, 88, 96, 104, 112, 120, 128, 136, 142};
+const UINT8 pos_state_0[] = { 40, 48, 56, 64, 72, 80, 88, 96, 104};
+const UINT8 pos_state_1[] = { 120, 128, 136, 144, 152, 160, 168, 176, 182};
 
 // posiciones x de segundo ataque 
-const UINT8 pos_state_2[] = { 0, 16, 64, 80, 128, 144};
-const UINT8 pos_state_3[] = { 32, 48, 96, 112};
+const UINT8 pos_state_2[] = { 40, 56, 104, 120, 168, 184};
+const UINT8 pos_state_3[] = { 72, 88, 136, 152};
 
 // posiciones x de tercer ataque 
-const UINT8 pos_state_4[] = { 0, 32, 64, 96, 128};
-const UINT8 pos_state_5[] = { 16, 48, 80, 112, 144};
+const UINT8 pos_state_4[] = { 40, 72, 104, 136, 168};
+const UINT8 pos_state_5[] = { 56, 88, 120, 152, 194};
 
 UINT8 fire_pos_counter = 0;
 

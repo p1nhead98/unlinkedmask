@@ -11,7 +11,7 @@
 
 // const UINT8 anim_box[] = {2, 0, 1};
 // const UINT8 anim_box2[] = {2, 2, 2};
-DECLARE_MUSIC(unlinkedchainedsoul);
+// DECLARE_MUSIC(unlinkedchainedsoul);
 const UINT8 pcs_walk_anim[] = {4, 1, 2, 0, 3};
 const UINT8 pcs_stand[] = {2, 4, 5};
 const UINT8 pcs_air[] = {5, 6, 7, 8, 9, 10};
