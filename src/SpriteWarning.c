@@ -19,8 +19,9 @@ extern Sprite* warning_spr2;
 void START()
 {
     CUSTOM_DATA* data = (CUSTOM_DATA*)THIS->custom_data;
-    SetSpriteAnim(THIS, warning_anim, 20);
+    SetSpriteAnim(THIS, warning_anim, 30);
     data->state = 3;
+    data->counter = 0;
     THIS->lim_x = 33;
 }
 
@@ -29,10 +30,36 @@ void UPDATE()
     CUSTOM_DATA* data = (CUSTOM_DATA*)THIS->custom_data;
     switch(data->state){
         case 0:
-            THIS->x-=3;
+        if (THIS->anim_frame == 1)
+        {
+            if(data->counter == 0){
+                THIS->x-=16;
+                data->counter = 1;
+            }
+            
+        }else{
+            if(data->counter == 1){
+                THIS->x-=16;
+                data->counter = 0;
+            }
+        }
+        
+            
             break;
         case 1:
-            THIS->x+=3;
+            if (THIS->anim_frame == 1)
+            {
+                if(data->counter == 0){
+                    THIS->x+=16;
+                    data->counter = 1;
+                }
+                
+            }else{
+                if(data->counter == 1){
+                    THIS->x+=16;
+                    data->counter = 0;
+                }
+            }
             break;
     }
 }

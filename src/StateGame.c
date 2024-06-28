@@ -485,7 +485,7 @@ void START()
 		bossAttackCounter = 10;
 		bossAttackState = 0;
 		doAnimCount = 3;
-		bossFireAttack_spr = SpriteManagerAdd(SpriteBossFireFlash, 0, 138);
+		
 		// AutomaticOnOff(collision_tiles2, canDo);
 		break;
 
@@ -510,7 +510,10 @@ void START()
 
 
 	if(current_level != 0){
-		
+		if(current_level == 30){
+			SpriteManagerAdd(SpriteBoss1, 144, 68);
+			bossFireAttack_spr = SpriteManagerAdd(SpriteBossFireFlash, 0, 138);
+		}
 		if(current_level == 1 || current_level == 8 || current_level == 13 ){
 			player_sprite = scroll_target = SpriteManagerAdd(SpritePlayerCutscenes, start_positions[current_level].start_x, start_positions[current_level].start_y);
 			// if(current_level == 13){
@@ -526,9 +529,7 @@ void START()
 		
 	}
 
-	if(current_level == 30){
-		SpriteManagerAdd(SpriteBoss1, 144, 68);
-	}
+	
 
 
 	// LY_REG  = 0;

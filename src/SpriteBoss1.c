@@ -143,9 +143,9 @@ void UPDATE()
                 warning_spr = SpriteManagerAdd(SpriteWarning, 216, 136);
                 CUSTOM_DATA* warningData = (CUSTOM_DATA*)warning_spr->custom_data;
                 warningData->state = 0;
-                warning_spr2 = SpriteManagerAdd(SpriteWarning, 224, 136);
+                warning_spr2 = SpriteManagerAdd(SpriteWarning, 228, 136);
                 CUSTOM_DATA* warningData2 = (CUSTOM_DATA*)warning_spr2->custom_data;
-                warningData->state = 0;
+                warningData2->state = 0;
             }
             break;
         case 11:
@@ -169,9 +169,9 @@ void UPDATE()
                 warning_spr = SpriteManagerAdd(SpriteWarning, 24, 136);
                 CUSTOM_DATA* warningData = (CUSTOM_DATA*)warning_spr->custom_data;
                 warningData->state = 1;
-                warning_spr2 = SpriteManagerAdd(SpriteWarning, 16, 136);
+                warning_spr2 = SpriteManagerAdd(SpriteWarning, 11, 136);
                 CUSTOM_DATA* warningData2 = (CUSTOM_DATA*)warning_spr2->custom_data;
-                warningData->state = 1;
+                warningData2->state = 1;
             }
             break;
         case 14:  
@@ -185,6 +185,32 @@ void UPDATE()
             if(THIS->x > 200){
                 boss_state++;
                 boss_counter = 60;
+            }
+            break;
+         case 16:
+            if(--boss_counter == 0){
+                boss_state++;
+                boss_counter = 60;
+                warning_spr = SpriteManagerAdd(SpriteWarning, 216, 136);
+                CUSTOM_DATA* warningData = (CUSTOM_DATA*)warning_spr->custom_data;
+                warningData->state = 0;
+                warning_spr2 = SpriteManagerAdd(SpriteWarning, 228, 136);
+                CUSTOM_DATA* warningData2 = (CUSTOM_DATA*)warning_spr2->custom_data;
+                warningData2->state = 0;
+            }
+            break;
+        case 17:
+            if(warning_spr == 0 && warning_spr2 == 0){
+                boss_state++;
+                THIS->mirror = NO_MIRROR;
+            }
+            break;
+        case 18:
+            THIS->x-=3;
+            if(THIS->x < 15){
+                boss_state++;
+                boss_counter = 60;
+                warning_spr = warning_spr2 = 1;
             }
             break;
     }   
