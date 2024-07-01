@@ -27,19 +27,23 @@ const UINT8 boss_6frames2[] = {6, 0, 1, 0, 1, 0 ,1};
 
 INT8 boss_state = 0;
 UINT8 boss_counter = 0;
+UINT8 boss_counter2 = 0;
 UINT8 cantChangeAnim = 0;
 extern Sprite* bossFireAttack_spr;
+extern Sprite* player_sprite;
 Sprite* bossSkullFlame_spr1 = 1;
 Sprite* bossSkullFlame_spr2 = 1;
 
 Sprite* warning_spr = 1;
 Sprite* warning_spr2 = 1;
+
 void START()
 {
 
     SetSpriteAnim(THIS, boss_flyidle, 20);
     boss_state = 0;
     boss_counter = 0;
+    boss_counter2 = 0;
     cantChangeAnim = 0;
     warning_spr = 1;
     warning_spr2 = 1;
@@ -184,35 +188,62 @@ void UPDATE()
             THIS->x+=3;
             if(THIS->x > 200){
                 boss_state++;
+                boss_counter = 30;
+                THIS->x = 112;
+                THIS->y = 0;
+                Set_Sprite_Tiles(&bossFalling, BANK(bossFalling), 48, THIS->first_tile);
                 boss_counter = 60;
             }
             break;
-         case 16:
+        case 16:
+            THIS->x = player_sprite->x;
             if(--boss_counter == 0){
+                boss_counter = 50;
+                boss_counter2++;
+                SpriteManagerAdd(SpriteWarning2, player_sprite->x - 8, player_sprite->y);
+            }
+            if(boss_counter2 == 4){
                 boss_state++;
-                boss_counter = 60;
-                warning_spr = SpriteManagerAdd(SpriteWarning, 216, 136);
-                CUSTOM_DATA* warningData = (CUSTOM_DATA*)warning_spr->custom_data;
-                warningData->state = 0;
-                warning_spr2 = SpriteManagerAdd(SpriteWarning, 228, 136);
-                CUSTOM_DATA* warningData2 = (CUSTOM_DATA*)warning_spr2->custom_data;
-                warningData2->state = 0;
+                boss_counter = 30;
             }
             break;
         case 17:
-            if(warning_spr == 0 && warning_spr2 == 0){
+            if(--boss_counter == 0){
                 boss_state++;
-                THIS->mirror = NO_MIRROR;
             }
             break;
         case 18:
-            THIS->x-=3;
-            if(THIS->x < 15){
+            if(TranslateSprite(THIS, 0, 4)){
                 boss_state++;
-                boss_counter = 60;
-                warning_spr = warning_spr2 = 1;
             }
             break;
+
+        //  case 16:
+        //     if(--boss_counter == 0){
+        //         boss_state++;
+        //         boss_counter = 60;
+        //         warning_spr = SpriteManagerAdd(SpriteWarning, 216, 136);
+        //         CUSTOM_DATA* warningData = (CUSTOM_DATA*)warning_spr->custom_data;
+        //         warningData->state = 0;
+        //         warning_spr2 = SpriteManagerAdd(SpriteWarning, 228, 136);
+        //         CUSTOM_DATA* warningData2 = (CUSTOM_DATA*)warning_spr2->custom_data;
+        //         warningData2->state = 0;
+        //     }
+        //     break;
+        // case 17:
+        //     if(warning_spr == 0 && warning_spr2 == 0){
+        //         boss_state++;
+        //         THIS->mirror = NO_MIRROR;
+        //     }
+        //     break;
+        // case 18:
+        //     THIS->x-=3;
+        //     if(THIS->x < 15){
+        //         boss_state++;
+        //         boss_counter = 60;
+        //         warning_spr = warning_spr2 = 1;
+        //     }
+        //     break;
     }   
      
 }

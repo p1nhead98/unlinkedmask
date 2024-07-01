@@ -11,7 +11,7 @@
 extern UINT8 door_time;
 extern UINT8 door_open;
 
-const UINT8 warning_anim[] = {2, 0, 1, };
+const UINT8 warning_anim[] = {4, 0, 1, 2, 2};
 extern Sprite* warning_spr;
 extern Sprite* warning_spr2;
 
@@ -30,7 +30,7 @@ void UPDATE()
     CUSTOM_DATA* data = (CUSTOM_DATA*)THIS->custom_data;
     switch(data->state){
         case 0:
-        if (THIS->anim_frame == 1)
+        if (THIS->anim_frame == 1 || THIS->anim_frame == 3)
         {
             if(data->counter == 0){
                 THIS->x-=16;
@@ -47,7 +47,7 @@ void UPDATE()
             
             break;
         case 1:
-            if (THIS->anim_frame == 1)
+            if (THIS->anim_frame == 1 || THIS->anim_frame == 3)
             {
                 if(data->counter == 0){
                     THIS->x+=16;
