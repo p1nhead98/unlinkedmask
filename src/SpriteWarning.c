@@ -61,6 +61,36 @@ void UPDATE()
                 }
             }
             break;
+        case 2:
+            if (THIS->anim_frame == 1 || THIS->anim_frame == 3)
+            {
+                if(data->counter == 0){
+                    THIS->y+=16;
+                    data->counter = 1;
+                }
+                
+            }else{
+                if(data->counter == 1){
+                    THIS->y+=16;
+                    data->counter = 0;
+                }
+            }
+            break;
+        case 3:
+            if (THIS->anim_frame == 1 || THIS->anim_frame == 3)
+            {
+                if(data->counter == 0){
+                    THIS->y-=16;
+                    data->counter = 1;
+                }
+                
+            }else{
+                if(data->counter == 1){
+                    THIS->y-=16;
+                    data->counter = 0;
+                }
+            }
+            break;
     }
 }
 

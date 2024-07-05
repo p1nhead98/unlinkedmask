@@ -479,12 +479,13 @@ void START()
 		SetHudWin(1);
 		AnimCounter = 0;
 		IsCutscene = 0;
-		state_interrupts = 0;
+		state_interrupts = 3;
 		can_scroll_x = 0;
 		canDoInterrupt = 0;
 		bossAttackCounter = 10;
 		bossAttackState = 0;
 		doAnimCount = 3;
+		Attacks_Animations(30);
 		
 		// AutomaticOnOff(collision_tiles2, canDo);
 		break;

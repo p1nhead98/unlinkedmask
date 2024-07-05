@@ -40,6 +40,7 @@ extern UINT8 on_off;
 extern UINT8 canDo;
 extern UINT8 change_jump_count;
 extern INT8 boss_state;
+
 BOOLEAN canHurt;
 
 
@@ -211,6 +212,20 @@ void CheckCollisionTile()
                 if(deaths_d_count != 9){
                     deaths_u_count = 0;
                     deaths_d_count++;
+                }
+            }
+        }
+    }else{
+        if( (colision2 == 112 || colision2 == 113) ||  (colision3 == 112 || colision3 == 113)){
+            if((player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 1))  && player_accel_y > 2 && (boss_state > 24 && boss_state < 43) ){
+                player_state = 3;
+                player_accel_y = -83;
+                PlayFx(CHANNEL_4, 10, 0x02, 0xf1, 0x40, 0xc0);
+                // PlayFx(CHANNEL_2, 10, 0xc1, 0xb1, 0x2b, 0x87);
+                SetSpriteAnim(THIS, anim_spin, 20);
+                SpriteManagerAdd(SpritePlayerVfx, THIS->x - 4, THIS->y + 8);
+                if(boss_state == 25){
+                    boss_state = 26;
                 }
             }
         }
@@ -552,12 +567,12 @@ void UPDATE()
         SPRITEMANAGER_ITERATE(i, spr) {
 
             if(spr->type == SpriteBoss1 && player_accel_y > 0) {
-                
-                if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && (player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 1)) && boss_state == 2) {
+                CUSTOM_DATA_BTN* sprData = (CUSTOM_DATA_BTN*)spr->custom_data;
+                if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && (player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 1)) && (sprData->state == 2 || sprData->state == 21)) {
                     player_state = 3;
                     player_accel_y = -83;
                     PlayFx(CHANNEL_4, 10, 0x02, 0xf1, 0x40, 0xc0);
-                    boss_state++;
+                    sprData->state++;
                     ScreenShake(1,1);
                     SetSpriteAnim(THIS, anim_spin, 20);
                     SpriteManagerAdd(SpritePlayerVfx, THIS->x - 4, THIS->y + 8);

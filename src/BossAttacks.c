@@ -11,6 +11,18 @@ const UINT8 LEFT_PILAR_4  = 72;
 const UINT8 LEFT_PILAR_5  = 70;
 const UINT8 LEFT_PILAR_6  = 71;
 const UINT8 LEFT_PILAR_7  = 73;
+
+const UINT8 ORB_TILE1  = 112;
+const UINT8 ORB_TILE2  = 113;
+const UINT8 ORB_TILE3  = 114;
+const UINT8 ORB_TILE4  = 115;
+
+
+const UINT8 FIRE_TILE1  = 106;
+const UINT8 FIRE_TILE2  = 107;
+
+
+
 void Attacks_Animations(UINT8 animIndex) BANKED {
     switch (animIndex)
     {
@@ -460,7 +472,92 @@ void Attacks_Animations(UINT8 animIndex) BANKED {
         set_bkg_tiles(23, 18, 1, 1, &LEFT_PILAR_7);
 		set_bkg_tiles(24, 18, 1, 1, &LEFT_PILAR_3);
         break;
-    
+
+
+
+    case 30:
+        set_bkg_tiles(8, 14, 1, 1, &LEFT_PILAR_3);
+		set_bkg_tiles(9, 14, 1, 1, &LEFT_PILAR_3);
+
+        set_bkg_tiles(8, 15, 1, 1, &LEFT_PILAR_3);
+		set_bkg_tiles(9, 15, 1, 1, &LEFT_PILAR_3);
+
+        set_bkg_tiles(14, 14, 1, 1, &LEFT_PILAR_3);
+		set_bkg_tiles(15, 14, 1, 1, &LEFT_PILAR_3);
+
+        set_bkg_tiles(14, 15, 1, 1, &LEFT_PILAR_3);
+		set_bkg_tiles(15, 15, 1, 1, &LEFT_PILAR_3);
+
+        set_bkg_tiles(20, 14, 1, 1, &LEFT_PILAR_3);
+		set_bkg_tiles(21, 14, 1, 1, &LEFT_PILAR_3);
+
+        set_bkg_tiles(20, 15, 1, 1, &LEFT_PILAR_3);
+		set_bkg_tiles(21, 15, 1, 1, &LEFT_PILAR_3);
+
+
+        break;
+    case 31:
+        set_bkg_tiles(8, 14, 1, 1, &ORB_TILE1);
+		set_bkg_tiles(9, 14, 1, 1, &ORB_TILE2);
+
+        set_bkg_tiles(8, 15, 1, 1, &ORB_TILE3);
+		set_bkg_tiles(9, 15, 1, 1, &ORB_TILE4);
+
+        set_bkg_tiles(14, 14, 1, 1, &ORB_TILE1);
+		set_bkg_tiles(15, 14, 1, 1, &ORB_TILE2);
+
+        set_bkg_tiles(14, 15, 1, 1, &ORB_TILE3);
+		set_bkg_tiles(15, 15, 1, 1, &ORB_TILE4);
+
+        set_bkg_tiles(20, 14, 1, 1, &ORB_TILE1);
+		set_bkg_tiles(21, 14, 1, 1, &ORB_TILE2);
+
+        set_bkg_tiles(20, 15, 1, 1, &ORB_TILE3);
+		set_bkg_tiles(21, 15, 1, 1, &ORB_TILE4);
+
+
+        break;
+    case 32:
+        for (UINT8 i = 5; i < 25; i++)
+        {
+            set_bkg_tiles(i, 18, 1, 1, &FIRE_TILE1);
+        }
+        
+        break;
+    case 33:
+        for (UINT8 i = 5; i < 25; i++)
+        {
+            set_bkg_tiles(i, 17, 1, 1, &FIRE_TILE1);
+            set_bkg_tiles(i, 18, 1, 1, &FIRE_TILE2);
+        }
+        
+        break;
+    case 34:
+
+        for (UINT8 i = 5; i < 25; i++)
+        {
+            set_bkg_tiles(i, 17, 1, 1, &LEFT_PILAR_3);
+            set_bkg_tiles(i, 18, 1, 1, &FIRE_TILE1);
+        }
+
+        set_bkg_tiles(5, 17, 1, 1, &LEFT_PILAR_1);
+		set_bkg_tiles(6, 17, 1, 1, &LEFT_PILAR_2);   
+        set_bkg_tiles(23, 17, 1, 1, &LEFT_PILAR_5);
+		set_bkg_tiles(24, 17, 1, 1, &LEFT_PILAR_6);
+    break;
+
+    case 35:
+
+        for (UINT8 i = 5; i < 25; i++)
+        {
+            set_bkg_tiles(i, 18, 1, 1, &LEFT_PILAR_3);
+            
+        }
+
+		set_bkg_tiles(6, 18, 1, 1, &LEFT_PILAR_4);
+        set_bkg_tiles(23, 18, 1, 1, &LEFT_PILAR_7);
+	
+    break;
     default:
         break;
     }
