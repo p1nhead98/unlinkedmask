@@ -32,12 +32,17 @@ UINT8 patternCounter = 0;
 
 extern UINT8 bossAttackState;
 extern Sprite* bossFireAttack_spr;
+extern UINT8 bossCanHurt;
+
+
 void START()
 {
     SetSpriteAnim(THIS, boss_fire_anim, 20);
     bossFireTimer = 110;
+    bossFireState = 0;
     patternCounter = 0;
     THIS->lim_y = 80;
+    fire_pos_counter = 0;
 }
 
 void UPDATE()
@@ -59,6 +64,7 @@ void UPDATE()
                 THIS->y--;
             }else{
                 bossFireState++;
+                
                 patternCounter++;
                 THIS->y = 138;
                 THIS->x = pos_state_1[0];
@@ -66,12 +72,14 @@ void UPDATE()
             if(THIS->y == 134){
                 Attacks_Animations(0);
                 if(patternCounter > 0){
-                   Attacks_Animations(7);
-                   Attacks_Animations(8); 
+                    bossCanHurt = 0;
+                    Attacks_Animations(7);
+                    Attacks_Animations(8); 
                 }   
             }
             if(THIS->y == 126){
                 Attacks_Animations(1);
+                bossCanHurt = 1;
                 if(patternCounter > 0){
                     Attacks_Animations(9);
                 }
@@ -99,11 +107,13 @@ void UPDATE()
             }else{
                 if(patternCounter < 4){
                     bossFireState = 0;
+                    
                     patternCounter++;
                     THIS->y = 138;
                     THIS->x = pos_state_0[0];
                 }else{
                     bossFireState++;
+                    
                     bossAttackState = 1;
                     THIS->y = 188;
                     bossFireTimer = 50;
@@ -111,12 +121,14 @@ void UPDATE()
             }
             if(THIS->y == 134){
                 Attacks_Animations(3);
+                bossCanHurt = 0;
                 Attacks_Animations(2);
                 Attacks_Animations(5);
             }
             if(THIS->y == 126){
                 Attacks_Animations(4);
                 Attacks_Animations(6);
+                bossCanHurt = 2;
             }
             THIS->x = pos_state_1[fire_pos_counter];
             if(++fire_pos_counter == 9){
@@ -125,6 +137,7 @@ void UPDATE()
             THIS->x = pos_state_1[fire_pos_counter];
             break;
         case 4:
+
             if(--bossFireTimer == 0){
                 bossFireTimer = 16;
                 bossFireState++;
@@ -135,6 +148,7 @@ void UPDATE()
             if(bossFireTimer > 0){
                 bossFireTimer--;
                 if(bossFireTimer == 12){
+                    bossCanHurt = 0;
                     Attacks_Animations(8);
                     Attacks_Animations(7);
                 }else if(bossFireTimer == 4){
@@ -147,6 +161,8 @@ void UPDATE()
                 THIS->y = 138;
             }
             break;
+
+            
         case 6:
             if(--bossFireTimer == 0){
                 bossFireTimer = 50;
@@ -159,6 +175,7 @@ void UPDATE()
             THIS->x = pos_state_2[fire_pos_counter];
             break;
         case 7:
+        
             if(THIS->y > 124){
                 THIS->y--;
             }else{
@@ -171,11 +188,13 @@ void UPDATE()
             if(THIS->y == 134){
                 Attacks_Animations(10);
                 if(patternCounter > 5){
+                    bossCanHurt = 0;
                    Attacks_Animations(17);
                    Attacks_Animations(18); 
                 }   
             }
             if(THIS->y == 126){
+                bossCanHurt = 3;
                 Attacks_Animations(11);
                 if(patternCounter > 5){
                     Attacks_Animations(19);
@@ -215,11 +234,13 @@ void UPDATE()
                 }
             }
             if(THIS->y == 134){
+                bossCanHurt = 0;
                 Attacks_Animations(15);
                 Attacks_Animations(12);
                 Attacks_Animations(13); 
             }
             if(THIS->y == 126){
+                bossCanHurt = 4;
                 Attacks_Animations(16);
                 Attacks_Animations(14);
                 
@@ -243,6 +264,7 @@ void UPDATE()
             if(bossFireTimer > 0){
                 bossFireTimer--;
                 if(bossFireTimer == 12){
+                    bossCanHurt = 0;
                     Attacks_Animations(18);
                     Attacks_Animations(17);
                 }else if(bossFireTimer == 4){
@@ -281,6 +303,7 @@ void UPDATE()
             if(THIS->y == 134){
                 Attacks_Animations(20);
                 if(patternCounter > 10){
+                    bossCanHurt = 0;
                     Attacks_Animations(27);
                     Attacks_Animations(28); 
                 }
@@ -288,6 +311,7 @@ void UPDATE()
             }
             if(THIS->y == 126){
                 Attacks_Animations(21);
+                bossCanHurt = 5;
                 if(patternCounter > 10){
                     Attacks_Animations(29);
                 }
@@ -329,11 +353,13 @@ void UPDATE()
                 }
             }
             if(THIS->y == 134){
+                 bossCanHurt = 0;
                 Attacks_Animations(25);
                 Attacks_Animations(22);
                 Attacks_Animations(23);
             }
             if(THIS->y == 126){
+                bossCanHurt = 6;
                 Attacks_Animations(26);
                 Attacks_Animations(24);
             }
@@ -355,6 +381,7 @@ void UPDATE()
             if(bossFireTimer > 0){
                 bossFireTimer--;
                 if(bossFireTimer == 12){
+                     bossCanHurt = 0;
                     Attacks_Animations(27);
                     Attacks_Animations(28);
                 }else if(bossFireTimer == 4){

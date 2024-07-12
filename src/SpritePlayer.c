@@ -56,10 +56,86 @@ UINT8 player_start = 0;
 INT16 player_initial_y = 0;
 INT16 player_init_framespeed = 0;
 
-
+UINT8 bossCanHurt = 0;
 // void UpdateMapTile(INT16 map_x, INT16 map_y, UINT8 tile_id, UINT8 c) {
 //        UPDATE_TILE(map_x, map_y, &tile_id, &c);
 // }
+
+void boss1Collisions(UINT8 bossCanHurt){
+    switch (bossCanHurt){
+        case 1:
+            if((THIS->y + 4) > 128 && (THIS->x > 0 && THIS->x < 112)){
+                if(canHurt && player_state != 11){
+                    inmunity = 30;
+                    canHurt = 0;
+                    current_life--;
+                    ScreenShake(1,1);
+                    RefreshLife();
+                }
+            }
+            break;
+
+        case 2:
+            if((THIS->y + 4) > 128 && (THIS->x > 112)){
+                if(canHurt && player_state != 11){
+                    inmunity = 30;
+                    canHurt = 0;
+                    current_life--;
+                    ScreenShake(1,1);
+                    RefreshLife();
+                }
+            }
+            break;
+ 
+        case 3:
+            if(((THIS->x > 32 && THIS->x < 64) || (THIS->x > 96 && THIS->x < 128 ) || (THIS->x > 160 && THIS->x < 192) )&& (THIS->y + 4) > 128){
+                if(canHurt && player_state != 11){
+                    inmunity = 30;
+                    canHurt = 0;
+                    current_life--;
+                    ScreenShake(1,1);
+                    RefreshLife();
+                }
+            }
+            break;
+        case 4:
+            if(((THIS->x > 64 && THIS->x < 96) || (THIS->x > 128 && THIS->x < 160 )) && (THIS->y + 4) > 128){
+                if(canHurt && player_state != 11){
+                    inmunity = 30;
+                    canHurt = 0;
+                    current_life--;
+                    ScreenShake(1,1);
+                    RefreshLife();
+                }
+            }
+            break;
+        case 5:
+            if(((THIS->x > 32 && THIS->x < 48) || (THIS->x > 64 && THIS->x < 80 ) || (THIS->x > 96 && THIS->x < 112) || (THIS->x > 128 && THIS->x < 144) || (THIS->x > 160 && THIS->x < 176 )) && (THIS->y + 4) > 128){
+                if(canHurt && player_state != 11){
+                    inmunity = 30;
+                    canHurt = 0;
+                    current_life--;
+                    ScreenShake(1,1);
+                    RefreshLife();
+                }
+            }
+            break;
+        case 6:
+            if(((THIS->x >48 && THIS->x < 64) || (THIS->x > 80 && THIS->x < 96 ) || (THIS->x > 112 && THIS->x < 128) || (THIS->x > 144 && THIS->x < 160) || (THIS->x > 176 && THIS->x < 192 )) && (THIS->y + 4) > 128){
+                 if(canHurt && player_state != 11){
+                    inmunity = 30;
+                    canHurt = 0;
+                    current_life--;
+                    ScreenShake(1,1);
+                    RefreshLife();
+                }
+            }
+            break;
+
+        default:
+            break;
+    }
+}
 
 void CheckDeathTiles(){
 
@@ -263,6 +339,7 @@ void START()
     player_counter =  0;
     inmunity = 0;
     canHurt = inmunity < 1 ? 1 : 0;
+    bossCanHurt = 0;
     // player_dj = 0;
 
 }
@@ -302,6 +379,11 @@ void UPDATE()
             }
         }
 
+        if (current_level == 30)
+        {
+            boss1Collisions(bossCanHurt);
+        }
+        
 
         if(current_life < 1){ // DEATH
             SetSpriteAnim(THIS, anim_death, 15);
@@ -568,14 +650,22 @@ void UPDATE()
 
             if(spr->type == SpriteBoss1 && player_accel_y > 0) {
                 CUSTOM_DATA_BTN* sprData = (CUSTOM_DATA_BTN*)spr->custom_data;
-                if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && (player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 1)) && (sprData->state == 2 || sprData->state == 21)) {
-                    player_state = 3;
-                    player_accel_y = -83;
-                    PlayFx(CHANNEL_4, 10, 0x02, 0xf1, 0x40, 0xc0);
-                    sprData->state++;
+                if((sprData->state == 2 || sprData->state == 21)){
+                    if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && (player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 1)) && (sprData->state == 2 || sprData->state == 21)) {
+                        player_state = 3;
+                        player_accel_y = -83;
+                        PlayFx(CHANNEL_4, 10, 0x02, 0xf1, 0x40, 0xc0);
+                        sprData->state++;
+                        ScreenShake(1,1);
+                        SetSpriteAnim(THIS, anim_spin, 20);
+                        SpriteManagerAdd(SpritePlayerVfx, THIS->x - 4, THIS->y + 8);
+                    }
+                }else if(CheckCollision(THIS, spr) && THIS->y + 8 > (spr->y) && player_state != 11){
+                    current_life = 0;
                     ScreenShake(1,1);
-                    SetSpriteAnim(THIS, anim_spin, 20);
-                    SpriteManagerAdd(SpritePlayerVfx, THIS->x - 4, THIS->y + 8);
+                    RefreshLife();
+                    SetSpriteAnim(THIS, anim_death, 15);
+                    player_state = 11;
                 }
             }
 

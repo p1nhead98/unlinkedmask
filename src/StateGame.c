@@ -59,7 +59,7 @@ IMPORT_MAP(templeCuts);
 IMPORT_MAP(templeCuts);
 IMPORT_MAP(doorCuts);
 IMPORT_TILES(capeCuts3Tiles);
-
+IMPORT_MAP(bossfightTrailer);
 
 
 
@@ -112,7 +112,7 @@ extern BOOLEAN door_button;
 
 
 
-UINT8 current_level = 30;
+UINT8 current_level = 31;
 
 UINT8 doAnimCount = 0;
 
@@ -221,6 +221,7 @@ const struct MapInfoBanked levels[] = {
 	BANKED_MAP(lvl_19),
 	BANKED_MAP(lvl_20),
 	BANKED_MAP(bossfight1),
+	BANKED_MAP(bossfightTrailer),
 	
 };
 
@@ -491,20 +492,20 @@ void START()
 		break;
 
 		default:
-			if(current_level != 1 && current_level != 2  && current_level != 8 && current_level != 9 && current_level != 13 && current_level != 19){
-				ScrollRelocateMapTo(0,48);
-				SetHudWin(1);
-				IsCutscene = 0;
-				state_interrupts = 0;
+			// if(current_level != 1 && current_level != 2  && current_level != 8 && current_level != 9 && current_level != 13 && current_level != 19){
+			// 	ScrollRelocateMapTo(0,48);
+			// 	SetHudWin(1);
+			// 	IsCutscene = 0;
+			// 	state_interrupts = 0;
 
-			}else{
-				SetHudWin(0);
-				IsCutscene = 1;
-				state_interrupts = 10;
-				SHOW_SPRITES;
-			}
-			canDo = 0;
-			dialog = 0;
+			// }else{
+			// 	SetHudWin(0);
+			// 	IsCutscene = 1;
+			// 	state_interrupts = 10;
+			// 	SHOW_SPRITES;
+			// }
+			// canDo = 0;
+			// dialog = 0;
 			
 			break;
 	}
@@ -590,11 +591,11 @@ void START()
 
 
 
-	if(current_level == 10){
-		INIT_FONT(fontCapeCuts, PRINT_WIN);
-	}else{
-		INIT_FONT(font, PRINT_WIN);
-	}
+	// if(current_level == 10){
+	// 	INIT_FONT(fontCapeCuts, PRINT_WIN);
+	// }else{
+	// 	INIT_FONT(font, PRINT_WIN);
+	// }
 	
 
 	if(current_level > 10){
