@@ -71,6 +71,9 @@ IMPORT_TILES(spinChangerAnim2);
 IMPORT_TILES(spinChangerAnim3);
 IMPORT_TILES(spinChangerAnim4);
 
+IMPORT_TILES(waterAnim1);
+IMPORT_TILES(waterAnim2);
+
 
 // IMPORT_MAP(window);
 // IMPORT_MAP(window2);
@@ -92,6 +95,9 @@ UINT8 collision_tiles[] = {4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 33, 34,
 UINT8 collision_tiles2[] = {4, 5, 6 ,7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 56, 57, 58, 59, 60, 61, 62, 63, 77, 78, 79, 80, 81, 82, 83, 84, 0};
 
 UINT8 collision_boss1[] = {4, 8, 64, 68,  0};
+
+
+UINT8 collision_boss_trailer[] = {59, 60, 61, 62, 63, 64, 65, 66, 67, 0};
 
 UINT8 ct_lvl25[] = {4, 5, 6 ,7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 56, 57, 58, 59, 60, 61, 62, 63, 77, 78, 79, 80, 0};
 
@@ -264,6 +270,7 @@ const START_POS start_positions[] = {
 	{8, 96},  //Level 19 Player Start Position	----- current level = 28
 	{8, 96},  //Level 20 Player Start Position	----- current level = 29
 	{48, 136},  //boss fight Player Start Position	----- current level = 30
+	{28, 30},  //boss fight Player Start Position	----- current level = 30
 };
 
 
@@ -294,7 +301,10 @@ void START()
 	on_off = 0;
 	change_jump_count = 0;
 	// if(current_level != 11){
-		if(current_level == 25){
+		if(current_level == 31){
+			InitScroll(level->bank, level->map, collision_boss_trailer, 0);
+
+		}else if(current_level == 25){
 			InitScroll(level->bank, level->map, ct_lvl25, 0);
 		}else if(current_level == 30){
 			InitScroll(level->bank, level->map, bossfight_col, 0);
@@ -532,6 +542,8 @@ void START()
 	}
 
 	
+	SpriteManagerAdd(SpriteBossHand1, 32, 56);
+	SpriteManagerAdd(SpriteBossHand2, 112, 56);
 
 
 	// LY_REG  = 0;
@@ -558,6 +570,7 @@ void START()
 
 	doAnimCount = 3;
 	AnimCounter2 = 0;
+	
 
 
 
@@ -657,7 +670,7 @@ void UPDATE()
 
 
 
-
+	if(current_level != 31){
 
 	if(current_level == 2){
 		if(canDoInterrupt == 0){
@@ -985,6 +998,13 @@ void UPDATE()
 	// 	char name [6] = "Dragon";
 	// 	PRINT(0, 0, "hola mundo");
 	// }
-
+	}else{
+		if(--doAnimCount == 0){
+			AnimCounter2++;
+			Tile_Anim(AnimCounter2, 8, &waterAnim1, 57, BANK(waterAnim1));	
+			Tile_Anim(AnimCounter2, 8, &waterAnim2, 58, BANK(waterAnim2));	
+			doAnimCount = 5;
+		}
+	}
 
 }

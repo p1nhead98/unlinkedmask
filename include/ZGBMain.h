@@ -48,6 +48,9 @@ _SPRITE_DMG(SpriteBossFireFlash, bossFireFlash)\
 _SPRITE_DMG(SpriteSkullFlame, skullFlame)\
 _SPRITE_DMG(SpriteWarning, warning)\
 _SPRITE_DMG(SpriteWarning2, warning)\
+_SPRITE_DMG(SpriteBossHand1, BossTrailer1)\
+_SPRITE_DMG(SpriteBossHand2, BossTrailer2)\
+_SPRITE_DMG(SpriteBossFire, BossTrailer3)\
 SPRITE_DEF_END
 
 #include "ZGBMain_Init.h"
