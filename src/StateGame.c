@@ -19,6 +19,7 @@
 #include "Cinematicas.h"
 #include "WinController.h"
 #include "BossAttacks.h"
+#include "OAMManager.h"
 
 IMPORT_MAP(titleScreen);
 
@@ -74,6 +75,8 @@ IMPORT_TILES(spinChangerAnim4);
 IMPORT_TILES(waterAnim1);
 IMPORT_TILES(waterAnim2);
 
+IMPORT_TILES(mugshots);
+
 
 // IMPORT_MAP(window);
 // IMPORT_MAP(window2);
@@ -118,7 +121,7 @@ extern BOOLEAN door_button;
 
 
 
-UINT8 current_level = 31;
+UINT8 current_level = 0;
 
 UINT8 doAnimCount = 0;
 
@@ -176,6 +179,8 @@ IMPORT_TILES(spikesAnim4);
 IMPORT_TILES(flameBoss);
 IMPORT_TILES(flameBoss2);
 IMPORT_TILES(flameBoss3);
+
+
 
 // IMPORT_TILES(waterAnim);
 // IMPORT_TILES(waterfallAnim);
@@ -300,7 +305,14 @@ void START()
 	event = 0;
 	on_off = 0;
 	change_jump_count = 0;
+	// if(current_level == 10){
+	// 	INIT_FONT(fontCapeCuts, PRINT_WIN);
+	// }else{
+	// 	INIT_FONT(font, PRINT_WIN);
+	// }
+	
 	// if(current_level != 11){
+	
 		if(current_level == 31){
 			InitScroll(level->bank, level->map, collision_boss_trailer, 0);
 
@@ -314,6 +326,8 @@ void START()
 			InitScroll(level->bank, level->map, collision_tiles2, 0);
 		}
 	//}
+
+	
 	
 	
 		// CapeCutsAnim
@@ -502,24 +516,28 @@ void START()
 		break;
 
 		default:
-			// if(current_level != 1 && current_level != 2  && current_level != 8 && current_level != 9 && current_level != 13 && current_level != 19){
-			// 	ScrollRelocateMapTo(0,48);
-			// 	SetHudWin(1);
-			// 	IsCutscene = 0;
-			// 	state_interrupts = 0;
+			if(current_level != 1 && current_level != 2  && current_level != 8 && current_level != 9 && current_level != 13 && current_level != 19){
+				
+				ScrollRelocateMapTo(0,48);
+				
+				SetHudWin(1);
+				IsCutscene = 0;
+				state_interrupts = 0;
+				
 
-			// }else{
-			// 	SetHudWin(0);
-			// 	IsCutscene = 1;
-			// 	state_interrupts = 10;
-			// 	SHOW_SPRITES;
-			// }
-			// canDo = 0;
-			// dialog = 0;
+			}else{
+				SetHudWin(0);
+				IsCutscene = 1;
+				state_interrupts = 10;
+				SHOW_SPRITES;
+			}
+			canDo = 0;
+			dialog = 0;
 			
 			break;
 	}
 
+	
 
 	if(current_level != 0){
 		if(current_level == 30){
@@ -541,10 +559,10 @@ void START()
 		
 	}
 
-	
-	SpriteManagerAdd(SpriteBossHand1, 32, 56);
-	SpriteManagerAdd(SpriteBossHand2, 112, 56);
-
+	if(current_level == 31){
+		SpriteManagerAdd(SpriteBossHand1, 32, 56);
+		SpriteManagerAdd(SpriteBossHand2, 112, 56);
+	}
 
 	// LY_REG  = 0;
 	// disable_interrupts();
@@ -588,11 +606,11 @@ void START()
 
 	
 	// if(current_level != 0){
-	// 	// if(current_level < 11){
+	// 	if(current_level < 11){
 			
-	// 	// }else{
-	// 	// 	INIT_HUD(window2);
-	// 	// }
+	// 	}else{
+	// 		INIT_HUD(window2);
+	// 	}
 	// }else{
 	// 	HIDE_WIN;
 	// }
@@ -602,13 +620,8 @@ void START()
 
 
 
+	
 
-
-	// if(current_level == 10){
-	// 	INIT_FONT(fontCapeCuts, PRINT_WIN);
-	// }else{
-	// 	INIT_FONT(font, PRINT_WIN);
-	// }
 	
 
 	if(current_level > 10){
@@ -617,6 +630,10 @@ void START()
 		TMA_REG = 154u;
 	}else{
 		TMA_REG = 180u;
+	}
+
+	if(IsCutscene == 1){
+		INIT_FONT(font, PRINT_WIN);
 	}
 
 	NR52_REG = 0x80; //Enables sound, you should always setup this first

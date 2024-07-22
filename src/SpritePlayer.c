@@ -650,8 +650,8 @@ void UPDATE()
 
             if(spr->type == SpriteBoss1 && player_accel_y > 0) {
                 CUSTOM_DATA_BTN* sprData = (CUSTOM_DATA_BTN*)spr->custom_data;
-                if((sprData->state == 2 || sprData->state == 21)){
-                    if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && (player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 1)) && (sprData->state == 2 || sprData->state == 21)) {
+                if((sprData->state == 2 || sprData->state == 21 || sprData->state == 48)){
+                    if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && (player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 1)) && (sprData->state == 2 || sprData->state == 21 || sprData->state == 48)) {
                         player_state = 3;
                         player_accel_y = -83;
                         PlayFx(CHANNEL_4, 10, 0x02, 0xf1, 0x40, 0xc0);
@@ -660,12 +660,14 @@ void UPDATE()
                         SetSpriteAnim(THIS, anim_spin, 20);
                         SpriteManagerAdd(SpritePlayerVfx, THIS->x - 4, THIS->y + 8);
                     }
-                }else if(CheckCollision(THIS, spr) && THIS->y + 8 > (spr->y) && player_state != 11){
-                    current_life = 0;
-                    ScreenShake(1,1);
-                    RefreshLife();
-                    SetSpriteAnim(THIS, anim_death, 15);
-                    player_state = 11;
+                }else if(CheckCollision(THIS, spr) && THIS->y + 8 > (spr->y) && player_state != 11 &&  (sprData->state == 6 || sprData->state == 7 || sprData->state == 13 || sprData->state == 16 || sprData->state == 19 ||  sprData->state == 20 || sprData->state == 29 || sprData->state == 32 || sprData->state == 35 || sprData->state == 38 || sprData->state == 41 || sprData->state == 46 || sprData->state == 80 || sprData->state == 81) ){
+                    if(canHurt && player_state != 11){
+                        inmunity = 30;
+                        canHurt = 0;
+                        current_life--;
+                        ScreenShake(1,1);
+                        RefreshLife();
+                    }
                 }
             }
 

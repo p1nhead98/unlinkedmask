@@ -20,6 +20,8 @@ IMPORT_TILES(bossHitGround);
 IMPORT_TILES(bossCharge);
 IMPORT_TILES(bossIdleGround);
 IMPORT_TILES(bossFlySide);
+IMPORT_TILES(bossFlyIdle);
+IMPORT_TILES(bossFrontIdle);
 
 const UINT8 boss_flyidle[] = {3, 0, 1, 2};
 const UINT8 boss_6frames[] = {6, 0, 1, 2, 0, 1, 2};
@@ -36,6 +38,7 @@ UINT8 boss_counter3 = 0;
 UINT8 cantChangeAnim = 0;
 extern Sprite* bossFireAttack_spr;
 extern Sprite* player_sprite;
+extern UINT8 current_level;
 Sprite* bossSkullFlame_spr1 = 1;
 Sprite* bossSkullFlame_spr2 = 1;
 
@@ -49,7 +52,7 @@ void START()
 {
     CUSTOM_DATA_BTN* data = (CUSTOM_DATA_BTN*)THIS->custom_data;
     SetSpriteAnim(THIS, boss_flyidle, 20);
-    data->state = 0;
+    data->state = 44;
     boss_counter = 0;
     boss_counter2 = 0;
     boss_counter3 = 0;
@@ -675,10 +678,54 @@ void UPDATE()
         case 47:
             if(THIS->anim_frame == 3){
                 
-                data->state++;
+                data->state = 48;
                 SetSpriteAnim(THIS, boss_6frames, 20);
                 Set_Sprite_Tiles(&bossCanHit, BANK(bossCanHit), 48, THIS->first_tile);
                 
+            }
+            break;
+        case 48:
+            if(boss_counter != 50){
+                boss_counter = 50;
+            }
+            break;
+        case 49:
+            if(--boss_counter == 0){
+                Set_Sprite_Tiles(&bossFlySide, BANK(bossFlySide), 48, THIS->first_tile);
+                SetSpriteAnim(THIS, boss_flyidle, 20);
+                data->state++;
+            }
+            break;
+        case 50:
+            THIS->x-=3;
+            if(THIS->x < 15){
+                data->state++;
+                boss_counter = 60;
+            }
+        break;
+        case 51:
+            if(--boss_counter == 0){
+                THIS->y -= 50;
+                Set_Sprite_Tiles(&bossFlyIdle, BANK(bossFlyIdle), 48, THIS->first_tile);
+                SetSpriteAnim(THIS, boss_flyidle, 20);
+                data->state++;
+                THIS->mirror = V_MIRROR;
+            }
+            break;
+        case 52:
+            if(THIS->x < 111){
+                THIS->x+=2;
+            }else{
+                data->state++;
+                Set_Sprite_Tiles(&bossFrontIdle, BANK(bossFrontIdle), 48, THIS->first_tile);
+                boss_counter = 50;
+            }
+            
+            break;
+        case 53:
+            if(--boss_counter == 0){
+                current_level++;
+		        SetState(current_state);
             }
             break;
 

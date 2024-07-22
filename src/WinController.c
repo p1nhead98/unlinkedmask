@@ -144,14 +144,27 @@ void RefreshLifePause() BANKED
 }
 
 void cleanWindow(struct MapInfo *map, UINT8 map_bank) __nonbanked{
-    CRITICAL{
-        PUSH_BANK(map_bank);
-            set_win_tiles(0, 0, 20, 18, map->data);
-        POP_BANK;
+    const UINT8 emptyWindow  = 0;
+
+    for (UINT8 i = 0; i != 50; ++i)
+    {
+        for (UINT8 x = 0; x != 50; ++x)
+        {
+            set_win_tiles(i, x, 1, 1, &emptyWindow  );
+        }
+      
+        
+       
     }
+    // CRITICAL{
+    //     PUSH_BANK(map_bank);
+            // set_win_tiles(0, 0, 20, 18, map->data);
+        // POP_BANK;
+    // }
 }
 
 void SetHudWin( UINT8 on) BANKED{
+    
     if(on == 1){
         
         cleanWindow(&window, BANK(window));
