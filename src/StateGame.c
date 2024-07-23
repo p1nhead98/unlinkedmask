@@ -335,7 +335,7 @@ void START()
 
 	switch (current_level){
 		case 0:
-			// PlayMusic(unlinkedtitlescreen, 1);
+			PlayMusic(unlinkedtitlescreen, 1);
 		break;
 		case 1:
 			SetHudWin(0);
@@ -620,17 +620,62 @@ void START()
 
 
 
-	
+	CRITICAL {
+#ifdef CGB
+	if (_cpu == CGB_TYPE) {
+		if(current_level > 10){
+				TMA_REG = 102u;
+			}else if(current_level == 0){
+				TMA_REG = 55u;
+			}else{
 
-	
-
-	if(current_level > 10){
-		TMA_REG = 180u;
-	}else if(current_level == 0){
-		TMA_REG = 154u;
+				TMA_REG = 102u;
+			}
 	}else{
-		TMA_REG = 180u;
+		if(current_level > 10){
+			TMA_REG = 180u;
+		}else if(current_level == 0){
+			TMA_REG = 154u;
+		}else{
+
+			TMA_REG = 180u;
+		}
 	}
+#else
+		if(current_level > 10){
+			TMA_REG = 180u;
+		}else if(current_level == 0){
+			TMA_REG = 154u;
+		}else{
+
+			TMA_REG = 180u;
+		}
+#endif
+	}
+
+	// #ifdef CGB
+	// 	if (_cpu == CGB_TYPE) {
+	// 		if(current_level > 10){
+	// 			TMA_REG = 180u;
+	// 		}else if(current_level == 0){
+	// 			TMA_REG = 154u;
+	// 		}else{
+
+	// 			TMA_REG = 90u;
+	// 		}		
+	// 	} else
+	// #endif
+	// 	if(current_level > 10){
+	// 		TMA_REG = 180u;
+	// 	}else if(current_level == 0){
+	// 		TMA_REG = 154u;
+	// 	}else{
+
+	// 		TMA_REG = 180u;
+	// 	}
+	// }	
+
+
 
 	if(IsCutscene == 1){
 		INIT_FONT(font, PRINT_WIN);
@@ -662,15 +707,9 @@ void UPDATE()
 		current_level--;
 		SetState(current_state);
 	}
-	
-	if(KEY_TICKED(J_START)){
-		if(current_level == 0){
-			start_fade = 1;
-			FadeColorAndMusic();
-			current_level++;
-			SetState(current_state);
-		}
-	}
+
+
+
 	if(dialog == 1){
 		if(canDo == 0){
 			SetDialog();
@@ -745,8 +784,8 @@ void UPDATE()
 		if(--state_counter == 0 ){
 			// scroll_y = scroll_y == 4 ? 0 : 4;
 			
-			state_counter = 1;
-			if(anim_index != 5){
+			state_counter = 4;
+			if(anim_index != 5 ){
 				CapeCutsAnim(anim_index);
 				anim_index++;
 			}else{
@@ -776,7 +815,7 @@ void UPDATE()
 			if(anim_index != 14){
 				CapeCutsAnim(anim_index);
 				anim_index++;
-				state_counter = 2;
+				state_counter = 4;
 			}else{
 				FadeDMGCustom(0);
 				current_level++;
@@ -808,11 +847,11 @@ void UPDATE()
 				}
 			}	
 		if(--state_counter == 0){
-			
+			SHOW_WIN;
 			CapeCutsAnim(anim_index);
 			anim_index++;
-			state_counter = 1;
-			SHOW_WIN;
+			state_counter = 4;
+			
 			if(anim_index == 17){
 				SHOW_WIN;
 				anim_index = 14;
@@ -854,13 +893,7 @@ void UPDATE()
 	// if(current_level != 17 && current_level != 18 && start_screen == 0 ){
 
 	if(KEY_TICKED(J_START) ){
-		if(current_level == 0){
-
-			current_level++;
-			SetState(current_state);
-
-		}
-		if( IsCutscene == 0){
+		if( IsCutscene == 0 && current_level != 0){
 			start_screen = start_screen == 0 ? 1 : 0;
 				if( start_screen == 1 ){
 					DISPLAY_OFF;
@@ -869,20 +902,31 @@ void UPDATE()
 				}else{
 					SetWindowY(128);
 					SetPauseMenu( level->map, level->bank );
-					if(current_level != 25 && current_level != 29){
+					if(current_level == 20 || current_level == 21 || current_level == 22 ||  current_level == 23 || current_level == 28){
 						SetOnOffCols(collision_tiles2, on_off);
-					}else{
+					}else if(current_level == 25 || current_level == 29){
 						AutomaticOnOff(collision_tiles2, canDo);
 					}
 					
 					RefreshLife();
-					RefreshTimer(0);
+					if(door_open == 1){
+						RefreshTimer(door_time);
+						SetDoorCols(door_open);
+					}
 					if(player_sprite->y != 0){
 						pDelay(40);
 					}
 
 			}
 		}
+	}
+
+		
+	if(KEY_TICKED(J_START) && current_level == 0){
+			start_fade = 1;
+			FadeColorAndMusic();
+			current_level++;
+			SetState(current_state);
 	}
 
 
@@ -938,14 +982,14 @@ void UPDATE()
 		
 	}
 
-	if(door_open == 1 && --door_time_btwn == 0){
+	if(door_open == 1 && --door_time_btwn == 0 && start_screen == 0){
 
 		door_time--;
 		RefreshTimer(door_time);
 		door_time_btwn = door_time_btwn_start;
 
 	}
-	if(door_time == 0){
+	if(door_time == 0 ){
 		door_open = 0;
 		door_time = 6;
 		door_button = 1;
