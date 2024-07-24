@@ -847,6 +847,8 @@ void UPDATE()
                         player_state = 3;
                         SetSpriteAnim(THIS, anim_spin, 20);
                     }
+                    PlayFx(CHANNEL_1, 20, 0x1C, 0x8D, 0xF1, 0xD6, 0x86);
+                    PlayFx(CHANNEL_4, 20, 0x3A, 0x91, 0x40, 0xC0);
                     if(sprData->state == 0){
                         sprData->state = 1;
                     }

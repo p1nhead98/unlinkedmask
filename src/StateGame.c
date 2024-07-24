@@ -109,7 +109,7 @@ UINT8 bossfight_col[] = {74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 0};
 
 UINT8 windtower_tiles[] = {10,7,8,9,15,16,17,4,5,6,82,83,84,85,86,87,88,89,18,12, 0};
 
-UINT8 door_sounds[] = { 0x44, 0x3a, 0x30, 0x26, 0x1c, 0x12 };
+UINT8 door_sounds[] = { 0x49, 0x3F, 0x35, 0x2B, 0x21, 0x17 };
 
 
 
@@ -899,7 +899,7 @@ void UPDATE()
 		door_time_btwn--;
 	}else if(door_open == 1 && start_screen == 0){
 		door_time--;
-		PlayFx(CHANNEL_2 , 5, 0x8B, 0xE1, door_sounds[door_time], 0x87);
+		PlayFx(CHANNEL_1 , 5, 0x18, 0x80, 0xF1,door_sounds[door_time], 0x87);
 		RefreshTimer();
 		door_time_btwn = door_time_btwn_start;
 	}
