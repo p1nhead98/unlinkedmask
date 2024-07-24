@@ -13,6 +13,8 @@
 #include "Print.h"
 #include "Math.h"
 
+#define tDelay 25
+
 UINT8 current_dialog = 0;
 extern UINT8 text_delay;
 extern UINT8 current_level;
@@ -21,6 +23,11 @@ extern UINT8 dialog;
 extern UINT8 canDo;
 extern UINT8 event;
 extern UINT8 state_counter;
+
+extern UINT8 text_voice;
+
+
+
 
 IMPORT_TILES(mugshots);
 IMPORT_MAP(capeCutsWin);
@@ -47,14 +54,15 @@ void SetDialog() BANKED{
         CleanWin();
         SetMugTiles(&mugshots, BANK(mugshots), 0);
         SetMushot();
-        text_delay = 10;
+        text_delay = tDelay;
+        text_voice = 1;
 		PRINT(3, 0, "i recieve a "); 
 		PRINT(3, 1, "divine message..."); 
         break;
     case 1:
         CleanText();
       
-        text_delay = 10;
+        text_delay = tDelay;
 		PRINT(3, 0, "a call from "); 
 		PRINT(3, 1, "beings that ");
         PRINT(3, 2, "promised me..."); 
@@ -62,14 +70,14 @@ void SetDialog() BANKED{
     case 2:
         CleanText();
       
-        text_delay = 10;
+        text_delay = tDelay;
 		PRINT(3, 0, "To give me  "); 
 		PRINT(3, 1, "something that   ");
         PRINT(3, 2, "I will never "); 
         break;
     case 3:
         CleanText();
-        text_delay = 10;
+        text_delay = tDelay;
 		PRINT(3, 0, "achieve in this"); 
         PRINT(3, 1, "material world."); 
         break;
@@ -89,18 +97,19 @@ void SetDialog() BANKED{
         CleanWin();
         SetMugTiles(&mugshots, BANK(mugshots), 27);
         SetMushot();
-        text_delay = 10;
+        text_delay = tDelay;
+        text_voice = 2;
 		PRINT(3, 0, "viewer..."); 
         break;
     case 6:
         CleanText();
-        text_delay = 10;
+        text_delay = tDelay;
 		PRINT(3, 0, "Come in,Viewer..."); 
 		PRINT(3, 1, " ");
         break;
     case 7:
         CleanText();
-        text_delay = 10;
+        text_delay = tDelay;
 		PRINT(3, 0, "We are waiting"); 
 		PRINT(3, 1, "for your arrival.");
         break;
@@ -119,17 +128,17 @@ void SetDialog() BANKED{
         CleanWin();
         SetMugTiles(&mugshots, BANK(mugshots), 27);
         SetMushot();
-        text_delay = 10;
+        text_delay = tDelay;
 		PRINT(3, 0, "..."); 
         break;
     case 10:
         CleanText();
-        text_delay = 10;
+        text_delay = tDelay;
 		PRINT(3, 0, "Viewer..."); 
         break;
     case 11:
         CleanText();
-        text_delay = 10;
+        text_delay = tDelay;
 		PRINT(3, 0, "Kneel down before");
         PRINT(3, 1, "us."); 
         break;
@@ -151,12 +160,12 @@ void SetDialog() BANKED{
         CleanWin();
         SetMugTiles(&mugshots, BANK(mugshots), 0);
         SetMushot();
-        text_delay = 10;
+        text_delay = tDelay;
 		PRINT(3, 0, "WAIT A SECOND!");
         break;
     case 14:
         CleanText();
-        text_delay = 10;
+        text_delay = tDelay;
 		PRINT(3, 0, "WHAT9S HAPPENING");
         PRINT(3, 1, "TO ME!?");
         break;
@@ -179,7 +188,7 @@ void SetDialog() BANKED{
         // SetState(current_state);
     // case 16:
     //     CleanText();
-    //     text_delay = 10;
+    //     text_delay = tDelay;
 	// 	PRINT(3, 0, "WHAT'S HAPPENING");
     //     PRINT(3, 1, "TO ME!?");
     //     break;
@@ -189,25 +198,25 @@ void SetDialog() BANKED{
         CleanWin();
         SetMugTiles(&mugshots, BANK(mugshots), 27);
         SetMushot();
-        text_delay = 10;
+        text_delay = tDelay;
 		PRINT(3, 0, "It's our divine"); 
         PRINT(3, 1, "commission."); 
         break;
     case 17:
         CleanText();
-        text_delay = 10;
+        text_delay = tDelay;
 		PRINT(3, 0, "This cape has"); 
         PRINT(3, 1, "been woven by "); 
         PRINT(3, 2, "the faith of "); 
         break;
     case 18:
         CleanText();
-        text_delay = 10;
+        text_delay = tDelay;
 		PRINT(3, 0, "the people."); 
         break;
     case 19:
         CleanText();
-        text_delay = 10;
+        text_delay = tDelay;
 		PRINT(3, 0, "People who perished"); 
         PRINT(3, 1, "in despair."); 
         break;

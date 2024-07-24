@@ -150,6 +150,7 @@ extern UINT8 state_interrupts;
 extern UINT16 scroller_y;
 extern UINT8 canDoInterrupt;
 extern UINT8 counterInterrupt;
+extern UINT8 counterInterrupt2;
 // extern UINT16 scroller_x;
 
 extern UINT8 max_life;
@@ -360,6 +361,7 @@ void START()
 			LYC_REG = 0;
 			state_interrupts = 2;
 			counterInterrupt = 30;
+			counterInterrupt2 = 30;
 			
 			break;
 		// case 6:
@@ -912,7 +914,7 @@ void UPDATE()
 		door_time = 6;
 		door_button = 1;
 		SetDoorCols(0);
-
+		PlayFx(CHANNEL_4, 60, 0x3F, 0xF5, 0xA8, 0x80);
 	}
 
 

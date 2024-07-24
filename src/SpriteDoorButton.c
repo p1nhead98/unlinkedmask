@@ -62,6 +62,7 @@ void UPDATE()
                     door_button = 0;
                     RefreshTimer();
                     SetDoorCols(1);
+                    PlayFx(CHANNEL_4, 15, 0x3F, 0xF1, 0x64, 0x80);
 			    }
             }else{
                 if(CheckCollision(THIS, spr) && door_button == 1 && data->state == 0 ) {
@@ -74,6 +75,7 @@ void UPDATE()
                     door_button = 0;
                     RefreshTimer();
                     SetDoorCols( 1 );
+                    PlayFx(CHANNEL_4, 15, 0x3F, 0xF1, 0x64, 0x80);
 			    }
             }
 

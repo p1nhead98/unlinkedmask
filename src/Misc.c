@@ -254,13 +254,12 @@ void SetOnOffCols(UINT8 cols[], UINT8 onOff ) BANKED{
 void SetDoorCols(UINT8 off) BANKED{
     if(off == 1){
         Door_Anim(&darkTileAnim, 0, BANK(darkTileAnim), 64, 1);
-        PlayFx(CHANNEL_4, 15, 0x3F, 0xF1, 0x64, 0x80);
         // Tile_Anim(9 , 12, &doorAnim, 64, BANK(doorAnim));
         // Tile_Anim(11 , 12, &doorAnim, 66, BANK(doorAnim));
     }else{
         Door_Anim(&doorAnim, 0, BANK(doorAnim), 64, 0);
         ScreenShake(1,1);
-        PlayFx(CHANNEL_4, 60, 0x3F, 0xF5, 0xA8, 0x80);
+        
     }
      
 }
