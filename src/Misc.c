@@ -37,10 +37,10 @@ extern UINT8 start_screen;
 extern UINT8 original_lvl_bank;
 extern struct TilesInfo* original_tiles;
 
-INT8 door_time = 0;
-INT8 door_time_btwn = 0;
-INT8 door_time_btwn_start = 0;
-INT8 door_open = 0;
+UINT8 door_time = 0;
+UINT8 door_time_btwn = 0;
+UINT8 door_time_btwn_start = 0;
+UINT8 door_open = 0;
 BOOLEAN door_button = 0;
 
 IMPORT_TILES(OnAnim);
@@ -254,7 +254,7 @@ void SetOnOffCols(UINT8 cols[], UINT8 onOff ) BANKED{
 void SetDoorCols(UINT8 off) BANKED{
     if(off == 1){
         Door_Anim(&darkTileAnim, 0, BANK(darkTileAnim), 64, 1);
-        PlayFx(CHANNEL_4, 60, 0x3F, 0xF1, 0x64, 0x80);
+        PlayFx(CHANNEL_4, 15, 0x3F, 0xF1, 0x64, 0x80);
         // Tile_Anim(9 , 12, &doorAnim, 64, BANK(doorAnim));
         // Tile_Anim(11 , 12, &doorAnim, 66, BANK(doorAnim));
     }else{

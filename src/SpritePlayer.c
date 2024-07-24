@@ -12,6 +12,8 @@
 #include "Music.h"
 #include "TileAnimation.h"
 
+#define InmunityTime 100
+
 const UINT8 anim_idle[] = {2, 0, 1};
 const UINT8 anim_walk[] = {4, 2, 1, 3, 1};
 const UINT8 anim_jump[] = {2, 4, 5};
@@ -29,7 +31,7 @@ extern INT8 pal_tick;
 extern UINT8 current_pal;
 extern UINT8 current_life;
 extern UINT8 current_level;
-extern INT8 door_open;
+extern UINT8 door_open;
 extern UINT8 IsFirstLvl;
 extern UINT8 start_screen;
 
@@ -66,7 +68,7 @@ void boss1Collisions(UINT8 bossCanHurt){
         case 1:
             if((THIS->y + 4) > 128 && (THIS->x > 0 && THIS->x < 112)){
                 if(canHurt && player_state != 11){
-                    inmunity = 30;
+                    inmunity = InmunityTime;
                     canHurt = 0;
                     current_life--;
                     ScreenShake(1,1);
@@ -78,7 +80,7 @@ void boss1Collisions(UINT8 bossCanHurt){
         case 2:
             if((THIS->y + 4) > 128 && (THIS->x > 112)){
                 if(canHurt && player_state != 11){
-                    inmunity = 30;
+                    inmunity = InmunityTime;
                     canHurt = 0;
                     current_life--;
                     ScreenShake(1,1);
@@ -90,7 +92,7 @@ void boss1Collisions(UINT8 bossCanHurt){
         case 3:
             if(((THIS->x > 32 && THIS->x < 64) || (THIS->x > 96 && THIS->x < 128 ) || (THIS->x > 160 && THIS->x < 192) )&& (THIS->y + 4) > 128){
                 if(canHurt && player_state != 11){
-                    inmunity = 30;
+                    inmunity = InmunityTime;
                     canHurt = 0;
                     current_life--;
                     ScreenShake(1,1);
@@ -101,7 +103,7 @@ void boss1Collisions(UINT8 bossCanHurt){
         case 4:
             if(((THIS->x > 64 && THIS->x < 96) || (THIS->x > 128 && THIS->x < 160 )) && (THIS->y + 4) > 128){
                 if(canHurt && player_state != 11){
-                    inmunity = 30;
+                    inmunity = InmunityTime;
                     canHurt = 0;
                     current_life--;
                     ScreenShake(1,1);
@@ -112,7 +114,7 @@ void boss1Collisions(UINT8 bossCanHurt){
         case 5:
             if(((THIS->x > 32 && THIS->x < 48) || (THIS->x > 64 && THIS->x < 80 ) || (THIS->x > 96 && THIS->x < 112) || (THIS->x > 128 && THIS->x < 144) || (THIS->x > 160 && THIS->x < 176 )) && (THIS->y + 4) > 128){
                 if(canHurt && player_state != 11){
-                    inmunity = 30;
+                    inmunity = InmunityTime;
                     canHurt = 0;
                     current_life--;
                     ScreenShake(1,1);
@@ -123,7 +125,7 @@ void boss1Collisions(UINT8 bossCanHurt){
         case 6:
             if(((THIS->x >48 && THIS->x < 64) || (THIS->x > 80 && THIS->x < 96 ) || (THIS->x > 112 && THIS->x < 128) || (THIS->x > 144 && THIS->x < 160) || (THIS->x > 176 && THIS->x < 192 )) && (THIS->y + 4) > 128){
                  if(canHurt && player_state != 11){
-                    inmunity = 30;
+                    inmunity = InmunityTime;
                     canHurt = 0;
                     current_life--;
                     ScreenShake(1,1);
@@ -143,8 +145,15 @@ void CheckDeathTiles(){
     
 
     if(current_level != 30){
-
-        if( ( THIS->x > 1281 && THIS->x < 1336 ) || ( THIS->x > 1449 && THIS->x < 1488) || ( THIS->x > 1697 && THIS->x < 1736) || ( THIS->x > 1825 && THIS->x < 1864)  ){
+        if(  ( THIS->x > 1449 && THIS->x < 1488) || ( THIS->x > 1697 && THIS->x < 1736) || ( THIS->x > 1825 && THIS->x < 1864)  ){
+            if(canDo == 0 && player_state != 11){
+                current_life = 0;
+                ScreenShake(1,1);
+                RefreshLife();
+                SetSpriteAnim(THIS, anim_death, 15);
+                player_state = 11;
+            }
+        }else if(( (THIS->x > 1281 && THIS->x < 1336) && THIS->y < 104)){
             if(canDo == 0 && player_state != 11){
                 current_life = 0;
                 ScreenShake(1,1);
@@ -181,7 +190,7 @@ void CheckDeathTiles(){
         if ((colision == 81 || colision == 82 || colision == 83 || colision == 84) && canDo == 0)
         {
             if(canHurt && player_state != 11){
-                inmunity = 30;
+                inmunity = InmunityTime;
                 canHurt = 0;
                 current_life--;
                 ScreenShake(1,1);
@@ -191,7 +200,7 @@ void CheckDeathTiles(){
         }else if ((colision == 85 || colision == 86 || colision == 87 || colision == 88) && canDo == 1)
         {
             if(canHurt && player_state != 11){
-                inmunity = 30;
+                inmunity = InmunityTime;
                 canHurt = 0;
                 current_life--;
                 ScreenShake(1,1);
@@ -250,7 +259,7 @@ void CheckCollisionTile()
         if (colision == 112 || colision == 113 || colision == 114 || colision == 115)
         {
             if(canHurt && player_state != 11){
-                inmunity = 30;
+                inmunity = InmunityTime;
                 canHurt = 0;
                 current_life--;
                 ScreenShake(1,1);
@@ -662,7 +671,7 @@ void UPDATE()
                     }
                 }else if(CheckCollision(THIS, spr) && THIS->y + 8 > (spr->y) && player_state != 11 &&  (sprData->state == 6 || sprData->state == 7 || sprData->state == 13 || sprData->state == 16 || sprData->state == 19 ||  sprData->state == 20 || sprData->state == 29 || sprData->state == 32 || sprData->state == 35 || sprData->state == 38 || sprData->state == 41 || sprData->state == 46 || sprData->state == 80 || sprData->state == 81) ){
                     if(canHurt && player_state != 11){
-                        inmunity = 30;
+                        inmunity = InmunityTime;
                         canHurt = 0;
                         current_life--;
                         ScreenShake(1,1);
@@ -746,7 +755,7 @@ void UPDATE()
                         
                     }else if( sprData->state == 7 ){
                         sprData->state = 3;
-                        sprData->speed = sprData->initial_speed = 1;
+                        sprData->speed = sprData->initial_speed = 2;
                     }
                     // else if(sprData->state == 6){
                     //     sprData->state = sprData->initial_state;

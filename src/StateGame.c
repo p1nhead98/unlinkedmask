@@ -113,15 +113,15 @@ UINT8 door_sounds[] = { 0x49, 0x3F, 0x35, 0x2B, 0x21, 0x17 };
 
 
 
-extern INT8 door_time;
-extern INT8 door_time_btwn;
-extern INT8 door_time_btwn_start;
-extern INT8 door_open;
+extern UINT8 door_time;
+extern UINT8 door_time_btwn;
+extern UINT8 door_time_btwn_start;
+extern UINT8 door_open;
 extern BOOLEAN door_button;
 
 
 
-UINT8 current_level = 19;
+UINT8 current_level = 0;
 
 UINT8 doAnimCount = 0;
 
@@ -450,7 +450,7 @@ void START()
 			break;
 		case 23:
 			ScrollRelocateMapTo(0,48);
-			door_time_btwn_start = door_time_btwn = 200;
+			door_time_btwn_start = door_time_btwn = 170;
 			SetOnOffCols(collision_tiles2, on_off);
 			SetOnOffColsEvent(collision_tiles2, 0);
 			SetHudWin(1);
@@ -471,6 +471,8 @@ void START()
 			ScrollRelocateMapTo(0,48);
 			// door_time_btwn_start = door_time_btwn = 220;
 			// SetOnOffCols(collision_tiles2, on_off);
+			canDo = 0;
+			AutomaticOnOff(collision_tiles2, canDo);
 			onoff_auto_time = 20;
 			SetHudWin(1);
 			IsCutscene = 0;
@@ -886,6 +888,8 @@ void UPDATE()
 			
 			canDo = canDo == 0 ? 1 : 0;
 			AutomaticOnOff(collision_tiles2, canDo);
+			PlayFx(CHANNEL_1, 20, 0x1C, 0x8D, 0xF1, 0xD6, 0x86);
+            PlayFx(CHANNEL_4, 20, 0x3A, 0x91, 0x40, 0xC0);
 		}	
 	}
 
@@ -899,7 +903,7 @@ void UPDATE()
 		door_time_btwn--;
 	}else if(door_open == 1 && start_screen == 0){
 		door_time--;
-		PlayFx(CHANNEL_1 , 5, 0x18, 0x80, 0xF1,door_sounds[door_time], 0x87);
+		PlayFx(CHANNEL_1 , 10, 0x18, 0xBF, 0xF1,door_sounds[door_time], 0x87);
 		RefreshTimer();
 		door_time_btwn = door_time_btwn_start;
 	}

@@ -8,8 +8,8 @@
 #include "Math.h"
 #include "ZGBMain.h"
 
-extern INT8 door_time;
-extern INT8 door_open;
+extern UINT8 door_time;
+extern UINT8 door_open;
 
 const UINT8 cape_cut_anim[] = {8, 0, 1, 2, 3, 4, 5, 6, 7};
 

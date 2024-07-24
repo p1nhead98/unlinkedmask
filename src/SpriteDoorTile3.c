@@ -8,9 +8,9 @@
 #include "Math.h"
 #include "ZGBMain.h"
 
-extern INT8 door_time;
-extern INT8 door_open;
-extern INT8 door_button;
+extern UINT8 door_time;
+extern UINT8 door_open;
+extern UINT8 door_button;
 
 void START()
 {

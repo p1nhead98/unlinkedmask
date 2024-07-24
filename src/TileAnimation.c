@@ -75,7 +75,12 @@ void Door_Anim(struct TilesInfo *tile, UINT8 tileStart, UINT8 bank, UINT8 firstT
     for ( i = 0; i < 12; i++)
     {
         if(off == 1){
-            Tile_Anim(tileStart, 12, tile, firstTile + i, bank);
+            if(i > 2){
+                Tile_Anim(tileStart + 1, 12, tile, firstTile + i, bank);
+            }else{
+                Tile_Anim(tileStart + i, 12, tile, firstTile + i, bank);
+            }
+            
         }else{
             Tile_Anim(tileStart + i, 12, tile, firstTile + i, bank);
         }

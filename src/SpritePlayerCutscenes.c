@@ -28,6 +28,7 @@ UINT8 player_cs_state = 0;
 UINT8 player_c_counter = 0;
 UINT8 player_c_counter2 = 0;
 UINT8 player_c_counter3 = 0;
+UINT8 player_c_canDo = 0;
 
 void START()
 {
@@ -63,7 +64,12 @@ void UPDATE()
                
             }
             THIS->x++;
-            
+            if((THIS->anim_frame == 1 || THIS->anim_frame == 3) && player_c_canDo == 0){
+                player_c_canDo = 1;
+                PlayFx(CHANNEL_4, 5, 0x3A, 0x81, 0x00, 0xC0);
+            }else if ((THIS->anim_frame == 0 || THIS->anim_frame == 2 ) && player_c_canDo == 1){
+                player_c_canDo = 0;
+            }
         }else{
             player_cs_state++;
             player_c_counter2 = 20;

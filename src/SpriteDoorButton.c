@@ -12,14 +12,21 @@
 const UINT8 door_op[] = {1, 0};
 const UINT8 door_cl[] = {1, 1};
 
-extern INT8 door_time;
-extern INT8 door_open;
-extern INT8 door_button;
+extern UINT8 door_time;
+extern UINT8 door_open;
+extern UINT8 door_button;
+extern UINT8 current_level;
+
+extern UINT8 door_time_btwn;
+extern UINT8 door_time_btwn_start;
 
 void START()
 {
     CUSTOM_DATA_BTN* data = (CUSTOM_DATA_BTN*)THIS->custom_data;
     data->state = 0;
+
+    
+
 }
 
 void UPDATE()
@@ -45,14 +52,31 @@ void UPDATE()
 
     SPRITEMANAGER_ITERATE(i, spr) {
 		if(spr->type == SpritePlayer ) {
-			if(CheckCollision(THIS, spr) && door_button == 1 && data->state == 0 ) {
-                SetSpriteAnim(THIS, door_cl, 0);
-                data->state = 1;
-                door_open = 1;
-                door_button = 0;
-                RefreshTimer();
-                SetDoorCols( 1 );
-			}
+            if(current_level == 24 && THIS->x > 840){
+                if(CheckCollision(THIS, spr) && data->state == 0 ) {
+                    door_time_btwn_start = door_time_btwn = 110;
+                    SetSpriteAnim(THIS, door_cl, 0);
+                    data->state = 1;
+                    door_open = 1;
+                    door_time = 6;
+                    door_button = 0;
+                    RefreshTimer();
+                    SetDoorCols(1);
+			    }
+            }else{
+                if(CheckCollision(THIS, spr) && door_button == 1 && data->state == 0 ) {
+                    SetSpriteAnim(THIS, door_cl, 0);
+                    if(current_level == 24){
+                        door_time_btwn_start = door_time_btwn = 200;
+                    }
+                    data->state = 1;
+                    door_open = 1;
+                    door_button = 0;
+                    RefreshTimer();
+                    SetDoorCols( 1 );
+			    }
+            }
+
 		}
 	}
 }

@@ -11,6 +11,8 @@
 #include "Music.h"
 #include "WinController.h"
 
+#define InmunityTime 100
+
 const UINT8 nc_anim_idle[] = {2, 0, 1};
 const UINT8 nc_anim_walk[] = {4, 2, 1, 3, 1};
 const UINT8 nc_anim_jump[] = {2, 4, 5};
@@ -27,7 +29,7 @@ extern INT8 pal_tick;
 extern UINT8 current_pal;
 extern UINT8 current_life;
 extern UINT8 current_level;
-extern INT8 door_open;
+extern UINT8 door_open;
 extern UINT8 IsFirstLvl;
 extern UINT8 start_screen;
 
@@ -61,7 +63,7 @@ void CheckCollisionTileNc()
     if (colision == 112 || colision == 113 || colision == 114 || colision == 115)
     {
         if(canHurtNc && player_nc_state != 11){
-            inmunity = 30;
+            inmunity = InmunityTime;
             canHurtNc = 0;
             current_life--;
             ScreenShake(1,1);

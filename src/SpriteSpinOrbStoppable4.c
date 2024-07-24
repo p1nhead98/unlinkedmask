@@ -44,6 +44,7 @@ void CheckCollisionTilePlt6(CUSTOM_DATA_ORB* data)
 
     if(colision == 101 && data->initial_state != 8){
         data->initial_state = 8; 
+        data->speed = data->initial_speed = 2;
         data->state = 4;
     }
     if(colision == 116 ){
@@ -178,15 +179,16 @@ void UPDATE()
             break;
         case 3:
             if(--data->speed == 0 ){
-                THIS->x++;
+                THIS->x+=3;
                 data->speed = data->initial_speed;
             }
                 
             break;
         case 4:
-          
+            if(--data->speed == 0 ){
                 THIS->y--;
-           
+                data->speed = data->initial_speed;
+            }
                 
             break;
  
