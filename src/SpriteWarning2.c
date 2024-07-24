@@ -8,8 +8,8 @@
 #include "Math.h"
 #include "ZGBMain.h"
 
-extern UINT8 door_time;
-extern UINT8 door_open;
+extern INT8 door_time;
+extern INT8 door_open;
 
 const UINT8 warning_anim2[] = {6, 0, 1, 0, 1, 2, 2};
 

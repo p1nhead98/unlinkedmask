@@ -109,19 +109,19 @@ UINT8 bossfight_col[] = {74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 0};
 
 UINT8 windtower_tiles[] = {10,7,8,9,15,16,17,4,5,6,82,83,84,85,86,87,88,89,18,12, 0};
 
+UINT8 door_sounds[] = { 0x44, 0x3a, 0x30, 0x26, 0x1c, 0x12 };
 
 
 
-
-extern UINT8 door_time;
-extern UINT8 door_time_btwn;
-extern UINT8 door_time_btwn_start;
-extern UINT8 door_open;
+extern INT8 door_time;
+extern INT8 door_time_btwn;
+extern INT8 door_time_btwn_start;
+extern INT8 door_open;
 extern BOOLEAN door_button;
 
 
 
-UINT8 current_level = 0;
+UINT8 current_level = 19;
 
 UINT8 doAnimCount = 0;
 
@@ -424,7 +424,7 @@ void START()
 
 
 		case 20:
-			// PlayMusic(unlinkedinside1, 1);
+			PlayMusic(unlinkedinside1, 1);
 			door_time_btwn_start = door_time_btwn = 35;
 			SetOnOffCols(collision_tiles2, on_off);
 			ScrollRelocateMapTo(0,48);
@@ -632,8 +632,10 @@ void START()
 				TMA_REG = 102u;
 			}
 	}else{
-		if(current_level > 10){
+		if(current_level > 10 && current_level < 20){
 			TMA_REG = 180u;
+		}else if(current_level > 19){
+			TMA_REG = 175u;
 		}else if(current_level == 0){
 			TMA_REG = 154u;
 		}else{
@@ -642,8 +644,10 @@ void START()
 		}
 	}
 #else
-		if(current_level > 10){
+		if(current_level > 10 && current_level < 20){
 			TMA_REG = 180u;
+		}else if(current_level > 19){
+			TMA_REG = 175u;
 		}else if(current_level == 0){
 			TMA_REG = 154u;
 		}else{
@@ -891,6 +895,22 @@ void UPDATE()
 
 
 	// if(current_level != 17 && current_level != 18 && start_screen == 0 ){
+	if(door_open == 1 && door_time_btwn > 0 && start_screen == 0){
+		door_time_btwn--;
+	}else if(door_open == 1 && start_screen == 0){
+		door_time--;
+		PlayFx(CHANNEL_2 , 5, 0x8B, 0xE1, door_sounds[door_time], 0x87);
+		RefreshTimer();
+		door_time_btwn = door_time_btwn_start;
+	}
+	if(door_time == 0 ){
+		door_open = 0;
+		door_time = 6;
+		door_button = 1;
+		SetDoorCols(0);
+
+	}
+
 
 	if(KEY_TICKED(J_START) ){
 		if( IsCutscene == 0 && current_level != 0){
@@ -902,31 +922,29 @@ void UPDATE()
 				}else{
 					SetWindowY(128);
 					SetPauseMenu( level->map, level->bank );
+					if(door_open == 1){
+						RefreshTimer();
+						SetDoorCols(door_open);
+					}
 					if(current_level == 20 || current_level == 21 || current_level == 22 ||  current_level == 23 || current_level == 28){
 						SetOnOffCols(collision_tiles2, on_off);
 					}else if(current_level == 25 || current_level == 29){
 						AutomaticOnOff(collision_tiles2, canDo);
 					}
-					
 					RefreshLife();
-					if(door_open == 1){
-						RefreshTimer(door_time);
-						SetDoorCols(door_open);
-					}
 					if(player_sprite->y != 0){
 						pDelay(40);
 					}
-
 			}
 		}
 	}
 
 		
 	if(KEY_TICKED(J_START) && current_level == 0){
-			start_fade = 1;
-			FadeColorAndMusic();
-			current_level++;
-			SetState(current_state);
+		start_fade = 1;
+		FadeColorAndMusic();
+		current_level++;
+		SetState(current_state);
 	}
 
 
@@ -982,20 +1000,7 @@ void UPDATE()
 		
 	}
 
-	if(door_open == 1 && --door_time_btwn == 0 && start_screen == 0){
-
-		door_time--;
-		RefreshTimer(door_time);
-		door_time_btwn = door_time_btwn_start;
-
-	}
-	if(door_time == 0 ){
-		door_open = 0;
-		door_time = 6;
-		door_button = 1;
-		SetDoorCols( 0 );
-
-	}
+	
 		
 
 	// 	} else if(current_level == 18){
@@ -1015,7 +1020,7 @@ void UPDATE()
 		canDo = 1;
 		SetOnOffColsEvent(collision_tiles2, 1);
 	}
-	if(event == 1){
+	if(event == 1 && IsCutscene == 0){
 		// can_scroll_x = 1;
 		event++;
 		SetOnOffColsEvent(collision_tiles2, 2);

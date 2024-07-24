@@ -29,7 +29,7 @@ extern INT8 pal_tick;
 extern UINT8 current_pal;
 extern UINT8 current_life;
 extern UINT8 current_level;
-extern UINT8 door_open;
+extern INT8 door_open;
 extern UINT8 IsFirstLvl;
 extern UINT8 start_screen;
 

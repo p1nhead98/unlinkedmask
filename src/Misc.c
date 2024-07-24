@@ -37,10 +37,10 @@ extern UINT8 start_screen;
 extern UINT8 original_lvl_bank;
 extern struct TilesInfo* original_tiles;
 
-UINT8 door_time = 0;
-UINT8 door_time_btwn = 0;
-UINT8 door_time_btwn_start = 0;
-UINT8 door_open = 0;
+INT8 door_time = 0;
+INT8 door_time_btwn = 0;
+INT8 door_time_btwn_start = 0;
+INT8 door_open = 0;
 BOOLEAN door_button = 0;
 
 IMPORT_TILES(OnAnim);
@@ -140,11 +140,7 @@ void ScrollRelocateMapTo(UINT16 new_x, UINT16 new_y) BANKED{
     // POP_BANK;
 }
 
-void RefreshTimer( UINT8 timer ) BANKED{
-
-    UINT8 i = 0;
-    UINT8 x = 0;
-    
+void RefreshTimer() BANKED{    
     const UINT8 CLOCK_TILE  = 133;
     const UINT8 CLOCK_TILE2 = 135;
     const UINT8 CLOCK_TILE3  = 134;
@@ -155,28 +151,26 @@ void RefreshTimer( UINT8 timer ) BANKED{
     
     const UINT8 CLEAN_TILE = 0;
 
-    if((timer) == 6){
+
+    if(door_time > 0){
         set_win_tiles(12, 0, 1, 1, &CLOCK_TILE);
         set_win_tiles(13, 0, 1, 1, &CLOCK_TILE2); 
         set_win_tiles(12, 1, 1, 1, &CLOCK_TILE3);
         set_win_tiles(13, 1, 1, 1, &CLOCK_TILE4); 
-        for (i = 0; i != (timer ); ++i)
+        for (INT8 i = 0; i != (door_time ); ++i)
         {
             set_win_tiles(14 + i, 0, 1, 1, &TIME_TILE);
             set_win_tiles(14 + i, 1, 1, 1, &TIME_TILE2); 
         }
-    }else if(timer > 0){
-        set_win_tiles(14 + (timer) , 0, 1, 1, &CLEAN_TILE);
-        set_win_tiles(14 + (timer), 1, 1, 1, &CLEAN_TILE);
+        set_win_tiles(14 + (door_time) , 0, 1, 1, &CLEAN_TILE);
+        set_win_tiles(14 + (door_time), 1, 1, 1, &CLEAN_TILE);
     }else{
-        for (i = 0; i != 8; ++i)
+        for (INT8 i = 0; i != 8; ++i)
         { 
             set_win_tiles(12 + i, 0, 1, 1, &CLEAN_TILE);
             set_win_tiles(12 + i, 1, 1, 1, &CLEAN_TILE); 
         }
     }
-
-
   
 }
 
@@ -260,10 +254,13 @@ void SetOnOffCols(UINT8 cols[], UINT8 onOff ) BANKED{
 void SetDoorCols(UINT8 off) BANKED{
     if(off == 1){
         Door_Anim(&darkTileAnim, 0, BANK(darkTileAnim), 64, 1);
+        PlayFx(CHANNEL_4, 60, 0x3F, 0xF1, 0x64, 0x80);
         // Tile_Anim(9 , 12, &doorAnim, 64, BANK(doorAnim));
         // Tile_Anim(11 , 12, &doorAnim, 66, BANK(doorAnim));
     }else{
         Door_Anim(&doorAnim, 0, BANK(doorAnim), 64, 0);
+        ScreenShake(1,1);
+        PlayFx(CHANNEL_4, 60, 0x3F, 0xF5, 0xA8, 0x80);
     }
      
 }

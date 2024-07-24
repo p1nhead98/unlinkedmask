@@ -58,7 +58,7 @@ void pDelay(UINT8 numloops) BANKED;
 void ScreenShake(UINT8 duration, INT8 seismicscale) BANKED;
 void JumpRandSound(BOOLEAN spin) BANKED;
 void ScrollRelocateMapTo(UINT16 new_x, UINT16 new_y) BANKED;
-void RefreshTimer( UINT8 timer ) BANKED;
+void RefreshTimer() BANKED;
 void SetOnOffCols(UINT8 cols[], UINT8 onOff ) BANKED;
 void SetDoorCols(UINT8 off) BANKED;
 void SetOnOffColsEvent(UINT8 cols[], UINT8 onOff ) BANKED;

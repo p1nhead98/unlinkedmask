@@ -12,9 +12,9 @@
 const UINT8 door_op[] = {1, 0};
 const UINT8 door_cl[] = {1, 1};
 
-extern UINT8 door_time;
-extern UINT8 door_open;
-extern UINT8 door_button;
+extern INT8 door_time;
+extern INT8 door_open;
+extern INT8 door_button;
 
 void START()
 {
@@ -50,7 +50,7 @@ void UPDATE()
                 data->state = 1;
                 door_open = 1;
                 door_button = 0;
-                RefreshTimer(door_time);
+                RefreshTimer();
                 SetDoorCols( 1 );
 			}
 		}
