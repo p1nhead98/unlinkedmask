@@ -269,7 +269,7 @@ void CheckCollisionTile()
             //SpriteManagerRemove(THIS_IDX);
         }
         if( (colision2 == 108 || colision2 == 110) ||  (colision3 == 108 || colision3 == 110)){
-            if((player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 1))  && player_accel_y > 2 ){
+            if((player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 2))  && player_accel_y > 2 ){
                 player_state = 3;
                 player_accel_y = -83;
                 PlayFx(CHANNEL_4, 10, 0x02, 0xf1, 0x40, 0xc0);
@@ -302,7 +302,7 @@ void CheckCollisionTile()
         }
     }else{
         if( (colision2 == 112 || colision2 == 113) ||  (colision3 == 112 || colision3 == 113)){
-            if((player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 1))  && player_accel_y > 2 && (boss_state > 24 && boss_state < 43) ){
+            if((player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 2))  && player_accel_y > 2 && (boss_state > 24 && boss_state < 43) ){
                 player_state = 3;
                 player_accel_y = -83;
                 PlayFx(CHANNEL_4, 10, 0x02, 0xf1, 0x40, 0xc0);
@@ -429,7 +429,7 @@ void UPDATE()
                     player_accel_y = -83;
                     JumpRandSound(0);
                     SetSpriteAnim(THIS, anim_jump, 15);
-                    player_last_state = 0;
+                    
                     SpriteManagerAdd(SpritePlayerVfx, THIS->x - 4, THIS->y + 8);
                     // player_dj = 1;
                 }
@@ -440,7 +440,7 @@ void UPDATE()
                     player_accel_y = -83;
                     JumpRandSound(1);
                     SetSpriteAnim(THIS, anim_spin, 20);
-                    player_last_state = 1;
+                    
                     SpriteManagerAdd(SpritePlayerVfx, THIS->x - 4, THIS->y + 8);
                 }
             break;
@@ -557,7 +557,7 @@ void UPDATE()
                 if (player_accel_y > 2)
                 {
                     
-                    SetSpriteAnim(THIS, player_last_state == 1 ? anim_spin : anim_fall, 15);
+                    SetSpriteAnim(THIS, player_last_state == 2 ? anim_spin : anim_fall, 15);
                 }
                 if(KEY_PRESSED(J_LEFT) && !KEY_PRESSED(J_RIGHT) && THIS->x > scroll_x + 2){
                     TranslateSprite(THIS, -2 << delta_time, 0);
@@ -660,7 +660,7 @@ void UPDATE()
             if(spr->type == SpriteBoss1 && player_accel_y > 0) {
                 CUSTOM_DATA_BTN* sprData = (CUSTOM_DATA_BTN*)spr->custom_data;
                 if((sprData->state == 2 || sprData->state == 21 || sprData->state == 48)){
-                    if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && (player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 1)) && (sprData->state == 2 || sprData->state == 21 || sprData->state == 48)) {
+                    if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && (player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 2)) && (sprData->state == 2 || sprData->state == 21 || sprData->state == 48)) {
                         player_state = 3;
                         player_accel_y = -83;
                         PlayFx(CHANNEL_4, 10, 0x02, 0xf1, 0x40, 0xc0);
@@ -681,7 +681,7 @@ void UPDATE()
             }
 
             if(spr->type == SpriteSpinOrb && player_accel_y > 0) {
-                if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && (player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 1))) {
+                if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && (player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 2))) {
                     player_state = 3;
                     player_accel_y = -83;
                     PlayFx(CHANNEL_4, 10, 0x02, 0xf1, 0x40, 0xc0);
@@ -692,7 +692,7 @@ void UPDATE()
             }
             if(spr->type == SpriteSpinOrbFall && player_accel_y > 0) {
                 CUSTOM_DATA_ORB* sprData = (CUSTOM_DATA_ORB*)spr->custom_data;
-                if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && (player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 1))) {
+                if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && (player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 2))) {
                     player_state = 3;
                     player_accel_y = -83;
                     PlayFx(CHANNEL_4, 10, 0x02, 0xf1, 0x40, 0xc0);
@@ -705,7 +705,7 @@ void UPDATE()
             }
             if(spr->type == SpriteSpinOrbActivable  && player_accel_y > 0) {
                 CUSTOM_DATA_ORB* sprData = (CUSTOM_DATA_ORB*)spr->custom_data;
-                if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && (player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 1))) {
+                if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && (player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 2))) {
                     player_state = 3;
                     player_accel_y = -83;
                     if(sprData->state == 0){
@@ -717,7 +717,7 @@ void UPDATE()
                 }
             }
             if(spr->type == SpriteSpinOrbEvent  && player_accel_y > 0) {
-                if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && (player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 1))) {
+                if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && (player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 2))) {
                     player_state = 3;
                     player_accel_y = -83;
                     PlayFx(CHANNEL_4, 10, 0x02, 0xf1, 0x40, 0xc0);
@@ -727,7 +727,7 @@ void UPDATE()
             }
             if((spr->type == SpriteSpinOrbStoppable || spr->type == SpriteSpinOrbStoppable2 || spr->type == SpriteSpinOrbStoppable3)  && player_accel_y > 0) {
                 CUSTOM_DATA_ORB* sprData = (CUSTOM_DATA_ORB*)spr->custom_data;
-                if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && (player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 1))) {
+                if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && (player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 2))) {
                     player_state = 3;
                     player_accel_y = -83;
                     if(sprData->state == 0 ){
@@ -745,7 +745,7 @@ void UPDATE()
             }
             if(( spr->type == SpriteSpinOrbStoppable4)  && player_accel_y > 0) {
                 CUSTOM_DATA_ORB* sprData = (CUSTOM_DATA_ORB*)spr->custom_data;
-                if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && (player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 1))) {
+                if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && (player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 2))) {
                     player_state = 3;
                     player_accel_y = -83;
                     if(sprData->state == 0 ){
@@ -767,7 +767,7 @@ void UPDATE()
             }
             if(( spr->type == SpriteSpinOrbStoppable5)  && player_accel_y > 0) {
                 CUSTOM_DATA_ORB* sprData = (CUSTOM_DATA_ORB*)spr->custom_data;
-                if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && (player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 1))) {
+                if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && (player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 2))) {
                     player_state = 3;
                     player_accel_y = -83;
                     if(sprData->state == 0 ){
@@ -792,7 +792,7 @@ void UPDATE()
             if((spr->type == SpriteJumpBox || spr->type == SpriteSplitBox || spr->type == SpriteJumpBoxEvent) && player_accel_y > 0)  {
                 CUSTOM_DATA_BOX* sprData = (CUSTOM_DATA_BOX*)spr->custom_data;
                 if(CheckCollision(THIS, spr) && sprData->state == 0 && (player_state == 1 || player_state == 2 || player_state == 4 || (player_state == 10))  ) {
-                    if(player_state == 1 || player_state == 4 || (player_state == 10 && player_last_state == 0) && THIS->y < (spr->y - 5)){
+                    if(player_state == 1 || player_state == 4 || (player_state == 10 && player_last_state == 1) && THIS->y < (spr->y - 5)){
                         player_state = 4;
                         player_accel_y = -83;
                         SetSpriteAnim(THIS, anim_jump, 40);   
@@ -814,7 +814,7 @@ void UPDATE()
             }
 
             if(spr->type == SpriteCrusherDown) {
-                if(CheckCollision(THIS, spr) && THIS->y < (spr->y) && (player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 1)) && player_accel_y > 0 ) {
+                if(CheckCollision(THIS, spr) && THIS->y < (spr->y) && (player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 2)) && player_accel_y > 0 ) {
                     // THIS->y -= 5;
                     player_state = 3;
                     player_accel_y = -83;
@@ -829,7 +829,7 @@ void UPDATE()
             }
 
             if(spr->type == SpriteCrusherLeft) {
-                if(CheckCollision(THIS, spr) && THIS->y < (spr->y) && (player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 1)) && player_accel_y > 0 ) {
+                if(CheckCollision(THIS, spr) && THIS->y < (spr->y) && (player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 2)) && player_accel_y > 0 ) {
                     // THIS->y -= 5;
                     player_state = 3;
                     player_accel_y = -83;
@@ -867,7 +867,7 @@ void UPDATE()
             }
             if(( spr->type == SpriteSpinOrbRooftop)  && player_accel_y > 0) {
                 CUSTOM_DATA_ORB* sprData = (CUSTOM_DATA_ORB*)spr->custom_data;
-                if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && (player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 1))) {
+                if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && (player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 2))) {
                     player_state = 3;
                     player_accel_y = -83;
                     if(sprData->state == 2 ){

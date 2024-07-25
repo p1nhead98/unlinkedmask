@@ -121,7 +121,7 @@ extern BOOLEAN door_button;
 
 
 
-UINT8 current_level = 0;
+UINT8 current_level = 20;
 
 UINT8 doAnimCount = 0;
 
