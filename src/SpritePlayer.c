@@ -144,7 +144,7 @@ void CheckDeathTiles(){
     UINT8 colision = GetScrollTile((THIS->x + 3u) >> 3, (THIS->y + 12u) >> 3);
     
 
-    if(current_level != 30){
+    if(current_level != 31){
         if(  ( THIS->x > 1449 && THIS->x < 1488) || ( THIS->x > 1697 && THIS->x < 1736) || ( THIS->x > 1825 && THIS->x < 1864)  ){
             if(canDo == 0 && player_state != 11){
                 current_life = 0;
@@ -223,7 +223,7 @@ void ChangeJumpCollision(){
     UINT8 colision6 = GetScrollTile((THIS->x + 10u) >> 3, (THIS->y + 8u ) >> 3);
 
     
-    if(current_level > 25 && current_level != 30){
+    if(current_level > 26 && current_level != 31){
         if((colision == 47 || colision2 == 47 || colision3 == 47 || colision4 == 47 || colision5 == 47 || colision6 == 47) && change_jump_count == 0){
             change_jump_count = 20;
      
@@ -255,7 +255,7 @@ void CheckCollisionTile()
     UINT8 colision3 = GetScrollTile((THIS->x + 10u) >> 3, (THIS->y + 16u) >> 3);
 
     
-    if(current_level != 30){
+    if(current_level != 31){
         if (colision == 112 || colision == 113 || colision == 114 || colision == 115)
         {
             if(canHurt && player_state != 11){
@@ -388,7 +388,7 @@ void UPDATE()
             }
         }
 
-        if (current_level == 30)
+        if (current_level == 31)
         {
             boss1Collisions(bossCanHurt);
         }
@@ -650,7 +650,7 @@ void UPDATE()
         if(current_level == 25){
             CheckDeathTiles();
         }
-        if(current_level > 25){
+        if(current_level > 26){
             ChangeJumpCollision();
         }
 

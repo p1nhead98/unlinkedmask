@@ -23,15 +23,15 @@ void START()
     THIS->lim_x = 200;
     THIS->lim_y = 80;
     THIS->x += 7;
-    if(THIS->x < 488 && current_level == 27){
+    if(THIS->x < 488 && current_level == 28){
         data->initial_x = THIS->x = 504;
-    }else if (THIS->x > 520 && current_level == 27){
+    }else if (THIS->x > 520 && current_level == 28){
         THIS->mirror = V_MIRROR;
-    }else if(THIS->x < 104 && current_level == 28){
+    }else if(THIS->x < 104 && current_level == 29){
         THIS->mirror = V_MIRROR;
-    }else if(THIS->x > 105 && THIS->x < 960 && current_level == 28){
+    }else if(THIS->x > 105 && THIS->x < 960 && current_level == 29){
         data->initial_x = THIS->x = 272;
-    }else if(current_level == 29){
+    }else if(current_level == 30){
         THIS->mirror = V_MIRROR;
     }
     data->state = 0;
@@ -45,13 +45,13 @@ void UPDATE()
     switch(data->state){
         case 0:
     
-            if(current_level == 26){
+            if(current_level == 27){
                 if(scroll_target->x > 1176 && scroll_target->x < 1273){
                 // if(  ((THIS->y + 5) > scroll_target->y) && (U_LESS_THAN(DISTANCE(scroll_target->x, THIS->x + 16), 95))  ){
                     data->state = 1;
                     SetSpriteAnim(THIS, crusher_l_blink, 20);
                 }
-            }else if (current_level == 27){
+            }else if (current_level == 28){
                 if(THIS->x < 513){
                     if(  ((THIS->y + 5) > scroll_target->y) && (THIS->x > scroll_target->x)  ){
                         data->state = 1;
@@ -68,7 +68,7 @@ void UPDATE()
                         SetSpriteAnim(THIS, crusher_l_blink, 20);
                     }
                 }
-            }else if( current_level == 28 ){
+            }else if( current_level == 29 ){
                 if(THIS->x < 145){
                     if(  (U_LESS_THAN(DISTANCE(scroll_target->x, THIS->x + 16), 38)) && ((THIS->y - 24 ) < scroll_target->y ) ){
                         data->state = 1;
@@ -86,7 +86,7 @@ void UPDATE()
                     }
                 }
                
-            }else if(current_level == 29){
+            }else if(current_level == 30){
                 if(THIS->x < 728){
                     if( ((THIS->y + 5) > scroll_target->y) && (THIS->x + 16 < scroll_target->x) ){
                         data->state = 1;
@@ -99,17 +99,17 @@ void UPDATE()
             
         break;
         case 1:
-        if(current_level == 27 && THIS->x > 520 && THIS->x < 656){
+        if(current_level == 28 && THIS->x > 520 && THIS->x < 656){
             if(TranslateSprite(THIS, 4 << delta_time, 0)){
                 data->state = 2;
                 data->counter = 50;
             }
-        }else if(THIS->x < 145 && current_level == 28){
+        }else if(THIS->x < 145 && current_level == 29){
             if(TranslateSprite(THIS, 4 << delta_time, 0)){
                 data->state = 2;
                 data->counter = 50;
             }
-        }else if (THIS->x < 728 && current_level == 29) {
+        }else if (THIS->x < 728 && current_level == 30) {
             if(TranslateSprite(THIS, 4 << delta_time, 0)){
                 data->state = 2;
                 data->counter = 50;
@@ -128,21 +128,21 @@ void UPDATE()
             }
         break;
         case 3:
-            if(current_level == 27 && THIS->x > 520 && THIS->x < 656){
+            if(current_level == 28 && THIS->x > 520 && THIS->x < 656){
                 if(THIS->x > data->initial_x){
                     TranslateSprite(THIS, -1 << delta_time, 0);
                 }else{
                     data->state = 0;
                     SetSpriteAnim(THIS, crusher_l_idle, 20);
                 }
-            }else if(THIS->x < 145 && current_level == 28){
+            }else if(THIS->x < 145 && current_level == 29){
                 if(THIS->x > data->initial_x){
                     TranslateSprite(THIS, -1 << delta_time, 0);
                 }else{
                     data->state = 0;
                     SetSpriteAnim(THIS, crusher_l_idle, 20);
                 }
-            }else if(current_level == 29){
+            }else if(current_level == 30){
                 if(THIS->x < 728){
                     if(THIS->x > data->initial_x){
                         TranslateSprite(THIS, -1 << delta_time, 0);

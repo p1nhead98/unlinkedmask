@@ -59,8 +59,11 @@ IMPORT_MAP(templeCuts);
 
 IMPORT_MAP(templeCuts);
 IMPORT_MAP(doorCuts);
+IMPORT_MAP(elevatorCuts);
 IMPORT_TILES(capeCuts3Tiles);
 IMPORT_MAP(bossfightTrailer);
+
+IMPORT_MAP(windowElevator);
 
 
 
@@ -76,6 +79,7 @@ IMPORT_TILES(waterAnim1);
 IMPORT_TILES(waterAnim2);
 
 IMPORT_TILES(mugshots);
+
 
 
 // IMPORT_MAP(window);
@@ -121,7 +125,7 @@ extern BOOLEAN door_button;
 
 
 
-UINT8 current_level = 20;
+UINT8 current_level = 0;
 
 UINT8 doAnimCount = 0;
 
@@ -228,6 +232,7 @@ const struct MapInfoBanked levels[] = {
 	BANKED_MAP(lvl_14),
 	BANKED_MAP(lvl_15),
 	BANKED_MAP(lvl_16),
+	BANKED_MAP(elevatorCuts),
 	BANKED_MAP(lvl_17),
 	BANKED_MAP(lvl_18),
 	BANKED_MAP(lvl_19),
@@ -271,12 +276,13 @@ const START_POS start_positions[] = {
 	{8, 96},  //Level 14 Player Start Position	----- current level = 23
 	{8, 96},  //Level 15 Player Start Position	----- current level = 24
 	{8, 96},  //Level 16 Player Start Position	----- current level = 25
-	{8, 96},  //Level 17 Player Start Position	----- current level = 26
-	{8, 96},  //Level 18 Player Start Position	----- current level = 27
-	{8, 96},  //Level 19 Player Start Position	----- current level = 28
-	{8, 96},  //Level 20 Player Start Position	----- current level = 29
-	{48, 136},  //boss fight Player Start Position	----- current level = 30
-	{28, 30},  //boss fight Player Start Position	----- current level = 30
+	{8, 216},  //ElevatorCinematic Player Start Position	----- current level = 26
+	{8, 128},  //Level 17 Player Start Position	----- current level = 27
+	{8, 96},  //Level 18 Player Start Position	----- current level = 28
+	{8, 96},  //Level 19 Player Start Position	----- current level = 29
+	{8, 96},  //Level 20 Player Start Position	----- current level = 30
+	{48, 136},  //boss fight Player Start Position	----- current level = 31
+	{28, 30},  //boss fight Player Start Position	----- current level = 32
 };
 
 
@@ -306,322 +312,6 @@ void START()
 	event = 0;
 	on_off = 0;
 	change_jump_count = 0;
-	// if(current_level == 10){
-	// 	INIT_FONT(fontCapeCuts, PRINT_WIN);
-	// }else{
-	// 	INIT_FONT(font, PRINT_WIN);
-	// }
-	
-	// if(current_level != 11){
-	
-		if(current_level == 31){
-			InitScroll(level->bank, level->map, collision_boss_trailer, 0);
-
-		}else if(current_level == 25){
-			InitScroll(level->bank, level->map, ct_lvl25, 0);
-		}else if(current_level == 30){
-			InitScroll(level->bank, level->map, bossfight_col, 0);
-		}else if( current_level < 20){
-			InitScroll(level->bank, level->map, collision_tiles, 0);
-		}else if( current_level > 19){
-			InitScroll(level->bank, level->map, collision_tiles2, 0);
-		}
-	//}
-
-	
-	
-	
-		// CapeCutsAnim
-	
-
-	switch (current_level){
-		case 0:
-			PlayMusic(unlinkedtitlescreen, 1);
-		break;
-		case 1:
-			SetHudWin(0);
-			IsCutscene = 1;
-			WY_REG = 144;
-			SHOW_SPRITES;
-			canDo = 0;
-			dialog = 0;
-			break;
-		case 2:
-
-			state_counter = 60;
-			canDo = 0;
-			dialog = 0;
-			event = 0;
-			SpriteManagerAdd(SpriteViewerH, 64, 87);
-		
-				
-			FillDoorCinem();
-			scroller_y = 0;
-			canDoInterrupt = 0;
-			LYC_REG = 0;
-			state_interrupts = 2;
-			counterInterrupt = 30;
-			counterInterrupt2 = 30;
-			
-			break;
-		// case 6:
-		// 	PlayMusic(unlinkedchainedsoul, 1);
-		// 	ScrollRelocateMapTo(0,48);
-		// 	break;
-
-		// case 8:
-		// 	canDo = 0;
-		// 	dialog = 0;
-		// 	state_counter = 60;
-		// 	break;
-
-		case 9:
-			canDo = 0;
-			dialog = 0;
-			state_counter = 60;
-			current_dialog = 9;
-			break;
-		
-		case 10:
-			canDo = 0;
-			dialog = 0;
-			state_counter = 60;
-			current_dialog = 13;
-			// CapeCutsAnim(0);
-			break;
-		case 11:
-			// canDo = 0;
-			// dialog = 0;
-			// state_counter = 60;
-			// event = 0;
-			// SHOW_SPRITES;
-			// SHOW_WIN;
-			// WY_REG = 144; 
-			// SpriteManagerAdd(SpriteCapeCuts, 0, 0);
-			canDo = 0;
-			anim_index = 6;
-			dialog = 0;
-			state_counter = 3;
-				// CapeCutsAnim(0);
-			break;
-		case 12:
-			// canDo = 0;
-			// dialog = 0;
-			// state_counter = 60;
-			// event = 0;
-			// SHOW_SPRITES;
-			// SHOW_WIN;
-			WY_REG = 144; 
-			// SpriteManagerAdd(SpriteCapeCuts, 0, 0);
-			canDo = 0;
-			anim_index = 15;
-			dialog = 0;
-			state_counter = 1;
-			event = 0;
-				// CapeCutsAnim(0);
-			break;
-
-	
-
-
-
-		case 20:
-			PlayMusic(unlinkedinside1, 1);
-			door_time_btwn_start = door_time_btwn = 35;
-			SetOnOffCols(collision_tiles2, on_off);
-			ScrollRelocateMapTo(0,48);
-			SetHudWin(1);
-			IsCutscene = 0;
-			state_interrupts = 0;
-			break;
-		case 21:
-			door_time_btwn_start = door_time_btwn = 120;
-			SetOnOffCols(collision_tiles2, on_off);
-			ScrollRelocateMapTo(0,48);
-			SetHudWin(1);
-			IsCutscene = 0;
-			state_interrupts = 0;
-			break;
-		case 22:
-			door_time_btwn_start = door_time_btwn = 120;
-			SetOnOffCols(collision_tiles2, on_off);
-			ScrollRelocateMapTo(0,48);
-			SetHudWin(1);
-			IsCutscene = 0;
-			state_interrupts = 0;
-			break;
-		case 23:
-			ScrollRelocateMapTo(0,48);
-			door_time_btwn_start = door_time_btwn = 170;
-			SetOnOffCols(collision_tiles2, on_off);
-			SetOnOffColsEvent(collision_tiles2, 0);
-			SetHudWin(1);
-			IsCutscene = 0;
-			canDo = 0;
-			event = 0;
-			state_interrupts = 0;
-			break;
-		case 24:
-			ScrollRelocateMapTo(0,48);
-			door_time_btwn_start = door_time_btwn = 220;
-			SetOnOffCols(collision_tiles2, on_off);
-			SetHudWin(1);
-			IsCutscene = 0;
-			state_interrupts = 0;
-			break;
-		case 25:
-			ScrollRelocateMapTo(0,48);
-			// door_time_btwn_start = door_time_btwn = 220;
-			// SetOnOffCols(collision_tiles2, on_off);
-			canDo = 0;
-			AutomaticOnOff(collision_tiles2, canDo);
-			onoff_auto_time = 20;
-			SetHudWin(1);
-			IsCutscene = 0;
-			state_interrupts = 0;
-			break;
-		
-		case 28:
-		canDo = 0;
-		dialog = 0;
-		AutomaticOnOff(collision_tiles2, canDo);
-		ScrollRelocateMapTo(0,48);
-		SetHudWin(1);
-		IsCutscene = 0;
-		state_interrupts = 0;
-		break;
-		
-		case 29:
-		ScrollRelocateMapTo(0,48);
-		onoff_auto_time = 20;
-		canDo = 0;
-		SetHudWin(1);
-		IsCutscene = 0;
-		state_interrupts = 0;
-		AutomaticOnOff(collision_tiles2, canDo);
-		break;
-
-		case 30:
-		ScrollRelocateMapTo(40,40);
-		// onoff_auto_time = 20;
-		// canDo = 0;
-		SetHudWin(1);
-		AnimCounter = 0;
-		IsCutscene = 0;
-		state_interrupts = 3;
-		can_scroll_x = 0;
-		canDoInterrupt = 0;
-		bossAttackCounter = 10;
-		bossAttackState = 0;
-		doAnimCount = 3;
-		Attacks_Animations(30);
-		
-		// AutomaticOnOff(collision_tiles2, canDo);
-		break;
-
-		default:
-			if(current_level != 1 && current_level != 2  && current_level != 8 && current_level != 9 && current_level != 13 && current_level != 19){
-				
-				ScrollRelocateMapTo(0,48);
-				
-				SetHudWin(1);
-				IsCutscene = 0;
-				state_interrupts = 0;
-				
-
-			}else{
-				SetHudWin(0);
-				IsCutscene = 1;
-				state_interrupts = 10;
-				SHOW_SPRITES;
-			}
-			canDo = 0;
-			dialog = 0;
-			
-			break;
-	}
-
-	
-
-	if(current_level != 0){
-		if(current_level == 30){
-			SpriteManagerAdd(SpriteBoss1, 144, 68);
-			bossFireAttack_spr = SpriteManagerAdd(SpriteBossFireFlash, 0, 138);
-		}
-		if(current_level == 1 || current_level == 8 || current_level == 13 ){
-			player_sprite = scroll_target = SpriteManagerAdd(SpritePlayerCutscenes, start_positions[current_level].start_x, start_positions[current_level].start_y);
-			// if(current_level == 13){
-			// 	FadeInColor();
-			// }
-		}else if(current_level == 19){
-			player_sprite = scroll_target = SpriteManagerAdd(SpritePlayerCutsTemple, start_positions[current_level].start_x, start_positions[current_level].start_y);
-		}else if( current_level < 8 && current_level != 2 && current_level != 19){
-			player_sprite = scroll_target = SpriteManagerAdd(SpritePlayerNoCape, start_positions[current_level].start_x, start_positions[current_level].start_y);
-		}else if( current_level > 13){
-			player_sprite = scroll_target = SpriteManagerAdd(SpritePlayer, start_positions[current_level].start_x, start_positions[current_level].start_y);
-		}
-		
-	}
-
-	if(current_level == 31){
-		SpriteManagerAdd(SpriteBossHand1, 32, 56);
-		SpriteManagerAdd(SpriteBossHand2, 112, 56);
-	}
-
-	// LY_REG  = 0;
-	// disable_interrupts();
-	// add_LCD(LCD_Interrupt);
-	// add_VBL(VBL_Interrupt);
-	// enable_interrupts();
-
-	// if(current_level == 0){
-	// 	DISPLAY_OFF;
-	// 	LOAD_SGB_BORDER(linkedborder);
-	// 	DISPLAY_ON;
-	// }
-	
-	// stop_music_on_new_state = 0;
-	// event = 0;
-	// current_level = 9;
-	
-
-
-	door_open = 0;
-	door_button = 1;
-	door_time = 6;
-
-	doAnimCount = 3;
-	AnimCounter2 = 0;
-	
-
-
-
-	
-
-	
- 
-	
-
-	
-
-
-
-	// INIT_HUD(window);
-
-	
-	// if(current_level != 0){
-	// 	if(current_level < 11){
-			
-	// 	}else{
-	// 		INIT_HUD(window2);
-	// 	}
-	// }else{
-	// 	HIDE_WIN;
-	// }
-
-	//InitScroll(level->bank, level->map, windtower_tiles, 0);
-
-
 
 
 	CRITICAL {
@@ -650,8 +340,10 @@ void START()
 #else
 		if(current_level > 10 && current_level < 20){
 			TMA_REG = 180u;
-		}else if(current_level > 19){
+		}else if(current_level > 19 && current_level < 27){
 			TMA_REG = 175u;
+		}else if(current_level > 26 && current_level < 30){
+			TMA_REG = 192u;
 		}else if(current_level == 0){
 			TMA_REG = 154u;
 		}else{
@@ -661,29 +353,265 @@ void START()
 #endif
 	}
 
-	// #ifdef CGB
-	// 	if (_cpu == CGB_TYPE) {
-	// 		if(current_level > 10){
-	// 			TMA_REG = 180u;
-	// 		}else if(current_level == 0){
-	// 			TMA_REG = 154u;
-	// 		}else{
-
-	// 			TMA_REG = 90u;
-	// 		}		
-	// 	} else
-	// #endif
-	// 	if(current_level > 10){
-	// 		TMA_REG = 180u;
-	// 	}else if(current_level == 0){
-	// 		TMA_REG = 154u;
-	// 	}else{
-
-	// 		TMA_REG = 180u;
-	// 	}
-	// }	
 
 
+	if(current_level == 32){
+		InitScroll(level->bank, level->map, collision_boss_trailer, 0);
+	}else if(current_level == 25){
+		InitScroll(level->bank, level->map, ct_lvl25, 0);
+	}else if(current_level == 31){
+		InitScroll(level->bank, level->map, bossfight_col, 0);
+	}else if( current_level < 20){
+		InitScroll(level->bank, level->map, collision_tiles, 0);
+	}else if( current_level > 19){
+		InitScroll(level->bank, level->map, collision_tiles2, 0);
+	}
+
+
+
+
+	
+
+	switch (current_level){
+		case 0:
+			PlayMusic(unlinkedtitlescreen, 1);
+		break;
+
+		case 1:
+			SetHudWin(0);
+			IsCutscene = 1;
+			WY_REG = 144;
+			SHOW_SPRITES;
+			canDo = 0;
+			dialog = 0;
+			break;
+		case 2:
+			state_counter = 60;
+			canDo = 0;
+			dialog = 0;
+			event = 0;
+			SpriteManagerAdd(SpriteViewerH, 64, 87);
+			FillDoorCinem();
+			scroller_y = 0;
+			canDoInterrupt = 0;
+			LYC_REG = 0;
+			state_interrupts = 2;
+			counterInterrupt = 30;
+			counterInterrupt2 = 30;
+			break;
+
+		case 9:
+			canDo = 0;
+			dialog = 0;
+			state_counter = 60;
+			current_dialog = 9;
+			break;
+		
+		case 10:
+			canDo = 0;
+			dialog = 0;
+			state_counter = 60;
+			current_dialog = 13;
+			break;
+
+		case 11:
+			canDo = 0;
+			anim_index = 6;
+			dialog = 0;
+			state_counter = 3;
+			break;
+
+		case 12:
+			WY_REG = 144; 
+			canDo = 0;
+			anim_index = 15;
+			dialog = 0;
+			state_counter = 1;
+			event = 0;
+			break;
+
+		case 20:
+			PlayMusic(unlinkedinside1, 1);
+			door_time_btwn_start = door_time_btwn = 35;
+			SetOnOffCols(collision_tiles2, on_off);
+			ScrollRelocateMapTo(0,48);
+			SetHudWin(1);
+			IsCutscene = 0;
+			state_interrupts = 0;
+			break;
+
+		case 21:
+			door_time_btwn_start = door_time_btwn = 120;
+			SetOnOffCols(collision_tiles2, on_off);
+			ScrollRelocateMapTo(0,48);
+			SetHudWin(1);
+			IsCutscene = 0;
+			state_interrupts = 0;
+			break;
+
+		case 22:
+			door_time_btwn_start = door_time_btwn = 120;
+			SetOnOffCols(collision_tiles2, on_off);
+			ScrollRelocateMapTo(0,48);
+			SetHudWin(1);
+			IsCutscene = 0;
+			state_interrupts = 0;
+			break;
+
+		case 23:
+			ScrollRelocateMapTo(0,48);
+			door_time_btwn_start = door_time_btwn = 170;
+			SetOnOffCols(collision_tiles2, on_off);
+			SetOnOffColsEvent(collision_tiles2, 0);
+			SetHudWin(1);
+			IsCutscene = 0;
+			canDo = 0;
+			event = 0;
+			state_interrupts = 0;
+			break;
+
+		case 24:
+			ScrollRelocateMapTo(0,48);
+			door_time_btwn_start = door_time_btwn = 220;
+			SetOnOffCols(collision_tiles2, on_off);
+			SetHudWin(1);
+			IsCutscene = 0;
+			state_interrupts = 0;
+			break;
+		case 25:
+			ScrollRelocateMapTo(0,48);
+			// door_time_btwn_start = door_time_btwn = 220;
+			// SetOnOffCols(collision_tiles2, on_off);
+			canDo = 0;
+			AutomaticOnOff(collision_tiles2, canDo);
+			onoff_auto_time = 20;
+			SetHudWin(1);
+			IsCutscene = 0;
+			state_interrupts = 0;
+			break;
+
+		case 26:
+			SpriteManagerAdd(SpriteElevatorFloor1, 40, 232);
+			SpriteManagerAdd(SpriteElevatorFloor2, 72, 232);
+			SpriteManagerAdd(SpriteElevatorFloor3, 104, 232);
+			SetHudWin(0);
+			FillElevatorCinem();
+			IsCutscene = 1;
+			SHOW_SPRITES;
+			canDo = 0;
+			dialog = 0;
+			scroller_y = 119;
+			scroll_y = 112;
+			counterInterrupt = counterInterrupt2 = 15;
+			state_interrupts = 3;
+			LYC_REG = 0;
+			break;
+		
+		case 27:
+			PlayMusic(unlinkedrooftop, 1);
+			ScrollRelocateMapTo(0,48);
+			SetHudWin(1);
+			IsCutscene = 0;
+			state_interrupts = 0;
+			canDo = 0;
+			dialog = 0;
+			break;
+		
+		case 29:
+			canDo = 0;
+			dialog = 0;
+			AutomaticOnOff(collision_tiles2, canDo);
+			ScrollRelocateMapTo(0,48);
+			SetHudWin(1);
+			IsCutscene = 0;
+			state_interrupts = 0;
+			break;
+			
+		case 30:
+			ScrollRelocateMapTo(0,48);
+			onoff_auto_time = 20;
+			canDo = 0;
+			SetHudWin(1);
+			IsCutscene = 0;
+			state_interrupts = 0;
+			AutomaticOnOff(collision_tiles2, canDo);
+			break;
+
+		case 31:
+			ScrollRelocateMapTo(40,40);
+			// onoff_auto_time = 20;
+			// canDo = 0;
+			SetHudWin(1);
+			AnimCounter = 0;
+			IsCutscene = 0;
+			state_interrupts = 3;
+			can_scroll_x = 0;
+			canDoInterrupt = 0;
+			bossAttackCounter = 10;
+			bossAttackState = 0;
+			doAnimCount = 3;
+			Attacks_Animations(30);
+			break;
+
+		default:
+			if(current_level != 1 && current_level != 2  && current_level != 8 && current_level != 9 && current_level != 13 && current_level != 19 && current_level != 26){
+				
+				ScrollRelocateMapTo(0,48);
+				
+				SetHudWin(1);
+				IsCutscene = 0;
+				state_interrupts = 0;
+				
+
+			}else{
+				SetHudWin(0);
+				IsCutscene = 1;
+				
+				state_interrupts = 10;
+				SHOW_SPRITES;
+			}
+			canDo = 0;
+			dialog = 0;
+			
+			break;
+	}
+
+	
+
+	if(current_level != 0){
+		if(current_level == 31){
+			SpriteManagerAdd(SpriteBoss1, 144, 68);
+			bossFireAttack_spr = SpriteManagerAdd(SpriteBossFireFlash, 0, 138);
+		}
+		if(current_level == 1 || current_level == 8 || current_level == 13 ){
+			player_sprite = scroll_target = SpriteManagerAdd(SpritePlayerCutscenes, start_positions[current_level].start_x, start_positions[current_level].start_y);
+			// if(current_level == 13){
+			// 	FadeInColor();
+			// }
+		}else if(current_level == 26){
+			player_sprite = scroll_target = SpriteManagerAdd(SpritePlayerCutsTemple, start_positions[current_level].start_x, start_positions[current_level].start_y);
+			
+		}else if(current_level == 19){
+			player_sprite = scroll_target = SpriteManagerAdd(SpritePlayerCutsTemple, start_positions[current_level].start_x, start_positions[current_level].start_y);
+		}else if( current_level < 8 && current_level != 2 && current_level != 19){
+			player_sprite = scroll_target = SpriteManagerAdd(SpritePlayerNoCape, start_positions[current_level].start_x, start_positions[current_level].start_y);
+		}else if( current_level > 13){
+			player_sprite = scroll_target = SpriteManagerAdd(SpritePlayer, start_positions[current_level].start_x, start_positions[current_level].start_y);
+		}
+		
+	}
+
+	if(current_level == 32){
+		SpriteManagerAdd(SpriteBossHand1, 32, 56);
+		SpriteManagerAdd(SpriteBossHand2, 112, 56);
+	}
+
+
+	door_open = 0;
+	door_button = 1;
+	door_time = 6;
+	doAnimCount = 3;
+	AnimCounter2 = 0;
 
 	if(IsCutscene == 1){
 		INIT_FONT(font, PRINT_WIN);
@@ -693,13 +621,6 @@ void START()
 	NR51_REG = 0xFF; //Enables all channels (left and right)
 	NR50_REG = 0x77; //Max volume
 
-	// if(current_level != 0){
-		
-	// }else{
-	// 	HIDE_WIN;
-	// }
-
-	
 
 
 }
@@ -732,9 +653,8 @@ void UPDATE()
 
 
 
-
-
-	if(current_level != 31){
+	
+	if(current_level != 32){
 
 	if(current_level == 2){
 		if(canDoInterrupt == 0){
@@ -880,9 +800,9 @@ void UPDATE()
 
 
 
-	if(current_level == 25 || current_level == 29){
+	if(current_level == 25 || current_level == 30){
 		if(--onoff_auto_time == 0 && start_screen == 0){
-			if(current_level == 29){
+			if(current_level == 30){
 				onoff_auto_time = 60;
 			}else{
 				onoff_auto_time = 90;
@@ -932,9 +852,9 @@ void UPDATE()
 						RefreshTimer();
 						SetDoorCols(door_open);
 					}
-					if(current_level == 20 || current_level == 21 || current_level == 22 ||  current_level == 23 || current_level == 28){
+					if(current_level == 20 || current_level == 21 || current_level == 22 ||  current_level == 23 || current_level == 29){
 						SetOnOffCols(collision_tiles2, on_off);
-					}else if(current_level == 25 || current_level == 29){
+					}else if(current_level == 25 || current_level == 30){
 						AutomaticOnOff(collision_tiles2, canDo);
 					}
 					RefreshLife();
@@ -955,7 +875,7 @@ void UPDATE()
 
 
 
-	if(--doAnimCount == 0 && IsCutscene == 0  && current_level != 30 ){
+	if(--doAnimCount == 0 && IsCutscene == 0  && current_level != 31 ){
 
 		
 		AnimCounter = AnimCounter == 1 ? 0 : 1;
@@ -969,7 +889,7 @@ void UPDATE()
 			}
 
 
-			if(current_level == 25 || current_level == 29){
+			if(current_level == 25 || current_level == 30){
 
 				if(canDo == 0){
 					if(AnimCounter == 0){
@@ -988,7 +908,7 @@ void UPDATE()
 
 				
 			}
-			if(current_level > 25 && current_level != 30){
+			if(current_level > 26 && current_level != 31){
 				AnimCounter2++;
 				if(change_jump_count == 0){
 					Tile_Anim(AnimCounter2, 6, &spinChangerAnim, 47, BANK(spinChangerAnim));	
@@ -1042,7 +962,7 @@ void UPDATE()
 		change_jump_count--;
 	}
 
-	if( current_level == 30){
+	if( current_level == 31){
 
 	
 		

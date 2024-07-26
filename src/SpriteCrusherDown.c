@@ -24,7 +24,7 @@ void START()
     THIS->lim_y = 80;
     THIS->x += 7;
     data->state = 0;
-    if(current_level == 28){
+    if(current_level == 29){
         if(THIS->x > 768 && THIS->x < 840){
             THIS->y -= 24;
         }else if(THIS->x > 1080 && THIS->x < 1136){
@@ -37,7 +37,7 @@ void START()
         }else if(THIS->x > 1192){
             THIS->y+=32;
         }
-    }else if(current_level == 26){
+    }else if(current_level == 27){
         if(THIS->x > 128 && THIS->x < 200){
             THIS->mirror = H_MIRROR;
         }
@@ -51,17 +51,17 @@ void UPDATE()
 
     switch(data->state){
         case 0:
-        if(current_level == 26 && THIS->x > 128 && THIS->x < 200){
+        if(current_level == 27 && THIS->x > 128 && THIS->x < 200){
                 if(  ((THIS->y + 5) > scroll_target->y) && (U_LESS_THAN(DISTANCE(scroll_target->x, THIS->x + 16), 40))  ){
                     data->state = 1;
                     SetSpriteAnim(THIS, crusher_blink, 20);
                 }
-        }else if(current_level == 26 && THIS->x > 288 && THIS->x < 320){
+        }else if(current_level == 27 && THIS->x > 288 && THIS->x < 320){
             if(  ((THIS->y + 5) < scroll_target->y) && (U_LESS_THAN(DISTANCE(scroll_target->x, THIS->x + 16), 80))  ){
                 data->state = 1;
                 SetSpriteAnim(THIS, crusher_blink, 20);
             }
-        }else if(current_level == 28){
+        }else if(current_level == 29){
             if(THIS->x < 384){
                 if(  ((THIS->y + 5) < scroll_target->y) && (U_LESS_THAN(DISTANCE(scroll_target->x, THIS->x + 16), 34))  ){
                     data->state = 1;
@@ -88,7 +88,7 @@ void UPDATE()
             
         break;
         case 1:
-        if(current_level == 28){
+        if(current_level == 29){
             if(THIS->x > 1192){
                 if(TranslateSprite(THIS, 0, -4 << delta_time)){
                     data->state = 2;
@@ -100,7 +100,7 @@ void UPDATE()
                     data->counter = 50;
                 } 
             }
-        }else if(current_level == 26 && THIS->x > 128 && THIS->x < 200){
+        }else if(current_level == 27 && THIS->x > 128 && THIS->x < 200){
           
             if(TranslateSprite(THIS, 0, -4 << delta_time)){
                 data->state = 2;

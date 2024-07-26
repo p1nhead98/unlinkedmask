@@ -84,6 +84,28 @@ void ScreenShake(UINT8 duration, INT8 seismicscale) BANKED
 	scroll_offset_y = 0;
 }
 
+void ScreenShakeX(UINT8 duration, INT8 seismicscale) BANKED
+{
+
+	UINT8 d;
+
+	for (d = 0; d < duration; d++)
+	{
+
+		scroll_x += seismicscale;
+
+		///scroll_offset_y=seismicscale;
+		pDelay(1);
+		scroll_x -= seismicscale;
+
+		//scroll_offset_y=-seismicscale;
+		pDelay(1);
+	}
+
+	scroll_offset_x = 0;
+	scroll_offset_y = 0;
+}
+
 
 void JumpRandSound(BOOLEAN spin) BANKED{
 
@@ -109,6 +131,17 @@ void FillDoorCinem() BANKED{
     for (UINT8 y = 0u; y < 12u; y++)
 	{
 		for (UINT8 x = 0u; x < 20u; x++)
+		{
+				ScrollUpdateColumn(x, y);
+		}
+			
+	}
+}
+
+void FillElevatorCinem() BANKED{
+    for (UINT8 y = 0u; y < 12u; y++)
+	{
+		for (UINT8 x = 0u; x < 32u; x++)
 		{
 				ScrollUpdateColumn(x, y);
 		}

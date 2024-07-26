@@ -128,6 +128,12 @@ void UPDATE()
         break;
     case 4:
         THIS->x++;
+        if((THIS->anim_frame == 1 || THIS->anim_frame == 3) && player_c_canDo == 0){
+            player_c_canDo = 1;
+            PlayFx(CHANNEL_4, 5, 0x3A, 0x81, 0x00, 0xC0);
+        }else if ((THIS->anim_frame == 0 || THIS->anim_frame == 2 ) && player_c_canDo == 1){
+            player_c_canDo = 0;
+        }
         if(THIS->x == 158){
             current_level++;
             SetState(current_state);

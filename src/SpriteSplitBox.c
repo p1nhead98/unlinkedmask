@@ -23,7 +23,7 @@ void START()
     THIS->lim_x = 80;
     THIS->lim_y = 80;
     data->state = 0;
-    if(current_level == 28 && THIS->x > 448){
+    if(current_level == 29 && THIS->x > 448){
         THIS->x -= 12;
     }
 }

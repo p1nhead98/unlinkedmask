@@ -147,7 +147,7 @@ void START()
     }
 
     switch(current_level){
-        case 26:
+        case 27:
             if(THIS->x > 496 && THIS->x < 616){
                 data->state = 1;
                 THIS->y += 4;
@@ -161,7 +161,7 @@ void START()
                 THIS->x -= 12;
             }
         break;
-        case 27:
+        case 28:
             if(THIS->x < 128){
                 THIS->x += 40;
                 THIS->y -= 32;
@@ -179,7 +179,7 @@ void START()
         
             }
         break;
-        case 28:
+        case 29:
             if(THIS->x > 216 && THIS->x < 344){
                 THIS->y-=20;
             }else if(THIS->x > 448 && THIS->x < 896){
@@ -190,7 +190,7 @@ void START()
                 data->state = 17;
             }
         break;
-        case 29:
+        case 30:
             THIS->y-=4;
             data->state = 1;
         break;
@@ -268,8 +268,8 @@ void UPDATE()
         }
 
 
-    if(current_level == 26){
-        if(current_level == 26 && THIS->x > 224 && THIS->x < 344){
+    if(current_level == 27){
+        if(current_level == 27 && THIS->x > 224 && THIS->x < 344){
             if(data->state == 3 && THIS->y == 117){
                 data->state = 4;
             }else if(data->state == 4 && THIS->x == 276){
@@ -281,7 +281,7 @@ void UPDATE()
             }
         }
 
-        if(current_level == 26 && THIS->x > 496 && THIS->x < 624){
+        if(current_level == 27 && THIS->x > 496 && THIS->x < 624){
             if(data->state == 4 && THIS->x == 540){
                 data->state = 7;
             }else if(data->state == 7 && THIS->y == 124){
@@ -291,17 +291,17 @@ void UPDATE()
             }
         }
 
-        if(THIS->x > 872 && THIS->x < 928 && current_level == 26){
+        if(THIS->x > 872 && THIS->x < 928 && current_level == 27){
             if(data->state == 7 && THIS->y == 92){
                 data->state = 10;
             }
         }
-        if(THIS->x > 1320 && current_level == 26){
+        if(THIS->x > 1320 && current_level == 27){
             if(data->state == 9 && THIS->x == 1454){
                 data->state = 10;
             }
         }
-    }else if(current_level == 27){
+    }else if(current_level == 28){
         if(THIS->x > 696 && THIS->x < 888 ){
             if(data->state == 4 && THIS->x == 780){
                 data->state = 0;
@@ -322,7 +322,7 @@ void UPDATE()
             }
         }
         
-    }else if(current_level == 28){
+    }else if(current_level == 29){
         if(THIS->x > 216 && THIS->x < 336){
             if(data->state == 9 && THIS->x == 316){
                 data->state = 2;
@@ -348,7 +348,7 @@ void UPDATE()
                 data->state = 10;
             }
         }
-    }else if (current_level == 29 ){
+    }else if (current_level == 30 ){
         if( data->state == 4 && THIS->x > 434 && THIS->y > 90 && THIS->x < 480){
             data->state = 23;
         }else if (data->state == 23 && THIS->y < 78 && THIS->x < 560){
