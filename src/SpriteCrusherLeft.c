@@ -20,19 +20,27 @@ void START()
     data->state = 0;
     data->counter = 50;
     data->accel_y = 0;
-    THIS->lim_x = 200;
+    THIS->lim_x = 400;
     THIS->lim_y = 80;
     THIS->x += 7;
-    if(THIS->x < 488 && current_level == 28){
+    if(THIS->x < 432 && current_level == 28){
         data->initial_x = THIS->x = 504;
-    }else if (THIS->x > 520 && current_level == 28){
+    }else if (THIS->x > 440 && THIS->x < 680 && current_level == 28){
         THIS->mirror = V_MIRROR;
+        data->initial_x = THIS->x = 536;
     }else if(THIS->x < 104 && current_level == 29){
         THIS->mirror = V_MIRROR;
-    }else if(THIS->x > 105 && THIS->x < 960 && current_level == 29){
+    }else if(THIS->x > 105 && THIS->x < 864 && current_level == 29){
         data->initial_x = THIS->x = 272;
+    }else if(THIS->x > 904 && current_level == 29){
+        data->initial_y = THIS->y = 72;
+        data->initial_x = THIS->x = 1016;
     }else if(current_level == 30){
-        THIS->mirror = V_MIRROR;
+        if(THIS->x < 880){
+            THIS->mirror = V_MIRROR;
+        }else{
+            data->initial_x = THIS->x = 1072;
+        }
     }
     data->state = 0;
 }
@@ -74,7 +82,7 @@ void UPDATE()
                         data->state = 1;
                         SetSpriteAnim(THIS, crusher_l_blink, 20);
                     }
-                }else if(THIS->x > 960){
+                }else if(THIS->x > 904){
                     if( ((scroll_target->x > 864) && (scroll_target->x <  (THIS->x + 3)))  ){
                         data->state = 1;
                         SetSpriteAnim(THIS, crusher_l_blink, 20);
@@ -92,6 +100,12 @@ void UPDATE()
                         data->state = 1;
                         SetSpriteAnim(THIS, crusher_l_blink, 20);
                     }
+                }else{
+                    if( ((scroll_target->x > 880) && (scroll_target->x <  (THIS->x)))  ){
+                        data->state = 1;
+                        SetSpriteAnim(THIS, crusher_l_blink, 20);
+                    }
+                
                 }
             }
             
@@ -109,10 +123,15 @@ void UPDATE()
                 data->state = 2;
                 data->counter = 50;
             }
-        }else if (THIS->x < 728 && current_level == 30) {
+        }else if (THIS->x < 703 && current_level == 30) {
             if(TranslateSprite(THIS, 4 << delta_time, 0)){
                 data->state = 2;
                 data->counter = 50;
+            }
+        }else if (THIS->x > 703 && current_level == 30) {
+            if(TranslateSprite(THIS, -4 << delta_time, 0)){
+                data->state = 2;
+                data->counter = 10;
             }
         }else{
             if(TranslateSprite(THIS, -4 << delta_time , 0)){
@@ -143,9 +162,16 @@ void UPDATE()
                     SetSpriteAnim(THIS, crusher_l_idle, 20);
                 }
             }else if(current_level == 30){
-                if(THIS->x < 728){
+                if(THIS->x < 704){
                     if(THIS->x > data->initial_x){
                         TranslateSprite(THIS, -1 << delta_time, 0);
+                    }else{
+                        data->state = 0;
+                        SetSpriteAnim(THIS, crusher_l_idle, 20);
+                    }
+                }else if(THIS->x > 704){
+                    if(THIS->x < data->initial_x){
+                        TranslateSprite(THIS, 1 << delta_time, 0);
                     }else{
                         data->state = 0;
                         SetSpriteAnim(THIS, crusher_l_idle, 20);

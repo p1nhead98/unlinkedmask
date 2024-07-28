@@ -20,11 +20,20 @@ void START()
     data->initial_frame_speed = 0;
     data->initial_y = THIS->y;
     data->start = 1;
-    THIS->lim_x = 80;
+    THIS->lim_x = 200;
     THIS->lim_y = 80;
     data->state = 0;
+    if(current_level == 28 && THIS->x > 592 && THIS->x < 672){
+        THIS->x = 624;
+    }else if(current_level == 28 && THIS->x > 1088){
+        THIS->y = 136;
+    }
     if(current_level == 29 && THIS->x > 448){
         THIS->x -= 12;
+    }
+    if(current_level == 30){
+        THIS->x = 288;
+        THIS->y = 152;
     }
 }
 

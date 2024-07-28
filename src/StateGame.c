@@ -100,6 +100,8 @@ DECLARE_MUSIC(unlinkedtitlescreen);
 
 UINT8 collision_tiles[] = {4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 33, 34, 35, 36, 37, 38, 62, 63, 64, 65, 66, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 0};
 UINT8 collision_tiles2[] = {4, 5, 6 ,7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 56, 57, 58, 59, 60, 61, 62, 63, 77, 78, 79, 80, 81, 82, 83, 84, 0};
+UINT8 collision_tiles3[] = {4, 5, 6 ,7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 56, 57, 58, 59, 60, 61, 62, 63, 0};
+
 
 UINT8 collision_boss1[] = {4, 8, 64, 68,  0};
 
@@ -125,7 +127,7 @@ extern BOOLEAN door_button;
 
 
 
-UINT8 current_level = 0;
+UINT8 current_level = 26;
 
 UINT8 doAnimCount = 0;
 
@@ -342,7 +344,7 @@ void START()
 			TMA_REG = 180u;
 		}else if(current_level > 19 && current_level < 27){
 			TMA_REG = 175u;
-		}else if(current_level > 26 && current_level < 30){
+		}else if(current_level > 26 && current_level < 31){
 			TMA_REG = 192u;
 		}else if(current_level == 0){
 			TMA_REG = 154u;
@@ -363,8 +365,10 @@ void START()
 		InitScroll(level->bank, level->map, bossfight_col, 0);
 	}else if( current_level < 20){
 		InitScroll(level->bank, level->map, collision_tiles, 0);
-	}else if( current_level > 19){
+	}else if( current_level > 19 && current_level < 27 ){
 		InitScroll(level->bank, level->map, collision_tiles2, 0);
+	}else if( current_level > 26 ){
+		InitScroll(level->bank, level->map, collision_tiles3, 0);
 	}
 
 
@@ -509,6 +513,7 @@ void START()
 		
 		case 27:
 			PlayMusic(unlinkedrooftop, 1);
+			door_time_btwn_start = door_time_btwn = 80;
 			ScrollRelocateMapTo(0,48);
 			SetHudWin(1);
 			IsCutscene = 0;
@@ -518,30 +523,33 @@ void START()
 			break;
 		
 		case 29:
-			canDo = 0;
-			dialog = 0;
-			AutomaticOnOff(collision_tiles2, canDo);
 			ScrollRelocateMapTo(0,48);
 			SetHudWin(1);
 			IsCutscene = 0;
 			state_interrupts = 0;
+			door_time_btwn_start = door_time_btwn = 80;
+			canDo = 0;
+			dialog = 0;
+			AutomaticOnOff(collision_tiles2, canDo);
 			break;
 			
 		case 30:
 			ScrollRelocateMapTo(0,48);
-			onoff_auto_time = 20;
-			canDo = 0;
 			SetHudWin(1);
+			door_time_btwn_start = door_time_btwn = 100;
 			IsCutscene = 0;
 			state_interrupts = 0;
+			canDo = 1;
+			dialog = 0;
+			onoff_auto_time = 20;
 			AutomaticOnOff(collision_tiles2, canDo);
 			break;
 
 		case 31:
 			ScrollRelocateMapTo(40,40);
+			SetHudWin(1);
 			// onoff_auto_time = 20;
 			// canDo = 0;
-			SetHudWin(1);
 			AnimCounter = 0;
 			IsCutscene = 0;
 			state_interrupts = 3;
@@ -551,6 +559,7 @@ void START()
 			bossAttackState = 0;
 			doAnimCount = 3;
 			Attacks_Animations(30);
+			SHOW_SPRITES;
 			break;
 
 		default:
@@ -882,7 +891,7 @@ void UPDATE()
 		
 		if(start_screen == 0){
 			
-			if(AnimCounter == 0){
+			if(AnimCounter == 0 && current_level < 27){
 				Spike_anim(&spikesAnim, 112, BANK(spikesAnim));
 			}else{
 				Spike_anim(&spikesAnim2, 112, BANK(spikesAnim2));

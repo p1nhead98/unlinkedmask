@@ -145,45 +145,66 @@ void CheckDeathTiles(){
     
 
     if(current_level != 31){
-        if(  ( THIS->x > 1449 && THIS->x < 1488) || ( THIS->x > 1697 && THIS->x < 1736) || ( THIS->x > 1825 && THIS->x < 1864)  ){
-            if(canDo == 0 && player_state != 11){
-                current_life = 0;
-                ScreenShake(1,1);
-                RefreshLife();
-                SetSpriteAnim(THIS, anim_death, 15);
-                player_state = 11;
+        if(current_level == 25){
+            if(  ( THIS->x > 1449 && THIS->x < 1488) || ( THIS->x > 1697 && THIS->x < 1736) || ( THIS->x > 1825 && THIS->x < 1864)  ){
+                if(canDo == 0 && player_state != 11){
+                    current_life = 0;
+                    ScreenShake(1,1);
+                    RefreshLife();
+                    SetSpriteAnim(THIS, anim_death, 15);
+                    player_state = 11;
+                }
+            }else if(( (THIS->x > 1281 && THIS->x < 1336) && THIS->y < 104)){
+                if(canDo == 0 && player_state != 11){
+                    current_life = 0;
+                    ScreenShake(1,1);
+                    RefreshLife();
+                    SetSpriteAnim(THIS, anim_death, 15);
+                    player_state = 11;
+                }
+            }else if( ( THIS->x > 169 && THIS->x < 224 ) || ( THIS->x > 297 && THIS->x < 336) || ( THIS->x > 705 && THIS->x < 432) || ( THIS->x > 449 && THIS->x < 488) || ( THIS->x > 505 && THIS->x < 544) || ( THIS->x > 1369 && THIS->x < 1408) || ( THIS->x > 1553 && THIS->x < 1592 ) || ( THIS->x > 1761 && THIS->x < 1800) ){
+                if(canDo == 1 && player_state != 11){
+                    current_life = 0;
+                    ScreenShake(1,1);
+                    RefreshLife();
+                    SetSpriteAnim(THIS, anim_death, 15);
+                    player_state = 11;
+                }
+            }else if((colision == 60 || colision == 61 || colision == 62 || colision == 63)){
+                if(canDo == 1 && player_state != 11){
+                    current_life = 0;
+                    ScreenShake(1,1);
+                    RefreshLife();
+                    SetSpriteAnim(THIS, anim_death, 15);
+                    player_state = 11;
+                }
+            }else if((colision == 56 || colision == 57 || colision == 58 || colision == 59)){
+                if(canDo == 0 && player_state != 11){
+                    current_life = 0;
+                    ScreenShake(1,1);
+                    RefreshLife();
+                    SetSpriteAnim(THIS, anim_death, 15);
+                    player_state = 11;
+                }
             }
-        }else if(( (THIS->x > 1281 && THIS->x < 1336) && THIS->y < 104)){
-            if(canDo == 0 && player_state != 11){
-                current_life = 0;
-                ScreenShake(1,1);
-                RefreshLife();
-                SetSpriteAnim(THIS, anim_death, 15);
-                player_state = 11;
-            }
-        }else if( ( THIS->x > 169 && THIS->x < 224 ) || ( THIS->x > 297 && THIS->x < 336) || ( THIS->x > 705 && THIS->x < 432) || ( THIS->x > 449 && THIS->x < 488) || ( THIS->x > 505 && THIS->x < 544) || ( THIS->x > 1369 && THIS->x < 1408) || ( THIS->x > 1553 && THIS->x < 1592 ) || ( THIS->x > 1761 && THIS->x < 1800) ){
-            if(canDo == 1 && player_state != 11){
-                current_life = 0;
-                ScreenShake(1,1);
-                RefreshLife();
-                SetSpriteAnim(THIS, anim_death, 15);
-                player_state = 11;
-            }
-        }else if((colision == 60 || colision == 61 || colision == 62 || colision == 63)){
-            if(canDo == 1 && player_state != 11){
-                current_life = 0;
-                ScreenShake(1,1);
-                RefreshLife();
-                SetSpriteAnim(THIS, anim_death, 15);
-                player_state = 11;
-            }
-        }else if((colision == 56 || colision == 57 || colision == 58 || colision == 59)){
-            if(canDo == 0 && player_state != 11){
-                current_life = 0;
-                ScreenShake(1,1);
-                RefreshLife();
-                SetSpriteAnim(THIS, anim_death, 15);
-                player_state = 11;
+        }
+        if(current_level == 29 || current_level == 30){
+            if((colision == 60 || colision == 61 || colision == 62 || colision == 63)){
+                if(canDo == 1 && player_state != 11){
+                    current_life = 0;
+                    ScreenShake(1,1);
+                    RefreshLife();
+                    SetSpriteAnim(THIS, anim_death, 15);
+                    player_state = 11;
+                }
+            }else if((colision == 56 || colision == 57 || colision == 58 || colision == 59)){
+                if(canDo == 0 && player_state != 11){
+                    current_life = 0;
+                    ScreenShake(1,1);
+                    RefreshLife();
+                    SetSpriteAnim(THIS, anim_death, 15);
+                    player_state = 11;
+                }
             }
         }
 
@@ -647,7 +668,7 @@ void UPDATE()
         }
 
         CheckCollisionTile();
-        if(current_level == 25){
+        if(current_level == 25 || current_level == 29 || current_level == 30){
             CheckDeathTiles();
         }
         if(current_level > 26){
@@ -834,17 +855,16 @@ void UPDATE()
                     player_state = 3;
                     player_accel_y = -83;
                     SetSpriteAnim(THIS, anim_spin, 20);
+                }else if(CheckCollision(THIS, spr) && THIS->y + 8 > (spr->y + 12) && player_state != 11){
+                    current_life = 0;
+                    ScreenShake(1,1);
+                    RefreshLife();
+                    SetSpriteAnim(THIS, anim_death, 15);
+                    player_state = 11;
                 }
-                // else if(CheckCollision(THIS, spr) && THIS->y + 8 > (spr->y) && player_state != 11){
-                //     current_life = 0;
-                //     ScreenShake(1,1);
-                //     RefreshLife();
-                //     SetSpriteAnim(THIS, anim_death, 15);
-                //     player_state = 11;
-                // }
             }
 
-            if(spr->type == SpriteOnOffBtn) {
+            if(spr->type == SpriteOnOffBtn || spr->type == SpriteKaizoBlock) {
                 CUSTOM_DATA_BOX* sprData = (CUSTOM_DATA_BOX*)spr->custom_data;
                 if(CheckCollision(THIS, spr) && THIS->y >= (spr->y) && (player_state == 1 || player_state == 2 || player_state == 3 || player_state == 4) && player_accel_y < 0) {
                     // THIS->y -= 5;

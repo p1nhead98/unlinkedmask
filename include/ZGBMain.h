@@ -54,6 +54,7 @@ _SPRITE_DMG(SpriteBossFire, BossTrailer3)\
 _SPRITE_DMG(SpriteElevatorFloor1, elevFloor1)\
 _SPRITE_DMG(SpriteElevatorFloor2, elevFloor2)\
 _SPRITE_DMG(SpriteElevatorFloor3, elevFloor3)\
+_SPRITE_DMG(SpriteKaizoBlock, kaizoBlock)\
 SPRITE_DEF_END
 
 #include "ZGBMain_Init.h"

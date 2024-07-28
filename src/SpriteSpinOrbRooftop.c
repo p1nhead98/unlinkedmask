@@ -17,13 +17,7 @@ void CheckCollisionOrb(CUSTOM_DATA_ORB* data)
     
     UINT8 colision = GetScrollTile((THIS->x + 16u) >> 3, (THIS->y + 6u) >> 3);
     UINT8 colision2 = GetScrollTile((THIS->x ) >> 3, (THIS->y + 6u) >> 3);
-    // if(data->state == 2){
-    //     colision = GetScrollTile((THIS->x + 12) >> 3, (THIS->y + 4u) >> 3);
-    // }else if (data->state == 3){
-    //     colision = data->initial_speed == 3 ? GetScrollTile((THIS->x + 9u) >> 3, (THIS->y + 2u) >> 3) : GetScrollTile((THIS->x + 9u) >> 3, (THIS->y + 3u) >> 3);
-    // }else if(data->state == 4){
-    //     colision = GetScrollTile((THIS->x + 3u) >> 3, (THIS->y + 4u) >> 3);
-    // }else
+
     if(data->state == 3){
         colision =  GetScrollTile((THIS->x + 12u) >> 3, (THIS->y + 4u) >> 3) ;
     }else if(data->state == 4){
@@ -48,75 +42,6 @@ void CheckCollisionOrb(CUSTOM_DATA_ORB* data)
         data->initial_state = 9; 
        data->state = 9;
     }
-    // if(colision == 116 ){
-    //     SpriteManagerRemove(THIS_IDX);
-    // }
-
-    // if(colision == 92 && data->state != 7 ){
-    //     data->state = 7;
-    // }else if( colision == 101 && data->state != 2 ){
-    //     data->initial_state = 2;
-    //     data->state = 6;
-    //     data->initial_speed = 2;
-    // }else if( colision == 102 && data->state != 5 ){
-    //     data->initial_state = 5;
-    //     data->state = 6;
-    //     data->initial_speed = 2;
-    // }else if( colision == 103 && data->state != 4 ){
-    //     data->initial_state = 4;
-    //     data->state = 6;
-    //     data->initial_speed = 2;
-    // }else if( colision == 104 && data->state != 3 ){
-    //     data->initial_state = 3;
-    //     data->state = 6;
-    //     data->initial_speed = 2;
-    // }else if(colision == 97 && data->state != 2 ){
-    //     data->initial_state = 2;
-    //     data->state = 6;
-    //     data->initial_speed = 1;
-    // }else if( colision == 98 && data->state != 5){
-    //     data->initial_state = 5;
-    //     data->state = 6;
-    //     data->initial_speed = 1;
-    // }else if( colision == 99 && data->state != 4){
-    //     data->initial_state = 4;
-    //     data->state = 6;
-    //     data->initial_speed = 1;
-    // }else if( colision == 100 && data->state != 3){
-    //     data->initial_state = 3;
-    //     data->state = 6;
-    //     data->initial_speed = 1;
-    // }if(colision == 93 && data->state != 2 ){
-    //     data->initial_state = 2;
-    //     data->state = 6;
-    //     data->initial_speed = 3;
-    // }else if( colision == 94 && data->state != 5){
-    //     data->initial_state = 5;
-    //     data->state = 6;
-    //     data->initial_speed = 3;
-    // }else if( colision == 95 && data->state != 4){
-    //     data->initial_state = 4;
-    //     data->state = 6;
-    //     data->initial_speed = 3;
-    // }else if( colision == 96 && data->state != 3){
-    //     data->initial_state = 3;
-    //     data->state = 6;
-    //     data->initial_speed = 3;
-    // }
-
-    // if(colision2 == 93 && (data->state == 2 || data->state == 9)){
-    //     data->initial_state = 8;
-    //     data->state = 6;
-    //     data->initial_speed = 3;
-    // }else if(colision2 == 101 && (data->state == 2 || data->state == 8)){
-    //     data->initial_state = 9;
-    //     data->state = 6;
-    //     data->initial_speed = 2;
-    //     data->speed = 1;
-    // }
-        
-    
-   
 
 }
 
@@ -135,9 +60,8 @@ void START()
         data->initial_speed = 2;
     }
     data->speed = data->initial_speed;
-    THIS->y += 8;
-    THIS->x -= 4;
-    THIS->lim_x = 80;
+    
+    THIS->lim_x = 150;
     THIS->lim_y = 80;
     UINT8 colision = GetScrollTile((THIS->x + 16u) >> 3, (THIS->y + 8u) >> 3);
     if (colision == 106){
@@ -148,52 +72,64 @@ void START()
 
     switch(current_level){
         case 27:
-            if(THIS->x > 496 && THIS->x < 616){
+            if(THIS->x < 208){
+                data->initial_state = data->state = 2;
+                THIS->y -= 8;
+                THIS->x += 4;
+            }else if(THIS->x > 224 && THIS->x < 344){
+                data->initial_state = data->state = 2;
+                THIS->y -= 6;
+                THIS->x += 4;
+            }else if(THIS->x > 496 && THIS->x < 616){
                 data->state = 1;
-                THIS->y += 4;
-                THIS->x += 12;
+                THIS->y += 12;
+                THIS->x -= 2;
             }else  if(THIS->x > 872 && THIS->x < 928){
                 data->state = 8;
-                THIS->y += 32;
-                THIS->x;
+                THIS->y += 40;
+                THIS->x += 4;
             }else if(THIS->x > 1320 ){
-                THIS->y -= 12;
-                THIS->x -= 12;
+                THIS->y -= 4;
+                THIS->x -= 28;
             }
-        break;
+            break;
         case 28:
             if(THIS->x < 128){
-                THIS->x += 40;
+                THIS->x += 36;
                 THIS->y -= 32;
                 data->state = 2;
             }
             if(THIS->x > 688 && THIS->x < 912){
                 data->state = 1;
                 THIS->x += 8;
-                THIS->y -= 4;
+                THIS->y += 4;
             }
             if(THIS->x > 1016){
                 data->state = 12;
-                THIS->x -= 8;
-                THIS->y += 44;
+                THIS->x -= 12;
+                THIS->y += 48;
         
             }
-        break;
+            break;
         case 29:
             if(THIS->x > 216 && THIS->x < 344){
-                THIS->y-=20;
+                THIS->y-=11;
+                THIS->x-=2;
             }else if(THIS->x > 448 && THIS->x < 896){
-                THIS->x-=8;
-                THIS->y-=10;
+                THIS->x-=12;
+                THIS->y-=6;
                 data->state = 17;
             }else if(THIS->x > 897 ){
                 data->state = 17;
+                THIS->x-=4;
+                THIS->y+=8;
             }
-        break;
+            break;
         case 30:
-            THIS->y-=4;
+            THIS->y+=4;
             data->state = 1;
-        break;
+            data->speed = 2;
+            break;
     }
   
 
@@ -214,7 +150,7 @@ void UPDATE()
         }
 
         if(data->state != 0){
-            CheckCollisionOrb(data);
+            // CheckCollisionOrb(data);
         }
         switch(data->state){
             case 3:
@@ -262,6 +198,9 @@ void UPDATE()
             case 23:
             THIS->y-=3;
             break;
+            case 24: 
+                THIS->y++;
+                break;
         
 
             
@@ -270,13 +209,13 @@ void UPDATE()
 
     if(current_level == 27){
         if(current_level == 27 && THIS->x > 224 && THIS->x < 344){
-            if(data->state == 3 && THIS->y == 117){
+            if(data->state == 3 && THIS->y > 115){
                 data->state = 4;
-            }else if(data->state == 4 && THIS->x == 276){
+            }else if(data->state == 4 && THIS->x > 274 && THIS->y < 138){
                 data->state = 5;
-            }else if(data->state == 6 && THIS->y == 141){
+            }else if(data->state == 6 && THIS->y > 137){
                 data->state = 4;
-            }else if(data->state == 4 && THIS->x == 324){
+            }else if(data->state == 4 && (THIS->y > 138 && THIS->x > 324 )){
                 data->state = 10;
             }
         }
@@ -307,7 +246,7 @@ void UPDATE()
                 data->state = 0;
             }else if(data->state == 9 && THIS->x == 852){
                 data->state = 12;
-            }else if(data->state == 11 && THIS->y == 128){
+            }else if(data->state == 11 && THIS->y < 120){
                 data->state = 10;
             }
         }else if(THIS->x > 1016){
@@ -359,6 +298,14 @@ void UPDATE()
             data->state = 15;
         }else if (data->state == 15 && THIS->y > 187 && THIS->x > 779){
             data->state = 23;
+        }else if(data->state == 23 && THIS->y < 46 && THIS->x > 779 ){
+            data->state = 9;
+        }else if(data->state == 9 && THIS->x > 1147){
+            data->state = 24;
+        }else if(data->state == 24 && THIS->y > 139 && THIS->x < 1216){
+            data->state = 4;
+        }else if(data->state == 4 && THIS->x > 1306){
+            data->state = 24;
         }
     }
         // switch (data->state)
