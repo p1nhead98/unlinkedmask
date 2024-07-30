@@ -51,6 +51,9 @@ typedef struct {
 	INT8 start;
 } CUSTOM_DATA_PFX;
 
+typedef struct {
+	UINT8 priority;
+} CUSTOM_DATA_PRIORITY;
 
 
 

@@ -52,6 +52,7 @@ INT8 player_state = 0;
 INT8 player_last_state = 0;
 UINT8 player_collision = 0;
 UINT8 player_counter = 0;
+UINT8 player_priority = 0;
 // UINT8 player_dj = 0;
 
 UINT8 player_start = 0;
@@ -144,7 +145,7 @@ void CheckDeathTiles(){
     UINT8 colision = GetScrollTile((THIS->x + 3u) >> 3, (THIS->y + 12u) >> 3);
     
 
-    if(current_level != 31){
+    if(current_level != 32){
         if(current_level == 25){
             if(  ( THIS->x > 1449 && THIS->x < 1488) || ( THIS->x > 1697 && THIS->x < 1736) || ( THIS->x > 1825 && THIS->x < 1864)  ){
                 if(canDo == 0 && player_state != 11){
@@ -188,9 +189,9 @@ void CheckDeathTiles(){
                 }
             }
         }
-        if(current_level == 29 || current_level == 30){
+        if(current_level == 29 ){
             if((colision == 60 || colision == 61 || colision == 62 || colision == 63)){
-                if(canDo == 1 && player_state != 11){
+                if(on_off == 1 && player_state != 11){
                     current_life = 0;
                     ScreenShake(1,1);
                     RefreshLife();
@@ -198,13 +199,35 @@ void CheckDeathTiles(){
                     player_state = 11;
                 }
             }else if((colision == 56 || colision == 57 || colision == 58 || colision == 59)){
-                if(canDo == 0 && player_state != 11){
+                if(on_off == 0 && player_state != 11){
                     current_life = 0;
                     ScreenShake(1,1);
                     RefreshLife();
                     SetSpriteAnim(THIS, anim_death, 15);
                     player_state = 11;
                 }
+            }
+
+            if ((colision == 81 || colision == 82 || colision == 83 || colision == 84) && on_off == 0)
+            {
+                if(canHurt && player_state != 11){
+                    inmunity = InmunityTime;
+                    canHurt = 0;
+                    current_life--;
+                    ScreenShake(1,1);
+                    RefreshLife();
+                }
+                
+            }else if ((colision == 85 || colision == 86 || colision == 87 || colision == 88) && on_off == 1)
+            {
+                if(canHurt && player_state != 11){
+                    inmunity = InmunityTime;
+                    canHurt = 0;
+                    current_life--;
+                    ScreenShake(1,1);
+                    RefreshLife();
+                }
+                
             }
         }
 
@@ -244,7 +267,7 @@ void ChangeJumpCollision(){
     UINT8 colision6 = GetScrollTile((THIS->x + 10u) >> 3, (THIS->y + 8u ) >> 3);
 
     
-    if(current_level > 26 && current_level != 31){
+    if(current_level > 26 && current_level != 32){
         if((colision == 47 || colision2 == 47 || colision3 == 47 || colision4 == 47 || colision5 == 47 || colision6 == 47) && change_jump_count == 0){
             change_jump_count = 20;
      
@@ -276,7 +299,7 @@ void CheckCollisionTile()
     UINT8 colision3 = GetScrollTile((THIS->x + 10u) >> 3, (THIS->y + 16u) >> 3);
 
     
-    if(current_level != 31){
+    if(current_level != 32){
         if (colision == 112 || colision == 113 || colision == 114 || colision == 115)
         {
             if(canHurt && player_state != 11){
@@ -344,10 +367,30 @@ void CheckCollisionTile()
 
 }
 
+void PriorityCheck(){
+    if(THIS->x < 37 && player_priority == 0){
+        player_priority = 1;
+    }else if(THIS->x > 37 && THIS->x < 210 && player_priority == 1){
+        player_priority = 0;
+    }else if(THIS->x > 210 && THIS->x < 292 && player_priority == 0){
+        player_priority = 1;
+    }else if(THIS->x > 292 && THIS->x < 466 && player_priority == 1){
+        player_priority = 0;
+    }else if(THIS->x > 467 && THIS->x < 548 && player_priority == 0){
+        player_priority = 1;
 
+    }else if(THIS->x > 548 && THIS->x < 724 && player_priority == 1){
+        player_priority = 0;
+    }else if(THIS->x > 722 && player_priority == 0){
+        player_priority = 1;
+    }
+}
 
 void START()
 {
+    CUSTOM_DATA_PRIORITY* data = (CUSTOM_DATA_PRIORITY*)THIS->custom_data;
+    
+
     player_state = 0;
     player_accel_y = 0;
     player_collision = 0;
@@ -370,13 +413,17 @@ void START()
     inmunity = 0;
     canHurt = inmunity < 1 ? 1 : 0;
     bossCanHurt = 0;
+    THIS->mt_sprite->props = 57;
+   
     // player_dj = 0;
 
+    player_priority = current_level == 31 ? 1 : 0;
+    THIS->mirror = current_level == 31 ? NM_PRIOR : NO_MIRROR;
 }
 
 void UPDATE()
 {
-
+    CUSTOM_DATA_PRIORITY* data = (CUSTOM_DATA_PRIORITY*)THIS->custom_data;
     UINT8 i;
 	Sprite* spr;
 
@@ -409,9 +456,11 @@ void UPDATE()
             }
         }
 
-        if (current_level == 31)
+        if (current_level == 32)
         {
             boss1Collisions(bossCanHurt);
+        }else if(current_level == 31){
+            PriorityCheck();
         }
         
 
@@ -435,11 +484,11 @@ void UPDATE()
                 if(KEY_PRESSED(J_LEFT) && !KEY_PRESSED(J_RIGHT) && THIS->x > scroll_x + 2){
                     TranslateSprite(THIS, -2 << delta_time, 0);
                     SetSpriteAnim(THIS, anim_walk, 15);
-                    THIS->mirror = V_MIRROR;
+                    THIS->mirror = player_priority == 1 ? VM_PRIOR : V_MIRROR;
                 }else if(KEY_PRESSED(J_RIGHT) && !KEY_PRESSED(J_LEFT)){
                     TranslateSprite(THIS, 2 << delta_time, 0);
                     SetSpriteAnim(THIS, anim_walk, 15);
-                    THIS->mirror = NO_MIRROR;
+                    THIS->mirror = player_priority == 1 ? NM_PRIOR : NO_MIRROR;
                 }else if(!KEY_PRESSED(J_RIGHT) && !KEY_PRESSED(J_LEFT)){
                     SetSpriteAnim(THIS, anim_idle, 15);
                 }
@@ -478,11 +527,11 @@ void UPDATE()
                 }
                 if(KEY_PRESSED(J_LEFT) && !KEY_PRESSED(J_RIGHT) && THIS->x > scroll_x + 2){
                     TranslateSprite(THIS, -2 << delta_time, 0);
-                    THIS->mirror = V_MIRROR;
+                    THIS->mirror = player_priority == 1 ? VM_PRIOR : V_MIRROR;
                     
                 }else if(KEY_PRESSED(J_RIGHT) && !KEY_PRESSED(J_LEFT)){
                     TranslateSprite(THIS, 2 << delta_time, 0);
-                    THIS->mirror = NO_MIRROR;
+                    THIS->mirror = player_priority == 1 ? NM_PRIOR : NO_MIRROR;
                 }
             break;
         case 2:
@@ -493,11 +542,11 @@ void UPDATE()
                 
                 if(KEY_PRESSED(J_LEFT) && !KEY_PRESSED(J_RIGHT) && THIS->x > scroll_x + 2){
                     TranslateSprite(THIS, -2 << delta_time, 0);
-                    // THIS->mirror = V_MIRROR;
+                    THIS->mirror = player_priority == 1 ? VM_PRIOR : V_MIRROR;
                     
                 }else if(KEY_PRESSED(J_RIGHT) && !KEY_PRESSED(J_LEFT)){
                     TranslateSprite(THIS, 2 << delta_time, 0);
-                    // THIS->mirror = NO_MIRROR;
+                    THIS->mirror = player_priority == 1 ? NM_PRIOR : NO_MIRROR;
                 }
             break;
             case 3:
@@ -507,11 +556,11 @@ void UPDATE()
                 
                 if(KEY_PRESSED(J_LEFT) && !KEY_PRESSED(J_RIGHT) && THIS->x > scroll_x + 2){
                     TranslateSprite(THIS, -2 << delta_time, 0);
-                    // THIS->mirror = V_MIRROR;
+                    THIS->mirror = player_priority == 1 ? VM_PRIOR : V_MIRROR;
                     
                 }else if(KEY_PRESSED(J_RIGHT) && !KEY_PRESSED(J_LEFT)){
                     TranslateSprite(THIS, 2 << delta_time, 0);
-                    // THIS->mirror = NO_MIRROR;
+                    THIS->mirror = player_priority == 1 ? NM_PRIOR : NO_MIRROR;
                 }
             break;
             case 4:
@@ -524,24 +573,24 @@ void UPDATE()
                 }
                 if(KEY_PRESSED(J_LEFT) && !KEY_PRESSED(J_RIGHT) && THIS->x > scroll_x + 2){
                     TranslateSprite(THIS, -2 << delta_time, 0);
-                    THIS->mirror = V_MIRROR;
+                    THIS->mirror = player_priority == 1 ? VM_PRIOR : V_MIRROR;
                     
                 }else if(KEY_PRESSED(J_RIGHT) && !KEY_PRESSED(J_LEFT)){
                     TranslateSprite(THIS, 2 << delta_time, 0);
-                    THIS->mirror = NO_MIRROR;
+                    THIS->mirror = player_priority == 1 ? NM_PRIOR : NO_MIRROR;
                 }
             break;
             case 8: //animacion al entrar a un nivel
                 if(IsFirstLvl){
                     player_accel_y = -80;
-                    THIS->mirror = NO_MIRROR;
+                    THIS->mirror = player_priority == 1 ? NM_PRIOR : NO_MIRROR;
                     
                     SetSpriteAnim(THIS, anim_jump, 15);
                     player_state = 12;
                 }else{  
                     TranslateSprite(THIS, 1, 0);
                     SetSpriteAnim(THIS, anim_walk, 15);
-                    THIS->mirror = NO_MIRROR;
+                    THIS->mirror = player_priority == 1 ? NM_PRIOR : NO_MIRROR;
                     if(THIS->x == 16){
                         player_state = 0;
                     }
@@ -550,7 +599,7 @@ void UPDATE()
             break;
             case 9: //animacion al llegar al limite del nivel
                 THIS->x++;
-                THIS->mirror = NO_MIRROR;
+                THIS->mirror = player_priority == 1 ? NM_PRIOR : NO_MIRROR;
                 if(THIS->x >= (scroll_x + 172)){
                     current_level++;
                     SetState(current_state);
@@ -582,11 +631,11 @@ void UPDATE()
                 }
                 if(KEY_PRESSED(J_LEFT) && !KEY_PRESSED(J_RIGHT) && THIS->x > scroll_x + 2){
                     TranslateSprite(THIS, -2 << delta_time, 0);
-                    THIS->mirror = V_MIRROR;
+                    THIS->mirror = player_priority == 1 ? VM_PRIOR : V_MIRROR;
                     
                 }else if(KEY_PRESSED(J_RIGHT) && !KEY_PRESSED(J_LEFT)){
                     TranslateSprite(THIS, 2 << delta_time, 0);
-                    THIS->mirror = NO_MIRROR;
+                    THIS->mirror = player_priority == 1 ? NM_PRIOR : NO_MIRROR;
                 }
             break;
             case 11:
@@ -667,13 +716,17 @@ void UPDATE()
             }
         }
 
-        CheckCollisionTile();
-        if(current_level == 25 || current_level == 29 || current_level == 30){
-            CheckDeathTiles();
+        if(current_level != 31){
+            
+            CheckCollisionTile();
+            if(current_level == 25 || current_level == 29 || current_level == 30){
+                CheckDeathTiles();
+            }
+            if(current_level > 26 && current_level < 31){
+                ChangeJumpCollision();
+            }
         }
-        if(current_level > 26){
-            ChangeJumpCollision();
-        }
+
 
 
         SPRITEMANAGER_ITERATE(i, spr) {

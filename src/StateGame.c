@@ -47,6 +47,8 @@ IMPORT_MAP(lvl_20);
 IMPORT_MAP(lvl_20);
 IMPORT_MAP(bossfight1);
 
+IMPORT_MAP(boss2Electric);
+
 //CUTSCENES
 IMPORT_MAP(intro_door);
 IMPORT_MAP(cinematicCape);
@@ -56,6 +58,8 @@ IMPORT_MAP(capeCuts3);
 IMPORT_MAP(capeCuts7);
 IMPORT_MAP(capeCuts16);
 IMPORT_MAP(templeCuts);
+IMPORT_MAP(corridorCutscene);
+
 
 IMPORT_MAP(templeCuts);
 IMPORT_MAP(doorCuts);
@@ -102,6 +106,8 @@ UINT8 collision_tiles[] = {4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 33, 34,
 UINT8 collision_tiles2[] = {4, 5, 6 ,7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 56, 57, 58, 59, 60, 61, 62, 63, 77, 78, 79, 80, 81, 82, 83, 84, 0};
 UINT8 collision_tiles3[] = {4, 5, 6 ,7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 56, 57, 58, 59, 60, 61, 62, 63, 0};
 
+UINT8 collision_corridor[] = {109, 110, 111, 112, 113, 114, 116, 0};
+
 
 UINT8 collision_boss1[] = {4, 8, 64, 68,  0};
 
@@ -127,7 +133,7 @@ extern BOOLEAN door_button;
 
 
 
-UINT8 current_level = 26;
+UINT8 current_level = 31;
 
 UINT8 doAnimCount = 0;
 
@@ -239,9 +245,10 @@ const struct MapInfoBanked levels[] = {
 	BANKED_MAP(lvl_18),
 	BANKED_MAP(lvl_19),
 	BANKED_MAP(lvl_20),
+	BANKED_MAP(corridorCutscene),
 	BANKED_MAP(bossfight1),
 	BANKED_MAP(bossfightTrailer),
-	
+	BANKED_MAP(boss2Electric),
 };
 
 
@@ -283,8 +290,11 @@ const START_POS start_positions[] = {
 	{8, 96},  //Level 18 Player Start Position	----- current level = 28
 	{8, 96},  //Level 19 Player Start Position	----- current level = 29
 	{8, 96},  //Level 20 Player Start Position	----- current level = 30
-	{48, 136},  //boss fight Player Start Position	----- current level = 31
-	{28, 30},  //boss fight Player Start Position	----- current level = 32
+	{16, 96},  //CorridorCinematic Player Start Position	----- current level = 31
+	{48, 136},  //boss fight Player Start Position	----- current level = 32
+	{28, 30},  //boss fight Player Start Position	----- current level = 33
+
+	{28, 30},  //boss fight Player Start Position	----- current level = 34
 };
 
 
@@ -303,6 +313,7 @@ void START()
 	//Se establecen la paleta de colores de los sprites en DMG//////////////////////////////
 	OBP0_REG = PAL_DEF(3, 0, 1, 2);
 	OBP1_REG = PAL_DEF(1, 0, 0, 0);
+	BGP_REG = current_level == 31 ? PAL_DEF(1, 2, 3, 0) : PAL_DEF(0, 1, 2, 3); 
 	/////////////////////////////////////////////////////////
 
 	IsFirstLvl = current_level == 3 ? 1 : 0; // variable para realizar animacion de intro en primer nivel
@@ -344,7 +355,7 @@ void START()
 			TMA_REG = 180u;
 		}else if(current_level > 19 && current_level < 27){
 			TMA_REG = 175u;
-		}else if(current_level > 26 && current_level < 31){
+		}else if(current_level > 26 && current_level < 32){
 			TMA_REG = 192u;
 		}else if(current_level == 0){
 			TMA_REG = 154u;
@@ -357,12 +368,14 @@ void START()
 
 
 
-	if(current_level == 32){
+	if(current_level == 33){
 		InitScroll(level->bank, level->map, collision_boss_trailer, 0);
 	}else if(current_level == 25){
 		InitScroll(level->bank, level->map, ct_lvl25, 0);
-	}else if(current_level == 31){
+	}else if(current_level == 32){
 		InitScroll(level->bank, level->map, bossfight_col, 0);
+	}else if(current_level == 31){
+		InitScroll(level->bank, level->map, collision_corridor, 0);
 	}else if( current_level < 20){
 		InitScroll(level->bank, level->map, collision_tiles, 0);
 	}else if( current_level > 19 && current_level < 27 ){
@@ -544,8 +557,11 @@ void START()
 			onoff_auto_time = 20;
 			AutomaticOnOff(collision_tiles2, canDo);
 			break;
-
 		case 31:
+			SetHudWin(1);
+			IsCutscene = 2;
+			break;
+		case 32:
 			ScrollRelocateMapTo(40,40);
 			SetHudWin(1);
 			// onoff_auto_time = 20;
@@ -560,6 +576,10 @@ void START()
 			doAnimCount = 3;
 			Attacks_Animations(30);
 			SHOW_SPRITES;
+			break;
+		case 33:
+			state_interrupts = 4;
+			canDoInterrupt = 1;
 			break;
 
 		default:
@@ -588,7 +608,7 @@ void START()
 	
 
 	if(current_level != 0){
-		if(current_level == 31){
+		if(current_level == 32){
 			SpriteManagerAdd(SpriteBoss1, 144, 68);
 			bossFireAttack_spr = SpriteManagerAdd(SpriteBossFireFlash, 0, 138);
 		}
@@ -610,7 +630,7 @@ void START()
 		
 	}
 
-	if(current_level == 32){
+	if(current_level == 33){
 		SpriteManagerAdd(SpriteBossHand1, 32, 56);
 		SpriteManagerAdd(SpriteBossHand2, 112, 56);
 	}
@@ -630,8 +650,12 @@ void START()
 	NR51_REG = 0xFF; //Enables all channels (left and right)
 	NR50_REG = 0x77; //Max volume
 
-
-
+	// for (UINT8 i = 0; i < 32; i++)
+	// {
+	// 	set_sprite_prop(i,  S_FLIPY | S_FLIPX);
+	// }
+	
+	
 }
 
 void UPDATE()
@@ -884,7 +908,7 @@ void UPDATE()
 
 
 
-	if(--doAnimCount == 0 && IsCutscene == 0  && current_level != 31 ){
+	if(--doAnimCount == 0 && IsCutscene == 0  && current_level != 32 ){
 
 		
 		AnimCounter = AnimCounter == 1 ? 0 : 1;
@@ -917,7 +941,7 @@ void UPDATE()
 
 				
 			}
-			if(current_level > 26 && current_level != 31){
+			if(current_level > 26 && current_level < 31){
 				AnimCounter2++;
 				if(change_jump_count == 0){
 					Tile_Anim(AnimCounter2, 6, &spinChangerAnim, 47, BANK(spinChangerAnim));	
@@ -971,7 +995,7 @@ void UPDATE()
 		change_jump_count--;
 	}
 
-	if( current_level == 31){
+	if( current_level == 32){
 
 	
 		
