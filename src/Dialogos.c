@@ -25,9 +25,9 @@ extern UINT8 event;
 extern UINT8 state_counter;
 
 extern UINT8 text_voice;
+extern UINT8 player_cs_state;
 
-
-
+extern INT8 boss_state;
 
 IMPORT_TILES(mugshots);
 IMPORT_MAP(capeCutsWin);
@@ -233,6 +233,217 @@ void SetDialog() BANKED{
         current_level++;
         SetState(current_state);
         break;
+        
+    case 21:
+        CleanWin();
+        SetMugTiles(&mugshots, BANK(mugshots), 18);
+        SetMushot();
+        text_delay = tDelay;
+        text_voice = 2;
+		PRINT(3, 0, "you must be"); 
+		PRINT(3, 1, "viewer right?"); 
+        break;
+    case 22:
+        CleanText();
+      
+        text_delay = tDelay;
+		PRINT(3, 0, "many times, i"); 
+		PRINT(3, 1, "have thought i");
+        PRINT(3, 2, "was a lost soul."); 
+        break;
+    case 23:
+        CleanText();
+        text_delay = tDelay;
+		PRINT(3, 0, "guarding this"); 
+		PRINT(3, 1, "temple that was");
+        PRINT(3, 2, "once teeming"); 
+        break;
+
+    case 24:
+        CleanText();
+        text_delay = tDelay;
+        PRINT(3, 0, "with life...");
+        break;
+    case 25:
+        CleanText();
+        text_delay = tDelay;
+        PRINT(3, 0, "...");
+        break;
+    case 26:
+        CleanText();
+        text_delay = tDelay;
+		PRINT(3, 0, "i see that you"); 
+		PRINT(3, 1, "really accepted");
+        PRINT(3, 2, "the challenge"); 
+        break;
+    case 27:
+        CleanText();
+        text_delay = tDelay;
+		PRINT(3, 0, "of the elder"); 
+		PRINT(3, 1, "gods...");
+        break;
+
+    case 28:
+        CleanText();
+        text_delay = tDelay;
+		PRINT(3, 0, "that cape tells"); 
+		PRINT(3, 1, "the whole story."); 
+        break;
+    case 29:
+        CleanText();
+        text_delay = tDelay;
+		PRINT(3, 0, "however...");  
+        break;
+    case 30:
+        
+        CleanWin();    
+        LYC_REG = 0;
+        WY_REG = 144;
+        state_interrupts = 0;
+        HIDE_WIN;
+        dialog = 0;
+        canDo = 0;
+        player_cs_state = 8;
+        // FadeColorAndMusic();
+        // current_level++;
+        // SetState(current_state);
+        break;
+    case 31:
+        CleanWin();
+        SetMugTiles(&mugshots, BANK(mugshots), 18);
+        SetMushot();
+        text_delay = tDelay;
+        text_voice = 2;
+		PRINT(3, 0, "we were so naive,"); 
+		PRINT(3, 1, "don't you think?"); 
+        break;
+
+    case 32:
+        CleanText();
+        text_delay = tDelay;
+		PRINT(3, 0, "you don't really"); 
+		PRINT(3, 1, "know what lies"); 
+        PRINT(3, 2, "ahead."); 
+        break;
+    case 33:
+        CleanText();
+        text_delay = tDelay;
+		PRINT(3, 0, "there was a time"); 
+		PRINT(3, 1, "i had a body,"); 
+        break;
+    case 34:
+        CleanText();
+        text_delay = tDelay;
+		PRINT(3, 0, "a body that i"); 
+		PRINT(3, 1, "offered to take"); 
+        PRINT(3, 2, "care of this"); 
+        break;
+    case 35:
+        CleanText();
+        text_delay = tDelay;
+        PRINT(3, 0, "place.");
+       
+        break;
+    case 36:
+        CleanText();
+        text_delay = tDelay;
+		PRINT(3, 0, "a place where i"); 
+		PRINT(3, 1, "truly believed"); 
+        PRINT(3, 2, "i was special."); 
+        break;
+    case 37:
+        CleanText();
+        text_delay = tDelay;
+		PRINT(3, 0, "miserable or not,"); 
+		PRINT(3, 1, "that depends on"); 
+        PRINT(3, 2, "your perspective."); 
+        break;
+    case 38:
+        CleanText();
+        text_delay = tDelay;
+		PRINT(3, 0, "like ants"); 
+		PRINT(3, 1, "searching for "); 
+        PRINT(3, 2, "their food or"); 
+        break;
+    case 39:
+        CleanText();
+        text_delay = tDelay;
+		PRINT(3, 0, "not healed...");  
+        PRINT(3, 1, "scars that have"); 
+        break;
+    case 40:
+        CleanText();
+        text_delay = tDelay;
+		PRINT(3, 0, "sleepless nights."); 
+        break;
+    case 41:
+        CleanText();
+        text_delay = tDelay;
+		PRINT(3, 0, "what's your"); 
+		PRINT(3, 1, "motivation in ");
+		PRINT(3, 2, "life?");  
+        break;
+    case 42:
+        CleanText();
+        text_delay = tDelay;
+		PRINT(3, 0, "you know it, "); 
+		PRINT(3, 1, "don't you?");  
+        break;
+    case 43:
+        CleanText();
+        text_delay = tDelay;
+		PRINT(3, 0, "what i've found"); 
+		PRINT(3, 1, "out is that it"); 
+        PRINT(3, 2, "will never be too"); 
+        break;
+    case 44:
+        CleanText();
+        text_delay = tDelay;
+		PRINT(3, 0, "late to start"); 
+		PRINT(3, 1, "over.");  
+        break;
+    case 45:
+        CleanWin();    
+        LYC_REG = 0;
+        WY_REG = 144;
+        state_interrupts = 0;
+        HIDE_WIN;
+        dialog = 0;
+        canDo = 0;
+        FadeColorAndMusic();
+        current_level++;
+        SetState(current_state);
+        break;
+    case 46:
+        CleanWin();
+        SetMugTiles(&mugshots, BANK(mugshots), 18);
+        SetMushot();
+        text_delay = tDelay;
+        text_voice = 2;
+		PRINT(3, 0, "you..."); 
+        break;
+
+    case 47:
+        CleanText();
+        text_delay = tDelay;
+		PRINT(3, 0, "do you believe "); 
+		PRINT(3, 1, "me.");
+        PRINT(3, 1, "don't you?");
+         
+        break;
+
+    case 48:
+        CleanWin();    
+        LYC_REG = 0;
+        WY_REG = 144;
+        state_interrupts = 0;
+        HIDE_WIN;
+        dialog = 0;
+        canDo = 0;
+        boss_state = 60;
+        break;
+
+
         
     default:
         break;

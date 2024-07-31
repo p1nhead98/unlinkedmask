@@ -9,7 +9,7 @@
 #include "ZGBMain.h"
 #include "TileAnimation.h"
 #include "BossAttacks.h"
-
+#include "Dialogos.h"
 
 //ANIMATION TILES
 IMPORT_TILES(bossFalling);
@@ -22,6 +22,8 @@ IMPORT_TILES(bossIdleGround);
 IMPORT_TILES(bossFlySide);
 IMPORT_TILES(bossFlyIdle);
 IMPORT_TILES(bossFrontIdle);
+
+DECLARE_MUSIC(unlinkedboss);
 
 const UINT8 boss_flyidle[] = {3, 0, 1, 2};
 const UINT8 boss_6frames[] = {6, 0, 1, 2, 0, 1, 2};
@@ -36,9 +38,18 @@ UINT8 boss_counter = 0;
 UINT8 boss_counter2 = 0;
 UINT8 boss_counter3 = 0;
 UINT8 cantChangeAnim = 0;
+
 extern Sprite* bossFireAttack_spr;
 extern Sprite* player_sprite;
 extern UINT8 current_level;
+extern UINT8 AnimCounter2;
+extern UINT8 dialog;
+extern UINT8 player_cs_state;
+
+extern UINT8 state_interrupts;
+extern UINT8 dialog_pos;
+extern UINT8 IsCutscene;
+
 Sprite* bossSkullFlame_spr1 = 1;
 Sprite* bossSkullFlame_spr2 = 1;
 
@@ -51,8 +62,8 @@ UINT16 boss_y_2 = 0;
 void START()
 {
     CUSTOM_DATA_BTN* data = (CUSTOM_DATA_BTN*)THIS->custom_data;
-    SetSpriteAnim(THIS, boss_flyidle, 20);
-    data->state = 44;
+    SetSpriteAnim(THIS, boss_flyidle, 15);
+    
     boss_counter = 0;
     boss_counter2 = 0;
     boss_counter3 = 0;
@@ -63,7 +74,19 @@ void START()
     THIS->lim_x = 140;
     boss_y_1 = 0;
     boss_y_2 = 0;
-
+    if(current_level == 32){
+        Set_Sprite_Tiles(&bossIdleGround, BANK(bossIdleGround), 48, THIS->first_tile);
+        data->state = 54;
+    }else if(current_level == 34){
+        if(IsCutscene == 1){
+            data->state = 58;
+            boss_counter = 50;
+        }else{
+            data->state = 60;
+            boss_counter = 50;
+        }
+        
+    }
 
 }
 
@@ -345,10 +368,10 @@ void UPDATE()
                     THIS->mirror = NO_MIRROR;
                 }
                 
-                bossSkullFlame_spr1 = SpriteManagerAdd(SpriteSkullFlame, THIS->x - 18, THIS->y);
+                bossSkullFlame_spr1 = SpriteManagerAdd(SpriteSkullFlame, THIS->x - 18, THIS->y - 4);
                 CUSTOM_DATA* dataFlame1 = (CUSTOM_DATA*)bossSkullFlame_spr1->custom_data;
                 dataFlame1->state = 0;
-                bossSkullFlame_spr2 = SpriteManagerAdd(SpriteSkullFlame, THIS->x + 16, THIS->y);
+                bossSkullFlame_spr2 = SpriteManagerAdd(SpriteSkullFlame, THIS->x + 16, THIS->y - 4);
                 CUSTOM_DATA* dataFlame2 = (CUSTOM_DATA*)bossSkullFlame_spr2->custom_data;
                 dataFlame2->state = 1;
             }
@@ -393,6 +416,7 @@ void UPDATE()
                     Attacks_Animations(30);
                 }
                 boss_counter2++;
+                AnimCounter2 = 1;
                 if(boss_counter2 == 7){
                     data->state++;
                     boss_state = 25;
@@ -728,6 +752,74 @@ void UPDATE()
 		        SetState(current_state);
             }
             break;
+
+        case 54: // CINEMATICA
+            if(player_cs_state == 8){
+                data->state++;
+                boss_counter = 40;
+            }
+            break;
+        case 55:
+            if(--boss_counter == 0){
+                data->state++;
+                PlayFx(CHANNEL_4, 15, 0x3f, 0xf1, 0x24, 0xc0);
+                PlayFx(CHANNEL_1, 15, 0x53, 0x82, 0x52, 0x88, 0x84);
+                Set_Sprite_Tiles(&bossFlyIdle, BANK(bossFlyIdle), 48, THIS->first_tile);
+            }
+            break;
+        case 56:
+            if(THIS->y < 80){
+                data->state++;
+                boss_counter = 40;
+                Set_Sprite_Tiles(&bossFrontIdle, BANK(bossFrontIdle), 48, THIS->first_tile);
+               
+            }else{
+                THIS->y--;
+            }
+            break;
+
+        case 57:
+            if(--boss_counter == 0){
+                current_level++;
+		        SetState(current_state);
+            }
+            break;
+
+        case 58:
+            if(--boss_counter == 0){
+                data->state++;
+				CleanWin();
+				dialog_pos = 120;
+				dialog = 1;
+				WY_REG = dialog_pos;
+				state_interrupts = 1;
+				LYC_REG = 0;
+                boss_counter = 50;
+            }
+            break;
+        case 59:
+            if(boss_state == 60){
+                data->state++;
+            } 
+            break;
+        case 60:
+            if(--boss_counter == 0){
+                IsCutscene = 0;
+                data->state = 0;
+                bossFireAttack_spr = SpriteManagerAdd(SpriteBossFireFlash, 0, 138);
+                PlayMusic(unlinkedboss, 1);
+                // data->state++;
+				// CleanWin();
+				// dialog_pos = 120;
+				// dialog = 1;
+				// WY_REG = dialog_pos;
+				// state_interrupts = 1;
+				// LYC_REG = 0;
+            }
+            break;
+
+
+
 
         case 80:
             THIS->y += 4;

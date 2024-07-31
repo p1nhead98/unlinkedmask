@@ -47,7 +47,6 @@ IMPORT_MAP(lvl_20);
 IMPORT_MAP(lvl_20);
 IMPORT_MAP(bossfight1);
 
-IMPORT_MAP(boss2Electric);
 
 //CUTSCENES
 IMPORT_MAP(intro_door);
@@ -59,6 +58,7 @@ IMPORT_MAP(capeCuts7);
 IMPORT_MAP(capeCuts16);
 IMPORT_MAP(templeCuts);
 IMPORT_MAP(corridorCutscene);
+IMPORT_MAP(bossCuts);
 
 
 IMPORT_MAP(templeCuts);
@@ -81,6 +81,13 @@ IMPORT_TILES(spinChangerAnim4);
 
 IMPORT_TILES(waterAnim1);
 IMPORT_TILES(waterAnim2);
+
+IMPORT_TILES(corridorFloor1);
+IMPORT_TILES(corridorFloor2);
+IMPORT_TILES(corridorSky1);
+IMPORT_TILES(corridorSky2);
+IMPORT_TILES(corridorSky3);
+
 
 IMPORT_TILES(mugshots);
 
@@ -133,14 +140,19 @@ extern BOOLEAN door_button;
 
 
 
-UINT8 current_level = 31;
+UINT8 current_level = 33;
 
 UINT8 doAnimCount = 0;
+UINT8 doAnimCount2 = 0;
+UINT8 doAnimCount3 = 0;
+UINT8 doAnimCount4 = 0;
 
 UINT8 bossAttackCounter = 0;
 UINT8 bossAttackState = 0;
 UINT8 AnimCounter = 0;
 UINT8 AnimCounter2 = 0;
+UINT8 AnimCounter3 = 0;
+UINT8 AnimCounter4 = 0;
 
 
 UINT8 IsFirstLvl = 0;
@@ -192,7 +204,8 @@ IMPORT_TILES(spikesAnim4);
 IMPORT_TILES(flameBoss);
 IMPORT_TILES(flameBoss2);
 IMPORT_TILES(flameBoss3);
-
+IMPORT_TILES(flameBoss4);
+IMPORT_TILES(flameBoss5);
 
 
 // IMPORT_TILES(waterAnim);
@@ -247,8 +260,10 @@ const struct MapInfoBanked levels[] = {
 	BANKED_MAP(lvl_20),
 	BANKED_MAP(corridorCutscene),
 	BANKED_MAP(bossfight1),
+	BANKED_MAP(bossCuts),
+	BANKED_MAP(bossfight1),
 	BANKED_MAP(bossfightTrailer),
-	BANKED_MAP(boss2Electric),
+	
 };
 
 
@@ -291,10 +306,11 @@ const START_POS start_positions[] = {
 	{8, 96},  //Level 19 Player Start Position	----- current level = 29
 	{8, 96},  //Level 20 Player Start Position	----- current level = 30
 	{16, 96},  //CorridorCinematic Player Start Position	----- current level = 31
-	{48, 136},  //boss fight Player Start Position	----- current level = 32
-	{28, 30},  //boss fight Player Start Position	----- current level = 33
+	{48, 136},  // Boss 1 dialog Player Start Position	----- current level = 32
+	{0, 96}, // Boss Cutscene	----- current level = 33
+	{88, 136}, //Boss 1 fight Player Start Position	----- current level = 34
 
-	{28, 30},  //boss fight Player Start Position	----- current level = 34
+	{28, 30},  //boss fight Player Start Position	----- current level = 33
 };
 
 
@@ -359,6 +375,8 @@ void START()
 			TMA_REG = 192u;
 		}else if(current_level == 0){
 			TMA_REG = 154u;
+		}else if(current_level == 34){
+			TMA_REG = 205u;
 		}else{
 
 			TMA_REG = 180u;
@@ -368,11 +386,12 @@ void START()
 
 
 
-	if(current_level == 33){
-		InitScroll(level->bank, level->map, collision_boss_trailer, 0);
-	}else if(current_level == 25){
+	// if(current_level == 33){
+	// 	InitScroll(level->bank, level->map, collision_boss_trailer, 0);
+	// }else 
+	if(current_level == 25){
 		InitScroll(level->bank, level->map, ct_lvl25, 0);
-	}else if(current_level == 32){
+	}else if(current_level == 32 || current_level == 34){
 		InitScroll(level->bank, level->map, bossfight_col, 0);
 	}else if(current_level == 31){
 		InitScroll(level->bank, level->map, collision_corridor, 0);
@@ -559,27 +578,77 @@ void START()
 			break;
 		case 31:
 			SetHudWin(1);
+			StopMusic;
+			AnimCounter = 3;
+			doAnimCount2 = 3;
+			doAnimCount3 = 3;
+			doAnimCount4 = 3;
+
 			IsCutscene = 2;
 			break;
 		case 32:
 			ScrollRelocateMapTo(40,40);
-			SetHudWin(1);
-			// onoff_auto_time = 20;
-			// canDo = 0;
+			SetHudWin(0);
+			IsCutscene = 1;
+			WY_REG = 144;
+			SHOW_SPRITES;
+			canDo = 0;
+			dialog = 0;
+			current_dialog = 21;
+			// AnimCounter = 0;
+			// IsCutscene = 0;
+			// state_interrupts = 3;
+			// can_scroll_x = 0;
+			// canDoInterrupt = 0;
+			// bossAttackCounter = 10;
+			// bossAttackState = 0;
+			// doAnimCount = 3;
+			// AnimCounter = 0;
+			Attacks_Animations(30);
+			SpriteManagerAdd(SpriteBoss1, 144, 125);
+			SpriteManagerAdd(SpritePlayerCutscenes, 24, 136);
+			bossFireAttack_spr = SpriteManagerAdd(SpriteBossFireFlash, 0, 138);
+			SHOW_SPRITES;
+			break;
+		case 33:
+			state_counter = 60;
+			canDo = 0;
+			dialog = 0;
+			current_dialog = 31;
+			IsCutscene = 1;
+			WY_REG = 144;
+			doAnimCount2 = 0;
+
+			break;
+		case 34:
+			ScrollRelocateMapTo(40,40);
+			if(IsCutscene == 1){
+
+			
+				SetHudWin(0);
+				// IsCutscene = 1;
+				WY_REG = 144;
+				
+				canDo = 0;
+				dialog = 0;
+				current_dialog = 46;
+			}else{
+				SetHudWin(1);
+				
+			}
+
+			SHOW_SPRITES;
 			AnimCounter = 0;
-			IsCutscene = 0;
-			state_interrupts = 3;
+			state_interrupts = 0;
 			can_scroll_x = 0;
 			canDoInterrupt = 0;
 			bossAttackCounter = 10;
 			bossAttackState = 0;
 			doAnimCount = 3;
+			AnimCounter = 0;
 			Attacks_Animations(30);
-			SHOW_SPRITES;
-			break;
-		case 33:
-			state_interrupts = 4;
-			canDoInterrupt = 1;
+			SpriteManagerAdd(SpriteBoss1, 144, 80);
+		
 			break;
 
 		default:
@@ -607,11 +676,8 @@ void START()
 
 	
 
-	if(current_level != 0){
-		if(current_level == 32){
-			SpriteManagerAdd(SpriteBoss1, 144, 68);
-			bossFireAttack_spr = SpriteManagerAdd(SpriteBossFireFlash, 0, 138);
-		}
+	if(current_level != 0 && current_level != 32 && current_level != 33){
+
 		if(current_level == 1 || current_level == 8 || current_level == 13 ){
 			player_sprite = scroll_target = SpriteManagerAdd(SpritePlayerCutscenes, start_positions[current_level].start_x, start_positions[current_level].start_y);
 			// if(current_level == 13){
@@ -630,10 +696,10 @@ void START()
 		
 	}
 
-	if(current_level == 33){
-		SpriteManagerAdd(SpriteBossHand1, 32, 56);
-		SpriteManagerAdd(SpriteBossHand2, 112, 56);
-	}
+	// if(current_level == 33){
+	// 	SpriteManagerAdd(SpriteBossHand1, 32, 56);
+	// 	SpriteManagerAdd(SpriteBossHand2, 112, 56);
+	// }
 
 
 	door_open = 0;
@@ -641,6 +707,8 @@ void START()
 	door_time = 6;
 	doAnimCount = 3;
 	AnimCounter2 = 0;
+	AnimCounter3 = 0;
+	AnimCounter4 = 0;
 
 	if(IsCutscene == 1){
 		INIT_FONT(font, PRINT_WIN);
@@ -684,22 +752,120 @@ void UPDATE()
 	}
 
 
+	if(current_level == 33){
+		if(--state_counter == 0 ){
+			if(doAnimCount2 == 0){
+				doAnimCount2 = 1;
+				CleanWin();
+				dialog_pos = 120;
+				dialog = 1;
+				WY_REG = dialog_pos;
+				state_interrupts = 1;
+				LYC_REG = 0;
+			}
+		}
+	}
+
+	if(current_level == 31){
+		if(--doAnimCount2 == 0 && doAnimCount != 0){
+			AnimCounter2--;
+			Tile_Anim(AnimCounter2, 8, &corridorSky3, 28, BANK(corridorSky3));
+			doAnimCount2 = 13;
+		}
+
+		if(--doAnimCount3 == 0 && doAnimCount != 0){
+			AnimCounter3--;
+			
+			Tile_Anim(AnimCounter3, 8, &corridorSky1, 35, BANK(corridorSky1));	
+			doAnimCount3 = 6;
+		}
+
+		if(--doAnimCount4 == 0 && doAnimCount != 0){
+			AnimCounter4--;
+			Tile_Anim(AnimCounter4, 16, &corridorSky2, 48, BANK(corridorSky2));	
+			Tile_Anim(AnimCounter4 + 8, 16, &corridorSky2, 49, BANK(corridorSky2));	
+			doAnimCount4 = 1;
+		}
+
+		if(KEY_PRESSED(J_LEFT) && player_sprite->x > 88 && player_sprite->x < 672){
+			AnimCounter--;
+			if(--doAnimCount == 0 ){
+				
+				Tile_Anim(AnimCounter, 8, &corridorFloor1, 110, BANK(corridorFloor1));	
+				Tile_Anim(AnimCounter, 8, &corridorFloor2, 115, BANK(corridorFloor2));	
+				doAnimCount = 2 ;
+			}
+		}else if(KEY_PRESSED(J_RIGHT) && player_sprite->x > 88 && player_sprite->x < 672){
+			AnimCounter++;
+			if(--doAnimCount == 0 ){
+				
+				Tile_Anim(AnimCounter, 8, &corridorFloor1, 110, BANK(corridorFloor1));	
+				Tile_Anim(AnimCounter, 8, &corridorFloor2, 115, BANK(corridorFloor2));	
+				doAnimCount = 2;
+			}
+		}
+		
+		
+	}
+
+
+	if(current_level == 32){
+		if(--doAnimCount == 0){
+			AnimCounter++;
+
+			if( AnimCounter2  == 0){
+				if(AnimCounter == 0){
+					Spike_anim(&flameBoss2, 108, BANK(flameBoss2));
+				}else if(AnimCounter == 1){
+					Spike_anim(&flameBoss3, 108, BANK(flameBoss3));
+				} else if(AnimCounter == 2){
+					Spike_anim(&flameBoss, 108, BANK(flameBoss));
+				}
+				if(AnimCounter == 2){
+					AnimCounter = 0;
+				}
+			}else{
+				Tile_Anim(AnimCounter, 8, &flameBoss4, 106, BANK(flameBoss4));	
+				Tile_Anim(AnimCounter, 8, &flameBoss5, 107, BANK(flameBoss5));	
+			}
+				
+			doAnimCount = 4;
+		}
+	}
+
+	
+
 
 
 	
-	if(current_level != 32){
+	if(current_level != 32 && current_level != 31 ){
 
-	if(current_level == 2){
-		if(canDoInterrupt == 0){
-			canDoInterrupt = 1;
-		}else if (canDoInterrupt == 2){
-			if(--state_counter == 0 &&  event == 0){
+		if(current_level == 2){
+			if(canDoInterrupt == 0){
+				canDoInterrupt = 1;
+			}else if (canDoInterrupt == 2){
+				if(--state_counter == 0 &&  event == 0){
+					event = 1;
+					CleanWin();
+					dialog_pos = 20;
+					if(current_dialog < 5){
+						current_dialog = 5;
+					}
+					dialog = 1;
+					
+					WY_REG = dialog_pos;
+					state_interrupts = 1;
+					LYC_REG = 0;
+					
+				}
+			}
+		}
+
+		if((current_level == 9 || current_level == 10) && event != 2){
+			if(--state_counter == 0 && event == 0){
 				event = 1;
 				CleanWin();
-				dialog_pos = 20;
-				if(current_dialog < 5){
-					current_dialog = 5;
-				}
+				dialog_pos = 120;
 				dialog = 1;
 				
 				WY_REG = dialog_pos;
@@ -707,90 +873,51 @@ void UPDATE()
 				LYC_REG = 0;
 				
 			}
+	
 		}
-	}
 
-
-
-
-
-
-
-
-	if((current_level == 9 || current_level == 10) && event != 2){
-		if(--state_counter == 0 && event == 0){
-			event = 1;
-			CleanWin();
-			dialog_pos = 120;
-			dialog = 1;
-			
-			WY_REG = dialog_pos;
-			state_interrupts = 1;
-			LYC_REG = 0;
-			
-		}
-		// }else if(--state_counter == 0 && canDo == 0 && current_dialog == 15){
-		// 	state_counter = 3;
-		// 	scroll_x = scroll_x == 2 ? 0 : 2;
-		// }
-	}
-
-
-
-
-
-
-	if(current_level == 10 && event == 2){
+		if(current_level == 10 && event == 2){
 		
-		if(--state_counter == 0 ){
-			// scroll_y = scroll_y == 4 ? 0 : 4;
-			
-			state_counter = 4;
-			if(anim_index != 5 ){
-				CapeCutsAnim(anim_index);
-				anim_index++;
-			}else{
-				event = 3;
-				state_counter = 30;
-			}
-			
-		}
-	}else if(current_level == 10 && event == 3){
-		if(--state_counter == 0)
-		{
-
-			current_level = 11;
-			SetState(current_state);
-			
-		}
-		
-	}
-
-
-
-
-
-
-	if(current_level == 11){
-		if(--state_counter == 0){
-			if(anim_index != 14){
-				CapeCutsAnim(anim_index);
-				anim_index++;
+			if(--state_counter == 0 ){
+				// scroll_y = scroll_y == 4 ? 0 : 4;
+				
 				state_counter = 4;
-			}else{
-				FadeDMGCustom(0);
-				current_level++;
+				if(anim_index != 5 ){
+					CapeCutsAnim(anim_index);
+					anim_index++;
+				}else{
+					event = 3;
+					state_counter = 30;
+				}
+				
+			}
+		}else if(current_level == 10 && event == 3){
+			if(--state_counter == 0)
+			{
+
+				current_level = 11;
 				SetState(current_state);
+				
+			}
+			
+		}
+
+		if(current_level == 11){
+			if(--state_counter == 0){
+				if(anim_index != 14){
+					CapeCutsAnim(anim_index);
+					anim_index++;
+					state_counter = 4;
+				}else{
+					FadeDMGCustom(0);
+					current_level++;
+					SetState(current_state);
+				}
 			}
 		}
-	}
 
-
-
-
-
-	if(current_level == 12){
-		if(event < 12){
+		if(current_level == 12){
+			if(event < 12){
 				event++;
 				if(event == 10 && dialog == 0){
 					event = 20;
@@ -807,46 +934,46 @@ void UPDATE()
 					
 				}
 			}	
-		if(--state_counter == 0){
-			SHOW_WIN;
-			CapeCutsAnim(anim_index);
-			anim_index++;
-			state_counter = 4;
-			
-			if(anim_index == 17){
+			if(--state_counter == 0){
 				SHOW_WIN;
-				anim_index = 14;
+				CapeCutsAnim(anim_index);
+				anim_index++;
+				state_counter = 4;
 				
-			}
-			
-		}	
-	}
+				if(anim_index == 17){
+					SHOW_WIN;
+					anim_index = 14;
+					
+				}
+				
+			}	
+		}
 
 	
-	if(current_level == 11){
-		if(--state_counter == 0){
-			canDo = canDo == 0 ? 1 : 0;
-			CapeCutsAnim(canDo);
-			--state_counter = 8;
-		}
-	}
-
-
-
-	if(current_level == 25 || current_level == 30){
-		if(--onoff_auto_time == 0 && start_screen == 0){
-			if(current_level == 30){
-				onoff_auto_time = 60;
-			}else{
-				onoff_auto_time = 90;
+		if(current_level == 11){
+			if(--state_counter == 0){
+				canDo = canDo == 0 ? 1 : 0;
+				CapeCutsAnim(canDo);
+				--state_counter = 8;
 			}
-			
-			canDo = canDo == 0 ? 1 : 0;
-			AutomaticOnOff(collision_tiles2, canDo);
-			PlayFx(CHANNEL_1, 20, 0x1C, 0x8D, 0xF1, 0xD6, 0x86);
-            PlayFx(CHANNEL_4, 20, 0x3A, 0x91, 0x40, 0xC0);
-		}	
-	}
+		}
+
+
+
+		if(current_level == 25 || current_level == 30){
+			if(--onoff_auto_time == 0 && start_screen == 0){
+				if(current_level == 30){
+					onoff_auto_time = 60;
+				}else{
+					onoff_auto_time = 90;
+				}
+				
+				canDo = canDo == 0 ? 1 : 0;
+				AutomaticOnOff(collision_tiles2, canDo);
+				PlayFx(CHANNEL_1, 20, 0x1C, 0x8D, 0xF1, 0xD6, 0x86);
+				PlayFx(CHANNEL_4, 20, 0x3A, 0x91, 0x40, 0xC0);
+			}	
+		}
 
 	// vsync();
 	// scanline_offsets = scanline_offsets_tbl + ((sys_time >> 2) & 0x07u)
@@ -854,110 +981,110 @@ void UPDATE()
 
 
 	// if(current_level != 17 && current_level != 18 && start_screen == 0 ){
-	if(door_open == 1 && door_time_btwn > 0 && start_screen == 0){
-		door_time_btwn--;
-	}else if(door_open == 1 && start_screen == 0){
-		door_time--;
-		PlayFx(CHANNEL_1 , 10, 0x18, 0xBF, 0xF1,door_sounds[door_time], 0x87);
-		RefreshTimer();
-		door_time_btwn = door_time_btwn_start;
-	}
-	if(door_time == 0 ){
-		door_open = 0;
-		door_time = 6;
-		door_button = 1;
-		SetDoorCols(0);
-		PlayFx(CHANNEL_4, 60, 0x3F, 0xF5, 0xA8, 0x80);
-	}
+		if(door_open == 1 && door_time_btwn > 0 && start_screen == 0){
+			door_time_btwn--;
+		}else if(door_open == 1 && start_screen == 0){
+			door_time--;
+			PlayFx(CHANNEL_1 , 10, 0x18, 0xBF, 0xF1,door_sounds[door_time], 0x87);
+			RefreshTimer();
+			door_time_btwn = door_time_btwn_start;
+		}
+		if(door_time == 0 ){
+			door_open = 0;
+			door_time = 6;
+			door_button = 1;
+			SetDoorCols(0);
+			PlayFx(CHANNEL_4, 60, 0x3F, 0xF5, 0xA8, 0x80);
+		}
 
 
-	if(KEY_TICKED(J_START) ){
-		if( IsCutscene == 0 && current_level != 0){
-			start_screen = start_screen == 0 ? 1 : 0;
-				if( start_screen == 1 ){
-					DISPLAY_OFF;
-					SetWindowY(0);
-					SetPauseMenu( level->map, level->bank );
-				}else{
-					SetWindowY(128);
-					SetPauseMenu( level->map, level->bank );
-					if(door_open == 1){
-						RefreshTimer();
-						SetDoorCols(door_open);
-					}
-					if(current_level == 20 || current_level == 21 || current_level == 22 ||  current_level == 23 || current_level == 29){
-						SetOnOffCols(collision_tiles2, on_off);
-					}else if(current_level == 25 || current_level == 30){
-						AutomaticOnOff(collision_tiles2, canDo);
-					}
-					RefreshLife();
-					if(player_sprite->y != 0){
-						pDelay(40);
-					}
+		if(KEY_TICKED(J_START) ){
+			if( IsCutscene == 0 && current_level != 0){
+				start_screen = start_screen == 0 ? 1 : 0;
+					if( start_screen == 1 ){
+						DISPLAY_OFF;
+						SetWindowY(0);
+						SetPauseMenu( level->map, level->bank );
+					}else{
+						SetWindowY(128);
+						SetPauseMenu( level->map, level->bank );
+						if(door_open == 1){
+							RefreshTimer();
+							SetDoorCols(door_open);
+						}
+						if(current_level == 20 || current_level == 21 || current_level == 22 ||  current_level == 23 || current_level == 29){
+							SetOnOffCols(collision_tiles2, on_off);
+						}else if(current_level == 25 || current_level == 30){
+							AutomaticOnOff(collision_tiles2, canDo);
+						}
+						RefreshLife();
+						if(player_sprite->y != 0){
+							pDelay(40);
+						}
+				}
 			}
 		}
-	}
 
 		
-	if(KEY_TICKED(J_START) && current_level == 0){
-		start_fade = 1;
-		FadeColorAndMusic();
-		current_level++;
-		SetState(current_state);
-	}
+		if(KEY_TICKED(J_START) && current_level == 0){
+			start_fade = 1;
+			FadeColorAndMusic();
+			current_level++;
+			SetState(current_state);
+		}
 
 
 
-	if(--doAnimCount == 0 && IsCutscene == 0  && current_level != 32 ){
+		if(--doAnimCount == 0 && IsCutscene == 0  && current_level != 32 ){
 
-		
-		AnimCounter = AnimCounter == 1 ? 0 : 1;
-		
-		if(start_screen == 0){
 			
-			if(AnimCounter == 0 && current_level < 27){
-				Spike_anim(&spikesAnim, 112, BANK(spikesAnim));
-			}else{
-				Spike_anim(&spikesAnim2, 112, BANK(spikesAnim2));
-			}
-
-
-			if(current_level == 25 || current_level == 30){
-
-				if(canDo == 0){
-					if(AnimCounter == 0){
-						Spike_anim(&spikesAnim, 81, BANK(spikesAnim));
-					}else{
-						Spike_anim(&spikesAnim2, 81, BANK(spikesAnim2));
-					}
+			AnimCounter = AnimCounter == 1 ? 0 : 1;
+			
+			if(start_screen == 0){
+				
+				if(AnimCounter == 0 && current_level < 27){
+					Spike_anim(&spikesAnim, 112, BANK(spikesAnim));
 				}else{
-					if(AnimCounter == 0){
-						Spike_anim(&spikesAnim, 85, BANK(spikesAnim));
-					}else{
-						Spike_anim(&spikesAnim2, 85, BANK(spikesAnim2));
-					}
+					Spike_anim(&spikesAnim2, 112, BANK(spikesAnim2));
 				}
 
+
+				if(current_level == 25 || current_level == 30){
+
+					if(canDo == 0){
+						if(AnimCounter == 0){
+							Spike_anim(&spikesAnim, 81, BANK(spikesAnim));
+						}else{
+							Spike_anim(&spikesAnim2, 81, BANK(spikesAnim2));
+						}
+					}else{
+						if(AnimCounter == 0){
+							Spike_anim(&spikesAnim, 85, BANK(spikesAnim));
+						}else{
+							Spike_anim(&spikesAnim2, 85, BANK(spikesAnim2));
+						}
+					}
+
+
+					
+				}
+				if(current_level > 26 && current_level < 31){
+					AnimCounter2++;
+					if(change_jump_count == 0){
+						Tile_Anim(AnimCounter2, 6, &spinChangerAnim, 47, BANK(spinChangerAnim));	
+					}else{
+						Tile_Anim(AnimCounter2, 6, &spinChangerAnim2, 47, BANK(spinChangerAnim2));
+					}
+			
+				// 	Tile_Anim(AnimCounter2 + 8, 16, &cloudAnim1, 46, BANK(cloudAnim1));
+				// 	// Tile_Anim(AnimCounter2, 8, &cloudAnim2, 44, BANK(cloudAnim2));
+				}
 
 				
 			}
-			if(current_level > 26 && current_level < 31){
-				AnimCounter2++;
-				if(change_jump_count == 0){
-					Tile_Anim(AnimCounter2, 6, &spinChangerAnim, 47, BANK(spinChangerAnim));	
-				}else{
-					Tile_Anim(AnimCounter2, 6, &spinChangerAnim2, 47, BANK(spinChangerAnim2));
-				}
-		
-			// 	Tile_Anim(AnimCounter2 + 8, 16, &cloudAnim1, 46, BANK(cloudAnim1));
-			// 	// Tile_Anim(AnimCounter2, 8, &cloudAnim2, 44, BANK(cloudAnim2));
-			}
-
+			doAnimCount = 5;
 			
 		}
-		doAnimCount = 5;
-		
-	}
 
 	
 		
@@ -975,61 +1102,47 @@ void UPDATE()
 	// 			doAnimCount = 5;
 	// 		}
 	// }
-	if(current_level == 23 && player_sprite->x > 1142 && canDo == 0 && event == 0){
-		canDo = 1;
-		SetOnOffColsEvent(collision_tiles2, 1);
-	}
-	if(event == 1 && IsCutscene == 0){
-		// can_scroll_x = 1;
-		event++;
-		SetOnOffColsEvent(collision_tiles2, 2);
-	}
-
-
-	if( change_jump_count > 0 ){
-		if(change_jump_count == 20){
-			Set_SpinChange_Tiles(&spinChangerAnim4, BANK(spinChangerAnim4), 8);
-		}else if(change_jump_count == 1){
-			Set_SpinChange_Tiles(&spinChangerAnim3, BANK(spinChangerAnim3), 8);
+		if(current_level == 23 && player_sprite->x > 1142 && canDo == 0 && event == 0){
+			canDo = 1;
+			SetOnOffColsEvent(collision_tiles2, 1);
 		}
-		change_jump_count--;
-	}
+		if(event == 1 && IsCutscene == 0){
+			// can_scroll_x = 1;
+			event++;
+			SetOnOffColsEvent(collision_tiles2, 2);
+		}
 
-	if( current_level == 32){
+
+		if( change_jump_count > 0 ){
+			if(change_jump_count == 20){
+				Set_SpinChange_Tiles(&spinChangerAnim4, BANK(spinChangerAnim4), 8);
+			}else if(change_jump_count == 1){
+				Set_SpinChange_Tiles(&spinChangerAnim3, BANK(spinChangerAnim3), 8);
+			}
+			change_jump_count--;
+		}
+
+	// if( current_level == 32){
 
 	
 		
 			
 	
-			if(AnimCounter < 3){
-				AnimCounter++;
-
-					if(AnimCounter == 0){
-						Spike_anim(&flameBoss2, 108, BANK(flameBoss2));
-					}else if(AnimCounter == 1){
-						Spike_anim(&flameBoss3, 108, BANK(flameBoss3));
-					} else if(AnimCounter == 2){
-						Spike_anim(&flameBoss, 108, BANK(flameBoss));
-					}
-				if(AnimCounter == 3){
-					AnimCounter = 0;
-				}
-			}
 		
 		
-	}
+	// }
 	
 	// if(KEY_TICKED(J_A)){
 	// 	char name [6] = "Dragon";
 	// 	PRINT(0, 0, "hola mundo");
 	// }
 	}else{
-		if(--doAnimCount == 0){
-			AnimCounter2++;
-			Tile_Anim(AnimCounter2, 8, &waterAnim1, 57, BANK(waterAnim1));	
-			Tile_Anim(AnimCounter2, 8, &waterAnim2, 58, BANK(waterAnim2));	
-			doAnimCount = 5;
-		}
+		// if(--doAnimCount == 0){
+		// 	AnimCounter2++;
+		// 	Tile_Anim(AnimCounter2, 8, &waterAnim1, 57, BANK(waterAnim1));	
+		// 	Tile_Anim(AnimCounter2, 8, &waterAnim2, 58, BANK(waterAnim2));	
+		// 	doAnimCount = 5;
+		// }
 	}
 
 }

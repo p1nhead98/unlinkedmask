@@ -46,6 +46,10 @@ void START()
         player_c_counter2 = 1;
         player_c_counter3 = 4;
     }
+    if(current_level == 32){
+        player_cs_state = 5;
+        SetSpriteAnim(THIS, pcs_cape_walk, 15);
+    }
 }
 
 void UPDATE()
@@ -139,6 +143,34 @@ void UPDATE()
             SetState(current_state);
         }
         break;
+    case 5:
+        THIS->x++;
+         if((THIS->anim_frame == 1 || THIS->anim_frame == 3) && player_c_canDo == 0){
+            player_c_canDo = 1;
+            PlayFx(CHANNEL_4, 5, 0x3A, 0x81, 0x00, 0xC0);
+        }else if ((THIS->anim_frame == 0 || THIS->anim_frame == 2 ) && player_c_canDo == 1){
+            player_c_canDo = 0;
+        }
+        if(THIS->x > 78){
+            player_cs_state++;
+            SetSpriteAnim(THIS, pcs_cape_stand, 15);
+            player_c_counter = 20;
+            
+        }
+        break;
+    case 6:
+        if(--player_c_counter == 0){
+            player_cs_state++;
+            dialog_pos = 20;
+            WY_REG = dialog_pos;
+            state_interrupts = 1;
+            LYC_REG = 0;
+            dialog = 1;
+        }
+        break;
+
+
+
     }
 }
 
