@@ -9,7 +9,7 @@
 #include "ZGBMain.h"
 
 const UINT8 kaizo_anim[] = {2, 0, 0};
-const UINT8 kaizo_anim2[] = {2, 1, 1};
+const UINT8 kaizo_anim2[] = {2, 1, 2};
 
 
 extern UINT8 start_screen;

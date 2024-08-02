@@ -9,7 +9,7 @@
 #include "ZGBMain.h"
 
 const UINT8 anim_sbox[] = {2, 0, 1};
-const UINT8 anim_sbox2[] = {2, 2, 2};
+// const UINT8 anim_sbox2[] = {2, 1, 2};
 extern UINT8 current_level;
 
 extern UINT8 start_screen;

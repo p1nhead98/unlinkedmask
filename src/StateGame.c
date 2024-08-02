@@ -46,6 +46,7 @@ IMPORT_MAP(lvl_19);
 IMPORT_MAP(lvl_20);
 IMPORT_MAP(lvl_20);
 IMPORT_MAP(bossfight1);
+IMPORT_MAP(bossfight2);
 
 
 //CUTSCENES
@@ -59,6 +60,7 @@ IMPORT_MAP(capeCuts16);
 IMPORT_MAP(templeCuts);
 IMPORT_MAP(corridorCutscene);
 IMPORT_MAP(bossCuts);
+IMPORT_MAP(ks);
 
 
 IMPORT_MAP(templeCuts);
@@ -108,6 +110,8 @@ DECLARE_MUSIC(unlinkedchainedsoul);
 DECLARE_MUSIC(unlinkedrooftop);
 DECLARE_MUSIC(unlinkedinside1);
 DECLARE_MUSIC(unlinkedtitlescreen);
+DECLARE_MUSIC(unlinkedfinalboss);
+
 
 UINT8 collision_tiles[] = {4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 33, 34, 35, 36, 37, 38, 62, 63, 64, 65, 66, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 0};
 UINT8 collision_tiles2[] = {4, 5, 6 ,7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 56, 57, 58, 59, 60, 61, 62, 63, 77, 78, 79, 80, 81, 82, 83, 84, 0};
@@ -125,6 +129,7 @@ UINT8 ct_lvl25[] = {4, 5, 6 ,7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 56
 
 
 UINT8 bossfight_col[] = {74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 0};
+UINT8 bossfight_col2[] = {104, 105, 106, 107, 108, 0};
 
 UINT8 windtower_tiles[] = {10,7,8,9,15,16,17,4,5,6,82,83,84,85,86,87,88,89,18,12, 0};
 
@@ -137,10 +142,11 @@ extern UINT8 door_time_btwn;
 extern UINT8 door_time_btwn_start;
 extern UINT8 door_open;
 extern BOOLEAN door_button;
+extern UINT8 pdeath_counter;
+extern UINT8 pdeath_counter2;
 
 
-
-UINT8 current_level = 33;
+UINT8 current_level = 0;
 
 UINT8 doAnimCount = 0;
 UINT8 doAnimCount2 = 0;
@@ -262,7 +268,8 @@ const struct MapInfoBanked levels[] = {
 	BANKED_MAP(bossfight1),
 	BANKED_MAP(bossCuts),
 	BANKED_MAP(bossfight1),
-	BANKED_MAP(bossfightTrailer),
+	BANKED_MAP(bossfight2),
+		BANKED_MAP(ks),
 	
 };
 
@@ -305,12 +312,14 @@ const START_POS start_positions[] = {
 	{8, 96},  //Level 18 Player Start Position	----- current level = 28
 	{8, 96},  //Level 19 Player Start Position	----- current level = 29
 	{8, 96},  //Level 20 Player Start Position	----- current level = 30
-	{16, 96},  //CorridorCinematic Player Start Position	----- current level = 31
+	{35, 96},  //CorridorCinematic Player Start Position	----- current level = 31
 	{48, 136},  // Boss 1 dialog Player Start Position	----- current level = 32
 	{0, 96}, // Boss Cutscene	----- current level = 33
 	{88, 136}, //Boss 1 fight Player Start Position	----- current level = 34
 
-	{28, 30},  //boss fight Player Start Position	----- current level = 33
+	{112, 96},  //boss 2 fight Player Start Position	----- current level = 35
+
+	{112, 96},  //boss 2 fight Player Start Position	----- current level = 35
 };
 
 
@@ -323,6 +332,9 @@ const START_POS start_positions[] = {
 void START()
 {
 	const struct MapInfoBanked* level = &levels[current_level]; // Se declara mapa del nivel actual
+	if(current_level == 0){
+		LOAD_SGB_BORDER(linkedborder);
+	}
 	current_life = max_life; //se establece que la vida actual sea la maxima vida permitida
 	start_screen = 0; // variable que determina si esta acitvada la pantalla de start o no
 
@@ -377,6 +389,8 @@ void START()
 			TMA_REG = 154u;
 		}else if(current_level == 34){
 			TMA_REG = 205u;
+		}else if(current_level == 35 || current_level == 36){
+			TMA_REG = 198u;
 		}else{
 
 			TMA_REG = 180u;
@@ -389,7 +403,9 @@ void START()
 	// if(current_level == 33){
 	// 	InitScroll(level->bank, level->map, collision_boss_trailer, 0);
 	// }else 
-	if(current_level == 25){
+	if(current_level == 35){
+		InitScroll(level->bank, level->map, bossfight_col2, 0);
+	}else if(current_level == 25){
 		InitScroll(level->bank, level->map, ct_lvl25, 0);
 	}else if(current_level == 32 || current_level == 34){
 		InitScroll(level->bank, level->map, bossfight_col, 0);
@@ -527,20 +543,22 @@ void START()
 			break;
 
 		case 26:
+			FillElevatorCinem();
+			SetHudWin(0);
 			SpriteManagerAdd(SpriteElevatorFloor1, 40, 232);
 			SpriteManagerAdd(SpriteElevatorFloor2, 72, 232);
 			SpriteManagerAdd(SpriteElevatorFloor3, 104, 232);
-			SetHudWin(0);
-			FillElevatorCinem();
+			
+			scroll_y = 112;
+			state_interrupts = 3;
 			IsCutscene = 1;
-			SHOW_SPRITES;
 			canDo = 0;
 			dialog = 0;
 			scroller_y = 119;
-			scroll_y = 112;
-			counterInterrupt = counterInterrupt2 = 15;
-			state_interrupts = 3;
 			LYC_REG = 0;
+			counterInterrupt = counterInterrupt2 = 15;
+			
+			SHOW_SPRITES;
 			break;
 		
 		case 27:
@@ -607,7 +625,7 @@ void START()
 			Attacks_Animations(30);
 			SpriteManagerAdd(SpriteBoss1, 144, 125);
 			SpriteManagerAdd(SpritePlayerCutscenes, 24, 136);
-			bossFireAttack_spr = SpriteManagerAdd(SpriteBossFireFlash, 0, 138);
+			// bossFireAttack_spr = SpriteManagerAdd(SpriteBossFireFlash, 0, 138);
 			SHOW_SPRITES;
 			break;
 		case 33:
@@ -648,8 +666,20 @@ void START()
 			AnimCounter = 0;
 			Attacks_Animations(30);
 			SpriteManagerAdd(SpriteBoss1, 144, 80);
-		
+			
 			break;
+		case 35:
+			can_scroll_x = 0;
+			SpriteManagerAdd(SpritePlayerFinal, 72, 96);
+			SpriteManagerAdd(SpriteBossHair, 72, 16);
+			SpriteManagerAdd(SpriteBossHand1, 16, 88);
+			SpriteManagerAdd(SpriteBossHand2, 128, 88);
+			PlayMusic(unlinkedfinalboss, 1);
+			AnimCounter = 200;
+			break;
+		case 36:	
+			break;
+
 
 		default:
 			if(current_level != 1 && current_level != 2  && current_level != 8 && current_level != 9 && current_level != 13 && current_level != 19 && current_level != 26){
@@ -676,7 +706,7 @@ void START()
 
 	
 
-	if(current_level != 0 && current_level != 32 && current_level != 33){
+	if(current_level != 0 && current_level != 32 && current_level != 33 && current_level != 35 && current_level != 36){
 
 		if(current_level == 1 || current_level == 8 || current_level == 13 ){
 			player_sprite = scroll_target = SpriteManagerAdd(SpritePlayerCutscenes, start_positions[current_level].start_x, start_positions[current_level].start_y);
@@ -730,13 +760,13 @@ void UPDATE()
 {
 	const struct MapInfoBanked* level = &levels[current_level]; // Se declara mapa del nivel actual
 
-	if (KEY_TICKED(J_SELECT) && !KEY_PRESSED(J_LEFT)){
-		current_level++;
-		SetState(current_state);
-	} else if (KEY_TICKED(J_SELECT) && KEY_PRESSED(J_LEFT)){
-		current_level--;
-		SetState(current_state);
-	}
+	// if (KEY_TICKED(J_SELECT) && !KEY_PRESSED(J_LEFT)){
+	// 	current_level++;
+	// 	SetState(current_state);
+	// } else if (KEY_TICKED(J_SELECT) && KEY_PRESSED(J_LEFT)){
+	// 	current_level--;
+	// 	SetState(current_state);
+	// }
 
 
 
@@ -747,7 +777,24 @@ void UPDATE()
 		}
 		if(KEY_TICKED(J_A) && canDo == 1){
 			current_dialog++;
+			// PlayFx(CHANNEL_1, 15, 0x3a, 0x9a, 0x91, 0xe0, 0x86);
 			canDo = 0;
+		}
+	}
+
+	if(current_level == 35){
+		if(--AnimCounter == 0){
+			current_level++;
+			SetState(current_state);
+		}
+	}
+
+
+	if(pdeath_counter == 1){
+		if(--pdeath_counter2 == 0){
+			pdeath_counter2 = 0;
+			pdeath_counter = 0;
+			SetState(current_state);
 		}
 	}
 
@@ -809,7 +856,7 @@ void UPDATE()
 	}
 
 
-	if(current_level == 32){
+	if(current_level == 34){
 		if(--doAnimCount == 0){
 			AnimCounter++;
 
@@ -838,7 +885,7 @@ void UPDATE()
 
 
 	
-	if(current_level != 32 && current_level != 31 ){
+	if(current_level != 32 && current_level != 31 && current_level != 35 && current_level != 36 ){
 
 		if(current_level == 2){
 			if(canDoInterrupt == 0){
@@ -1116,6 +1163,7 @@ void UPDATE()
 		if( change_jump_count > 0 ){
 			if(change_jump_count == 20){
 				Set_SpinChange_Tiles(&spinChangerAnim4, BANK(spinChangerAnim4), 8);
+				PlayFx(CHANNEL_1, 20, 0x25, 0xbf, 0xe2, 0x40, 0x86);
 			}else if(change_jump_count == 1){
 				Set_SpinChange_Tiles(&spinChangerAnim3, BANK(spinChangerAnim3), 8);
 			}

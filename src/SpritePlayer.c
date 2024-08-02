@@ -23,6 +23,8 @@ const UINT8 anim_death[] = {4, 14, 15, 15, 15};
 const UINT8 anim_dab[] = {2, 16, 17};
 const UINT8 anim_patinar[] = {2, 18, 18};
 
+const UINT8 anim_back[] = {3, 19, 20, 21};
+
 
 // DECLARE_MUSIC(unlinkedunchainedsoul);
 
@@ -66,6 +68,9 @@ UINT8 bossCanHurt = 0;
 // void UpdateMapTile(INT16 map_x, INT16 map_y, UINT8 tile_id, UINT8 c) {
 //        UPDATE_TILE(map_x, map_y, &tile_id, &c);
 // }
+void playerHurtSound(){
+    // PlayFx(CHANNEL_1, 15, 0x3a, 0xbf, 0xf1, 0x9e, 0xc7);
+}
 
 void boss1Collisions(UINT8 bossCanHurt){
     switch (bossCanHurt){
@@ -192,7 +197,7 @@ void CheckDeathTiles(){
                 }
             }
         }
-        if(current_level == 29 ){
+        if(current_level == 30 ){
             if((colision == 60 || colision == 61 || colision == 62 || colision == 63)){
                 if(on_off == 1 && player_state != 11){
                     current_life = 0;
@@ -313,6 +318,7 @@ void CheckCollisionTile()
                 current_life--;
                 ScreenShake(1,1);
                 RefreshLife();
+                playerHurtSound();
             }
             
             //SpriteManagerRemove(THIS_IDX);
@@ -339,7 +345,8 @@ void CheckCollisionTile()
             player_state = 55;
             ScreenShake(1,1);
             RefreshLife();
-            SetState(current_state);
+            playerHurtSound();
+            // SetState(current_state);
             if(deaths_u_count != 99){
                 deaths_u_count++;
             }else{
@@ -418,7 +425,7 @@ void START()
     inmunity = 0;
     canHurt = inmunity < 1 ? 1 : 0;
     bossCanHurt = 0;
-    THIS->mt_sprite->props = 57;
+    // THIS->mt_sprite->props = 57;
    
     // player_dj = 0;
 
@@ -442,7 +449,7 @@ void UPDATE()
         }
 
 
-        if( IsCutscene == 0){
+        if( IsCutscene == 0 || IsCutscene == 5 || IsCutscene == 2){
 
             if (inmunity != 0)
             {
@@ -479,75 +486,90 @@ void UPDATE()
                 
                 // SetState(current_state);
             }
-            if(current_level != 17 && current_level != 18 && current_level != 34){
+            if( current_level != 34){
                 if( (THIS->x >= scroll_x + 150) && player_state != 9 && player_state != 8){
                     player_state = 9;
                 }
             }
 
 
+            if(current_level == 34){
+                if((boss_state > 26 && boss_state < 42 ) && THIS->y > 120){
+                    if(canHurt && player_state != 11){
+                        inmunity = InmunityTime;
+                        canHurt = 0;
+                        current_life--;
+                        ScreenShake(1,1);
+                        RefreshLife();
+                        playerHurtSound();
+                    }
+                } 
+            }
+
+
 
             switch( player_state ){
                 case 0:
-
-                    if(KEY_PRESSED(J_LEFT) && !KEY_PRESSED(J_RIGHT) && THIS->x > scroll_x + 2){
-                        TranslateSprite(THIS, -2 << delta_time, 0);
-                        if(current_level == 31){
-                            if((THIS->anim_frame == 1 || THIS->anim_frame == 3) && player_canDo == 0){
-                                player_canDo = 1;
-                                PlayFx(CHANNEL_4, 5, 0x3A, 0x81, 0x00, 0xC0);
-                            }else if ((THIS->anim_frame == 0 || THIS->anim_frame == 2 ) && player_canDo == 1){
-                                player_canDo = 0;
-                            }
-                        }   
-                        SetSpriteAnim(THIS, anim_walk, 15);
-                        THIS->mirror = player_priority == 1 ? VM_PRIOR : V_MIRROR;
-                    }else if(KEY_PRESSED(J_RIGHT) && !KEY_PRESSED(J_LEFT)){
-                        
-                        if(current_level == 31){
-                            if((THIS->anim_frame == 1 || THIS->anim_frame == 3) && player_canDo == 0){
-                                player_canDo = 1;
-                                PlayFx(CHANNEL_4, 5, 0x3A, 0x81, 0x00, 0xC0);
-                            }else if ((THIS->anim_frame == 0 || THIS->anim_frame == 2 ) && player_canDo == 1){
-                                player_canDo = 0;
-                            }
-                        }
-                        if(current_level == 34 && THIS->x < 192){
-                            TranslateSprite(THIS, 2 << delta_time, 0);
+                    if(IsCutscene != 5){
+                        if(KEY_PRESSED(J_LEFT) && !KEY_PRESSED(J_RIGHT) && THIS->x > scroll_x + 2){
+                            TranslateSprite(THIS, -2 << delta_time, 0);
+                            if(current_level == 31){
+                                if((THIS->anim_frame == 1 || THIS->anim_frame == 3) && player_canDo == 0){
+                                    player_canDo = 1;
+                                    PlayFx(CHANNEL_4, 5, 0x3A, 0x81, 0x00, 0xC0);
+                                }else if ((THIS->anim_frame == 0 || THIS->anim_frame == 2 ) && player_canDo == 1){
+                                    player_canDo = 0;
+                                }
+                            }   
                             SetSpriteAnim(THIS, anim_walk, 15);
-                            THIS->mirror = player_priority == 1 ? NM_PRIOR : NO_MIRROR;
-                        }else if(current_level < 34){
-                            TranslateSprite(THIS, 2 << delta_time, 0);
-                            SetSpriteAnim(THIS, anim_walk, 15);
-                            THIS->mirror = player_priority == 1 ? NM_PRIOR : NO_MIRROR;
+                            THIS->mirror = player_priority == 1 ? VM_PRIOR : V_MIRROR;
+                        }else if(KEY_PRESSED(J_RIGHT) && !KEY_PRESSED(J_LEFT)){
+                            
+                            if(current_level == 31){
+                                if((THIS->anim_frame == 1 || THIS->anim_frame == 3) && player_canDo == 0){
+                                    player_canDo = 1;
+                                    PlayFx(CHANNEL_4, 5, 0x3A, 0x81, 0x00, 0xC0);
+                                }else if ((THIS->anim_frame == 0 || THIS->anim_frame == 2 ) && player_canDo == 1){
+                                    player_canDo = 0;
+                                }
+                            }
+                            if(current_level == 34 && THIS->x < 192){
+                                TranslateSprite(THIS, 2 << delta_time, 0);
+                                SetSpriteAnim(THIS, anim_walk, 15);
+                                THIS->mirror = player_priority == 1 ? NM_PRIOR : NO_MIRROR;
+                            }else if(current_level < 34){
+                                TranslateSprite(THIS, 2 << delta_time, 0);
+                                SetSpriteAnim(THIS, anim_walk, 15);
+                                THIS->mirror = player_priority == 1 ? NM_PRIOR : NO_MIRROR;
+                            }
+                            
+
+                        }else if(!KEY_PRESSED(J_RIGHT) && !KEY_PRESSED(J_LEFT)){
+                            SetSpriteAnim(THIS, anim_idle, 15);
                         }
-                        
 
-                    }else if(!KEY_PRESSED(J_RIGHT) && !KEY_PRESSED(J_LEFT)){
-                        SetSpriteAnim(THIS, anim_idle, 15);
-                    }
-
-                    
-                    if(KEY_TICKED(J_A)){
                         
-                        player_state = 1;
-                        player_last_state = player_state;
-                        player_accel_y = -83;
-                        JumpRandSound(0);
-                        SetSpriteAnim(THIS, anim_jump, 15);
-                        
-                        SpriteManagerAdd(SpritePlayerVfx, THIS->x - 4, THIS->y + 8);
-                        // player_dj = 1;
-                    }
-                    if(KEY_TICKED(J_B)){
-                        
-                        player_state = 2;
-                        player_last_state = player_state;
-                        player_accel_y = -83;
-                        JumpRandSound(1);
-                        SetSpriteAnim(THIS, anim_spin, 20);
-                        
-                        SpriteManagerAdd(SpritePlayerVfx, THIS->x - 4, THIS->y + 8);
+                        if(KEY_TICKED(J_A)){
+                            
+                            player_state = 1;
+                            player_last_state = player_state;
+                            player_accel_y = -83;
+                            JumpRandSound(0);
+                            SetSpriteAnim(THIS, anim_jump, 15);
+                            
+                            SpriteManagerAdd(SpritePlayerVfx, THIS->x - 4, THIS->y + 8);
+                            // player_dj = 1;
+                        }
+                        if(KEY_TICKED(J_B)){
+                            
+                            player_state = 2;
+                            player_last_state = player_state;
+                            player_accel_y = -83;
+                            JumpRandSound(1);
+                            SetSpriteAnim(THIS, anim_spin, 20);
+                            
+                            SpriteManagerAdd(SpritePlayerVfx, THIS->x - 4, THIS->y + 8);
+                        }
                     }
                 break;
                 case 1:
@@ -741,6 +763,27 @@ void UPDATE()
                     }
                     
                 break;
+                case 15:
+                    if(THIS->x > 114){
+                        THIS->x--;
+                        SetSpriteAnim(THIS, anim_walk, 15);
+                        THIS->mirror = player_priority == 1 ? VM_PRIOR : V_MIRROR;
+                    }else if(THIS->x < 114){
+                        THIS->mirror = player_priority == 1 ? NM_PRIOR : NO_MIRROR;
+                        THIS->x++;
+                        SetSpriteAnim(THIS, anim_walk, 15);
+                    }else{
+                        player_state++;
+                        SetSpriteAnim(THIS, anim_back, 15);
+                        player_counter = 70;
+                    }
+                    break;
+                case 16:
+                    if(--player_counter == 0){
+                        current_level++;
+                        SetState(current_state);
+                    }
+                    break;
             }
 
         
@@ -763,19 +806,24 @@ void UPDATE()
                 if (player_collision && !TranslateSprite(THIS, 0, (player_accel_y >> (-4 << delta_time))))
                 {
                     player_accel_y = 0;
-                    if (player_state == 1 || player_state == 2 || player_state == 3 || player_state == 4 || player_state == 10)
-                    {
-                        player_state = 0;
-                        SetSpriteAnim(THIS, anim_idle, 15);
-                    }
-                    if(player_state == 12){
-                        player_state++;
-                        SetSpriteAnim(THIS, anim_patinar, 30);
-                    }
-                }else if(player_collision && player_accel_y < 0){
+                    
+                    
+                        if (player_state == 1 || player_state == 2 || player_state == 3 || player_state == 4 || player_state == 10)
+                        {
+                            if(IsCutscene != 5){
+                                player_state = 0;
+                            }
+                            SetSpriteAnim(THIS, anim_idle, 15);
+                        }
+                        if(player_state == 12){
+                            player_state++;
+                            SetSpriteAnim(THIS, anim_patinar, 30);
+                        }
+                    
+                }else if(player_collision && player_accel_y < 0 && IsCutscene != 5){
                     player_accel_y = 0;
                 }
-                if (player_state == 0 && player_accel_y >= 20)
+                if (player_state == 0 && player_accel_y >= 20 && IsCutscene != 5)
                 {
                     player_state = 10;
                 }
@@ -792,6 +840,7 @@ void UPDATE()
                 }
             }
 
+            
 
 
             SPRITEMANAGER_ITERATE(i, spr) {
@@ -802,11 +851,13 @@ void UPDATE()
                         if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && (player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 2)) && (sprData->state == 2 || sprData->state == 21 || sprData->state == 48)) {
                             player_state = 3;
                             player_accel_y = -83;
-                            PlayFx(CHANNEL_4, 10, 0x02, 0xf1, 0x40, 0xc0);
+                            // PlayFx(CHANNEL_4, 10, 0x02, 0xf1, 0x40, 0xc0);
                             sprData->state++;
                             ScreenShake(1,1);
                             SetSpriteAnim(THIS, anim_spin, 20);
                             SpriteManagerAdd(SpritePlayerVfx, THIS->x - 4, THIS->y + 8);
+                            PlayFx(CHANNEL_1, 20, 0x1C, 0x8D, 0xF1, 0xD6, 0x86);
+                            PlayFx(CHANNEL_4, 20, 0x3A, 0x91, 0x40, 0xC0);
                         }
                     }else if(CheckCollision(THIS, spr) && THIS->y + 8 > (spr->y) && player_state != 11 &&  (sprData->state == 6 || sprData->state == 7 || sprData->state == 13 || sprData->state == 16 || sprData->state == 19 ||  sprData->state == 20 || sprData->state == 29 || sprData->state == 32 || sprData->state == 35 || sprData->state == 38 || sprData->state == 41 || sprData->state == 46 || sprData->state == 80 || sprData->state == 81) ){
                         if(canHurt && player_state != 11){
@@ -815,6 +866,7 @@ void UPDATE()
                             current_life--;
                             ScreenShake(1,1);
                             RefreshLife();
+                            playerHurtSound();
                         }
                     }
                 }
@@ -947,7 +999,8 @@ void UPDATE()
                         current_life = 0;
                         ScreenShake(1,1);
                         RefreshLife();
-                        SetState(current_state);
+                        playerHurtSound();
+                        // SetState(current_state);
                     
                     }
                 }
@@ -958,10 +1011,12 @@ void UPDATE()
                         player_state = 3;
                         player_accel_y = -83;
                         SetSpriteAnim(THIS, anim_spin, 20);
+                        PlayFx(CHANNEL_4, 10, 0x02, 0xf1, 0x40, 0xc0);
                     }else if(CheckCollision(THIS, spr) && THIS->y + 8 > (spr->y) && player_state != 11){
                         current_life = 0;
                         ScreenShake(1,1);
                         RefreshLife();
+                        playerHurtSound();
                         SetSpriteAnim(THIS, anim_death, 15);
                         player_state = 11;
                     }
@@ -973,12 +1028,26 @@ void UPDATE()
                         player_state = 3;
                         player_accel_y = -83;
                         SetSpriteAnim(THIS, anim_spin, 20);
+                        PlayFx(CHANNEL_4, 10, 0x02, 0xf1, 0x40, 0xc0);
                     }else if(CheckCollision(THIS, spr) && THIS->y + 8 > (spr->y + 12) && player_state != 11){
                         current_life = 0;
                         ScreenShake(1,1);
                         RefreshLife();
+                        playerHurtSound();
                         SetSpriteAnim(THIS, anim_death, 15);
                         player_state = 11;
+                    }
+                }
+
+                if(spr->type == SpriteSkullFlame) {
+                   if(CheckCollision(THIS, spr) && player_state != 11){
+                      if(canHurt && player_state != 11){
+                            inmunity = InmunityTime;
+                            canHurt = 0;
+                            current_life--;
+                            ScreenShake(1,1);
+                            RefreshLife();
+                        }
                     }
                 }
 
@@ -987,6 +1056,7 @@ void UPDATE()
                     if(CheckCollision(THIS, spr) && THIS->y >= (spr->y) && (player_state == 1 || player_state == 2 || player_state == 3 || player_state == 4) && player_accel_y < 0) {
                         // THIS->y -= 5;
                         player_accel_y = 5;
+                       
                         if(player_state == 1 || player_state == 4){
                             player_state = 4;
                             SetSpriteAnim(THIS, anim_jump, 20);
@@ -1072,9 +1142,10 @@ void DESTROY()
 {
 
     if(player_state != 9 && player_state != 8 && player_state != 11){
-        current_life = 0;
+       current_life = 0;
         ScreenShake(1,1);
         RefreshLife();
+        playerHurtSound();
         SetState(current_state);
     }   
 

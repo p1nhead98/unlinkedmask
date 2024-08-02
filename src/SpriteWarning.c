@@ -15,7 +15,11 @@ const UINT8 warning_anim[] = {4, 0, 1, 2, 2};
 extern Sprite* warning_spr;
 extern Sprite* warning_spr2;
 
+void wrnSound(){
+    PlayFx(CHANNEL_1, 10, 0x2c, 0xbf, 0xf1, 0x9e, 0x87);
+    // PlayFx(CHANNEL_2, 3, 0x81, 0xf1, 0x37, 0x87);
 
+}
 void START()
 {
     CUSTOM_DATA* data = (CUSTOM_DATA*)THIS->custom_data;
@@ -34,12 +38,14 @@ void UPDATE()
         {
             if(data->counter == 0){
                 THIS->x-=16;
+                wrnSound();
                 data->counter = 1;
             }
             
         }else{
             if(data->counter == 1){
                 THIS->x-=16;
+                wrnSound();
                 data->counter = 0;
             }
         }
@@ -51,12 +57,14 @@ void UPDATE()
             {
                 if(data->counter == 0){
                     THIS->x+=16;
+                    wrnSound();
                     data->counter = 1;
                 }
                 
             }else{
                 if(data->counter == 1){
                     THIS->x+=16;
+                    wrnSound();
                     data->counter = 0;
                 }
             }
@@ -66,12 +74,14 @@ void UPDATE()
             {
                 if(data->counter == 0){
                     THIS->y+=16;
+                    wrnSound();
                     data->counter = 1;
                 }
                 
             }else{
                 if(data->counter == 1){
                     THIS->y+=16;
+                    wrnSound();
                     data->counter = 0;
                 }
             }
@@ -81,12 +91,14 @@ void UPDATE()
             {
                 if(data->counter == 0){
                     THIS->y-=16;
+                    wrnSound();
                     data->counter = 1;
                 }
                 
             }else{
                 if(data->counter == 1){
                     THIS->y-=16;
+                    wrnSound();
                     data->counter = 0;
                 }
             }

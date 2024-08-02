@@ -42,14 +42,14 @@ _SPRITE_DMG(SpriteSpinOrbStoppable5, plataforma1)\
 _SPRITE_DMG(SpriteCrusherUp, crusherDown)\
 _SPRITE_DMG(SpriteSpinOrbRooftop, plataforma1)\
 _SPRITE_DMG(SpriteCrusherLeft, crusherLeft)\
-_SPRITE_DMG(SpriteSplitBox, plataforma2)\
+_SPRITE_DMG(SpriteSplitBox, splitBox)\
 _SPRITE_DMG(SpriteBoss1, boss1)\
 _SPRITE_DMG(SpriteBossFireFlash, bossFireFlash)\
 _SPRITE_DMG(SpriteSkullFlame, skullFlame)\
 _SPRITE_DMG(SpriteWarning, warning)\
 _SPRITE_DMG(SpriteWarning2, warning)\
-_SPRITE_DMG(SpriteBossHand1, BossTrailer1)\
-_SPRITE_DMG(SpriteBossHand2, BossTrailer2)\
+_SPRITE_DMG(SpriteBossHand1, hand1boss)\
+_SPRITE_DMG(SpriteBossHand2, hand2boss)\
 _SPRITE_DMG(SpriteBossFire, BossTrailer3)\
 _SPRITE_DMG(SpriteElevatorFloor1, elevFloor1)\
 _SPRITE_DMG(SpriteElevatorFloor2, elevFloor2)\
@@ -57,6 +57,8 @@ _SPRITE_DMG(SpriteElevatorFloor3, elevFloor3)\
 _SPRITE_DMG(SpriteKaizoBlock, kaizoBlock)\
 _SPRITE_DMG(SpriteBossElec, elecBoss)\
 _SPRITE_DMG(SpriteElectBossFx, elecBossFx)\
+_SPRITE_DMG(SpritePlayerFinal, playerBackCape)\
+_SPRITE_DMG(SpriteBossHair, hair_boss)\
 SPRITE_DEF_END
 
 #include "ZGBMain_Init.h"

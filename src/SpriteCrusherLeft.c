@@ -12,6 +12,16 @@
 const UINT8 crusher_l_blink[] = {2, 0, 1};
 const UINT8 crusher_l_idle[] = {1, 0};
 extern UINT8 current_level;
+
+void crusherLeftSound(){
+    PlayFx(CHANNEL_1, 15, 0x34, 0xbf, 0xf1, 0xee, 0x82);
+    PlayFx(CHANNEL_4, 15, 0x3b, 0xf1, 0x30, 0x80);
+}
+
+void crusherLeftCSound(){
+    PlayFx(CHANNEL_4, 60, 0x3F, 0xF5, 0xA8, 0x80);
+}
+
 void START()
 {
     CUSTOM_DATA* data = (CUSTOM_DATA*)THIS->custom_data;
@@ -57,22 +67,26 @@ void UPDATE()
                 if(scroll_target->x > 1176 && scroll_target->x < 1273){
                 // if(  ((THIS->y + 5) > scroll_target->y) && (U_LESS_THAN(DISTANCE(scroll_target->x, THIS->x + 16), 95))  ){
                     data->state = 1;
+                    crusherLeftSound();
                     SetSpriteAnim(THIS, crusher_l_blink, 20);
                 }
             }else if (current_level == 28){
                 if(THIS->x < 513){
                     if(  ((THIS->y + 5) > scroll_target->y) && (THIS->x > scroll_target->x)  ){
                         data->state = 1;
+                        crusherLeftSound();
                         SetSpriteAnim(THIS, crusher_l_blink, 20);
                     }
                 }else if (THIS->x > 936 && THIS->x < 1048){
                     if( (U_LESS_THAN(DISTANCE(scroll_target->x, THIS->x + 16), 95)) ){
                         data->state = 1;
+                        crusherLeftSound();
                         SetSpriteAnim(THIS, crusher_l_blink, 20);
                     }
                 }else{
                     if(  ((THIS->y + 5) > scroll_target->y) && (THIS->x + 15 < scroll_target->x) ){
                         data->state = 1;
+                        crusherLeftSound();
                         SetSpriteAnim(THIS, crusher_l_blink, 20);
                     }
                 }
@@ -80,16 +94,19 @@ void UPDATE()
                 if(THIS->x < 145){
                     if(  (U_LESS_THAN(DISTANCE(scroll_target->x, THIS->x + 16), 38)) && ((THIS->y - 24 ) < scroll_target->y ) ){
                         data->state = 1;
+                        crusherLeftSound();
                         SetSpriteAnim(THIS, crusher_l_blink, 20);
                     }
                 }else if(THIS->x > 904){
                     if( ((scroll_target->x > 864) && (scroll_target->x <  (THIS->x + 3)))  ){
                         data->state = 1;
+                        crusherLeftSound();
                         SetSpriteAnim(THIS, crusher_l_blink, 20);
                     }
                 }else{
                     if( ((scroll_target->x > 128) && (scroll_target->x <  (THIS->x + 3))) && ((THIS->y - 40 ) < scroll_target->y ) ){
                         data->state = 1;
+                        crusherLeftSound();
                         SetSpriteAnim(THIS, crusher_l_blink, 20);
                     }
                 }
@@ -98,11 +115,13 @@ void UPDATE()
                 if(THIS->x < 728){
                     if( ((THIS->y + 5) > scroll_target->y) && (THIS->x + 16 < scroll_target->x) ){
                         data->state = 1;
+                        crusherLeftSound();
                         SetSpriteAnim(THIS, crusher_l_blink, 20);
                     }
                 }else{
                     if( ((scroll_target->x > 880) && (scroll_target->x <  (THIS->x)))  ){
                         data->state = 1;
+                        crusherLeftSound();
                         SetSpriteAnim(THIS, crusher_l_blink, 20);
                     }
                 
@@ -115,26 +134,31 @@ void UPDATE()
         case 1:
         if(current_level == 28 && THIS->x > 520 && THIS->x < 656){
             if(TranslateSprite(THIS, 4 << delta_time, 0)){
+                crusherLeftCSound();
                 data->state = 2;
                 data->counter = 50;
             }
         }else if(THIS->x < 145 && current_level == 29){
             if(TranslateSprite(THIS, 4 << delta_time, 0)){
+                crusherLeftCSound();
                 data->state = 2;
                 data->counter = 50;
             }
         }else if (THIS->x < 703 && current_level == 30) {
             if(TranslateSprite(THIS, 4 << delta_time, 0)){
+                crusherLeftCSound();
                 data->state = 2;
                 data->counter = 50;
             }
         }else if (THIS->x > 703 && current_level == 30) {
             if(TranslateSprite(THIS, -4 << delta_time, 0)){
+                crusherLeftCSound();
                 data->state = 2;
                 data->counter = 10;
             }
         }else{
             if(TranslateSprite(THIS, -4 << delta_time , 0)){
+                crusherLeftCSound();
                 data->state = 2;
                 data->counter = 50;
             }

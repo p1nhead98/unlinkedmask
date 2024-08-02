@@ -10,6 +10,7 @@
 #include "TileAnimation.h"
 #include "BossAttacks.h"
 #include "Dialogos.h"
+#include "WinController.h"
 
 //ANIMATION TILES
 IMPORT_TILES(bossFalling);
@@ -33,6 +34,8 @@ const UINT8 boss_6frames2[] = {6, 0, 1, 0, 1, 0 ,1};
 
 const UINT8 boss_poss_1[] = { 64, 112};
 
+const UINT8 warn2_sounds[] = { 0x9e, 0xf1, 0x4e, 0x26 };
+
 INT8 boss_state = 0;
 UINT8 boss_counter = 0;
 UINT8 boss_counter2 = 0;
@@ -45,6 +48,7 @@ extern UINT8 current_level;
 extern UINT8 AnimCounter2;
 extern UINT8 dialog;
 extern UINT8 player_cs_state;
+extern UINT8 player_state;
 
 extern UINT8 state_interrupts;
 extern UINT8 dialog_pos;
@@ -104,10 +108,11 @@ void UPDATE()
             if(bossFireAttack_spr == 0){
                 data->state++;
                 Set_Sprite_Tiles(&bossFalling, BANK(bossFalling), 48, THIS->first_tile);
+                PlayFx(CHANNEL_1, 15, 0x1D, 0x94, 0xf3, 0xd6, 0x86);
             }
             break;
         case 1:
-            if(TranslateSprite(THIS, 0, 2)){
+            if(TranslateSprite(THIS, 0, 3)){
                 data->state++;
                 SetSpriteAnim(THIS, boss_6frames, 20);
                 Set_Sprite_Tiles(&bossCanHit, BANK(bossCanHit), 48, THIS->first_tile);
@@ -123,6 +128,7 @@ void UPDATE()
             if(--boss_counter == 0){
                 data->state++;
                 Set_Sprite_Tiles(&bossFlyUp, BANK(bossFlyUp), 48, THIS->first_tile);
+                 PlayFx(CHANNEL_1, 15, 0x1D, 0x94, 0xf3, 0xd6, 0x86);
 
             }
             break;
@@ -145,12 +151,14 @@ void UPDATE()
                 warning_spr2 = SpriteManagerAdd(SpriteWarning, 112, 14);
                 CUSTOM_DATA* warningData2 = (CUSTOM_DATA*)warning_spr2->custom_data;
                 warningData2->state = 2;
+                PlayFx(CHANNEL_1, 15, 0x1D, 0x94, 0xf3, 0xd6, 0x86);
             }
                     
         break;
         case 6:
             if(warning_spr == 0 && warning_spr2 == 0){
                 if(TranslateSprite(THIS, 0, 3)){
+                    
                     data->state++;
                     Set_Sprite_Tiles(&bossHitGround, BANK(bossHitGround), 48, THIS->first_tile);
                     SetSpriteAnim(THIS, boss_4frames, 20);
@@ -159,7 +167,8 @@ void UPDATE()
                     }else{
                         THIS->mirror = NO_MIRROR;
                     }
-                    
+                    ScreenShake(1,1);
+                    PlayFx(CHANNEL_4, 25, 0x3a, 0xf3, 0x62, 0x80);
                     bossSkullFlame_spr1 = SpriteManagerAdd(SpriteSkullFlame, THIS->x - 18, THIS->y - 4);
                     CUSTOM_DATA* dataFlame1 = (CUSTOM_DATA*)bossSkullFlame_spr1->custom_data;
                     dataFlame1->state = 0;
@@ -198,6 +207,7 @@ void UPDATE()
                 data->state++;
                 Set_Sprite_Tiles(&bossFlySide, BANK(bossFlySide), 48, THIS->first_tile);
                 SetSpriteAnim(THIS, boss_flyidle, 20);
+                 PlayFx(CHANNEL_1, 15, 0x1D, 0x94, 0xf3, 0xd6, 0x86);
             }
             break;
         case 10:
@@ -245,11 +255,13 @@ void UPDATE()
                 if(warning_spr == 0 && warning_spr2 == 0){
                     data->state++;
                     THIS->mirror = V_MIRROR;
+                     PlayFx(CHANNEL_1, 15, 0x1D, 0x94, 0xf3, 0xd6, 0x86);
                 }
             }else{
                 if(warning_spr == 0 && warning_spr2 == 0){
                     data->state++;
                     THIS->mirror = NO_MIRROR;
+                     PlayFx(CHANNEL_1, 15, 0x1D, 0x94, 0xf3, 0xd6, 0x86);
                 }
             }
             
@@ -304,11 +316,14 @@ void UPDATE()
                 if(warning_spr == 0 && warning_spr2 == 0){
                     data->state++;
                     THIS->mirror = NO_MIRROR;
+                     PlayFx(CHANNEL_1, 15, 0x1D, 0x94, 0xf3, 0xd6, 0x86);
                 }  
             }else{
                 if(warning_spr == 0 && warning_spr2 == 0){
                     data->state++;
                     THIS->mirror = V_MIRROR;
+                     PlayFx(CHANNEL_1, 15, 0x1D, 0x94, 0xf3, 0xd6, 0x86);
+                    
                 }    
             }
             
@@ -346,6 +361,7 @@ void UPDATE()
                 boss_counter = 50;
                 boss_counter2++;
                 SpriteManagerAdd(SpriteWarning2, player_sprite->x - 4, player_sprite->y);
+                PlayFx(CHANNEL_1, 10, 0x2c, 0xbf, 0xf1, warn2_sounds[boss_counter2], 0x87);
             }
             if(boss_counter2 == 4){
                 data->state++;
@@ -355,6 +371,7 @@ void UPDATE()
         case 18:
             if(--boss_counter == 0){
                 data->state++;
+                PlayFx(CHANNEL_1, 15, 0x1D, 0x94, 0xf3, 0xd6, 0x86);
             }
             break;
         case 19:
@@ -367,7 +384,8 @@ void UPDATE()
                 }else{
                     THIS->mirror = NO_MIRROR;
                 }
-                
+                ScreenShake(1,1);
+                PlayFx(CHANNEL_4, 25, 0x3a, 0xf3, 0x62, 0x80);
                 bossSkullFlame_spr1 = SpriteManagerAdd(SpriteSkullFlame, THIS->x - 18, THIS->y - 4);
                 CUSTOM_DATA* dataFlame1 = (CUSTOM_DATA*)bossSkullFlame_spr1->custom_data;
                 dataFlame1->state = 0;
@@ -393,7 +411,7 @@ void UPDATE()
         case 22:
             if(--boss_counter == 0){
                 data->state++;
-                
+                PlayFx(CHANNEL_1, 15, 0x1D, 0x94, 0xf3, 0xd6, 0x86);
                 Set_Sprite_Tiles(&bossFlyUp, BANK(bossFlyUp), 48, THIS->first_tile);
 
             }
@@ -421,6 +439,7 @@ void UPDATE()
                     data->state++;
                     boss_state = 25;
                     Attacks_Animations(31);
+                    PlayFx(CHANNEL_1, 15, 0x1b, 0x3f, 0xf1, 0x9e, 0x87);
                     boss_counter = 10;
                 }
             }
@@ -434,6 +453,7 @@ void UPDATE()
             if(boss_counter > 0){
                 if(boss_counter == 5){
                     Attacks_Animations(32);
+                    PlayFx(CHANNEL_4, 10, 0x3f, 0xf3, 0x90, 0x80);
                 }
                 boss_counter--;
             }else{
@@ -461,6 +481,7 @@ void UPDATE()
             if(warning_spr == 0 && warning_spr2 == 0){
                 data->state++;
                 THIS->x = 160;
+                PlayFx(CHANNEL_1, 15, 0x1D, 0x94, 0xf3, 0xd6, 0x86);
                 // THIS->mirror = H_MIRROR;
             }
             break;
@@ -490,6 +511,7 @@ void UPDATE()
             if(warning_spr == 0 && warning_spr2 == 0){
                 data->state++;
                 THIS->x = 112;
+                PlayFx(CHANNEL_1, 15, 0x1D, 0x94, 0xf3, 0xd6, 0x86);
                 // THIS->mirror = H_MIRROR;
             }
             break;
@@ -517,6 +539,7 @@ void UPDATE()
             if(warning_spr == 0 && warning_spr2 == 0){
                 data->state++;
                 THIS->x = 64;
+                PlayFx(CHANNEL_1, 15, 0x1D, 0x94, 0xf3, 0xd6, 0x86);
                 // THIS->mirror = H_MIRROR;
             }
             break;
@@ -559,6 +582,7 @@ void UPDATE()
                 CUSTOM_DATA_BTN* bossData2 = (CUSTOM_DATA_BTN*)warning_spr->custom_data;
                 bossData2->state = 80;
                 THIS->mirror = H_MIRROR;
+                 PlayFx(CHANNEL_1, 15, 0x1D, 0x94, 0xf3, 0xd6, 0x86);
             }
             break;
         case 38:
@@ -617,6 +641,7 @@ void UPDATE()
                 CUSTOM_DATA_BTN* bossData3 = (CUSTOM_DATA_BTN*)warning_spr2->custom_data;
                 bossData3->state = 80;
                 THIS->mirror = NO_MIRROR;
+                PlayFx(CHANNEL_1, 15, 0x1D, 0x94, 0xf3, 0xd6, 0x86);
             }
             
             break;
@@ -680,7 +705,7 @@ void UPDATE()
             if(warning_spr == 0 && warning_spr2 == 0){
                 data->state++;
                 boss_counter = 30;
-              
+              PlayFx(CHANNEL_1, 15, 0x1D, 0x94, 0xf3, 0xd6, 0x86);
                 // THIS->mirror = H_MIRROR;
             }
             break;
@@ -689,6 +714,8 @@ void UPDATE()
            
                 if(TranslateSprite(THIS, 0, 4)){
                     data->state++;
+                    ScreenShake(1,1);
+                    PlayFx(CHANNEL_4, 25, 0x3a, 0xf3, 0x62, 0x80);
                     Set_Sprite_Tiles(&bossHitGround, BANK(bossHitGround), 48, THIS->first_tile);
                     SetSpriteAnim(THIS, boss_4frames, 20);
                     if(THIS->x < player_sprite->x){
@@ -718,6 +745,8 @@ void UPDATE()
                 Set_Sprite_Tiles(&bossFlySide, BANK(bossFlySide), 48, THIS->first_tile);
                 SetSpriteAnim(THIS, boss_flyidle, 20);
                 data->state++;
+                THIS->mirror = NO_MIRROR;
+             
             }
             break;
         case 50:
@@ -734,6 +763,7 @@ void UPDATE()
                 SetSpriteAnim(THIS, boss_flyidle, 20);
                 data->state++;
                 THIS->mirror = V_MIRROR;
+                 
             }
             break;
         case 52:
@@ -748,8 +778,10 @@ void UPDATE()
             break;
         case 53:
             if(--boss_counter == 0){
-                current_level++;
-		        SetState(current_state);
+                data->state = 61;
+                IsCutscene = 5;
+                boss_counter2 = 0;
+                boss_counter = 5;
             }
             break;
 
@@ -782,6 +814,7 @@ void UPDATE()
             if(--boss_counter == 0){
                 current_level++;
 		        SetState(current_state);
+           
             }
             break;
 
@@ -804,10 +837,13 @@ void UPDATE()
             break;
         case 60:
             if(--boss_counter == 0){
-                IsCutscene = 0;
+                if(IsCutscene == 1){
+                    IsCutscene = 0;
+                    SetHudWin(1);
+                }
                 data->state = 0;
-                bossFireAttack_spr = SpriteManagerAdd(SpriteBossFireFlash, 0, 138);
                 PlayMusic(unlinkedboss, 1);
+                bossFireAttack_spr = SpriteManagerAdd(SpriteBossFireFlash, 0, 138);
                 // data->state++;
 				// CleanWin();
 				// dialog_pos = 120;
@@ -820,6 +856,27 @@ void UPDATE()
 
 
 
+
+
+
+
+        case 61:
+            if(boss_counter2 < 4){
+                if(--boss_counter == 0){
+                    FadeMusic(boss_counter2);
+                    boss_counter2++;
+                    boss_counter = 20;
+                }
+            }else{
+                data->state++;
+                player_state = 15;
+                NR52_REG = 0x80; //Enables sound, you should always setup this first
+                NR51_REG = 0xFF; //Enables all channels (left and right)
+                NR50_REG = 0x77; //Max volume
+            }
+            break;
+        case 62:
+            break;
 
         case 80:
             THIS->y += 4;

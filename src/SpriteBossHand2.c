@@ -37,85 +37,85 @@ void START()
 void UPDATE()
 {
 
-     switch (BossH2State)
-     {
-     case 0:
-          if(--BossH2Counter == 0){
-               BossH2Counter = 18;
-               BossH2State++;
-               SetSpriteAnim(THIS, hand2anim2, 16);
-          }
-          break;
-     case 1:
-          if( BossH2Counter > 0 ){
-               BossH2Counter--;
-               THIS->y--;
-          }else{
-               BossH2State++;
-          }
-          break;
-     case 2:
-          if(TranslateSprite(THIS, 0 , 4)){
-               BossH2State++;
-               ScreenShake(1,1);
-               BossH2Counter = 50;
+     // switch (BossH2State)
+     // {
+     // case 0:
+     //      if(--BossH2Counter == 0){
+     //           BossH2Counter = 18;
+     //           BossH2State++;
+     //           SetSpriteAnim(THIS, hand2anim2, 16);
+     //      }
+     //      break;
+     // case 1:
+     //      if( BossH2Counter > 0 ){
+     //           BossH2Counter--;
+     //           THIS->y--;
+     //      }else{
+     //           BossH2State++;
+     //      }
+     //      break;
+     // case 2:
+     //      if(TranslateSprite(THIS, 0 , 4)){
+     //           BossH2State++;
+     //           ScreenShake(1,1);
+     //           BossH2Counter = 50;
 
 
-               switch (BossH2Counter2)
-               {
-               case 0:
-                    for (UINT8 i = 0; i < 4; i++)
-                    {
-                         SpriteManagerAdd(SpriteBossFire, hand_boss_patter[i], 0);
-                    }
-                    break;
-               case 1:
-                    for (UINT8 i = 0; i < 4; i++)
-                    {
-                         SpriteManagerAdd(SpriteBossFire, hand_boss_patter2[i], 0);
-                    }
-                    break;
-               case 2:
-                    for (UINT8 i = 0; i < 4; i++)
-                    {
-                         SpriteManagerAdd(SpriteBossFire, hand_boss_patter3[i], 0);
-                    }
-                    break;
-               case 3:
-                    for (UINT8 i = 0; i < 4; i++)
-                    {
-                         SpriteManagerAdd(SpriteBossFire, hand_boss_patter4[i], 0);
-                    }
-                    break;
-               }
+     //           switch (BossH2Counter2)
+     //           {
+     //           case 0:
+     //                for (UINT8 i = 0; i < 4; i++)
+     //                {
+     //                     SpriteManagerAdd(SpriteBossFire, hand_boss_patter[i], 0);
+     //                }
+     //                break;
+     //           case 1:
+     //                for (UINT8 i = 0; i < 4; i++)
+     //                {
+     //                     SpriteManagerAdd(SpriteBossFire, hand_boss_patter2[i], 0);
+     //                }
+     //                break;
+     //           case 2:
+     //                for (UINT8 i = 0; i < 4; i++)
+     //                {
+     //                     SpriteManagerAdd(SpriteBossFire, hand_boss_patter3[i], 0);
+     //                }
+     //                break;
+     //           case 3:
+     //                for (UINT8 i = 0; i < 4; i++)
+     //                {
+     //                     SpriteManagerAdd(SpriteBossFire, hand_boss_patter4[i], 0);
+     //                }
+     //                break;
+     //           }
 
-               if(BossH2Counter2 < 3){
-                    BossH2Counter2++;
-               }else{
-                    BossH2Counter2 = 0;
-               }
+     //           if(BossH2Counter2 < 3){
+     //                BossH2Counter2++;
+     //           }else{
+     //                BossH2Counter2 = 0;
+     //           }
                
                
-          }
-          break;
-     case 3:
-          if(--BossH2Counter == 0){
-               BossH2Counter = 50;
-               BossH2State++;
-               SetSpriteAnim(THIS, hand2anim, 16);
-          }
-          break;
-     case 4:
-          if(THIS->y > BossH2InitY){
-               THIS->y--;
-          }else{
-               BossH2State = 0;
+     //      }
+     //      break;
+     // case 3:
+     //      if(--BossH2Counter == 0){
+     //           BossH2Counter = 50;
+     //           BossH2State++;
+     //           SetSpriteAnim(THIS, hand2anim, 16);
+     //      }
+     //      break;
+     // case 4:
+     //      if(THIS->y > BossH2InitY){
+     //           THIS->y--;
+     //      }else{
+     //           BossH2State = 0;
          
-          }
-          break;
-     default:
-          break;
-     }
+     //      }
+     //      break;
+     // default:
+     //      break;
+     // }
 
      // if(BossH2State == 0 && --BossH2Counter == 0 ){
      //      if(TranslateSprite(THIS, 0, 4)){

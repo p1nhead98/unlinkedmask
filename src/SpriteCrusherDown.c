@@ -12,6 +12,15 @@
 const UINT8 crusher_blink[] = {2, 0, 1};
 const UINT8 crusher_idle[] = {1, 0};
 extern UINT8 current_level;
+
+void crusherDownSound(){
+    PlayFx(CHANNEL_1, 15, 0x34, 0xbf, 0xf1, 0xee, 0x82);
+    PlayFx(CHANNEL_4, 15, 0x3b, 0xf1, 0x30, 0x80);
+}
+
+void crusherDownCSound(){
+    PlayFx(CHANNEL_4, 60, 0x3F, 0xF5, 0xA8, 0x80);
+}
 void START()
 {
     CUSTOM_DATA* data = (CUSTOM_DATA*)THIS->custom_data;
@@ -54,27 +63,32 @@ void UPDATE()
         if(current_level == 27 && THIS->x > 128 && THIS->x < 200){
                 if(  ((THIS->y + 5) > scroll_target->y) && (U_LESS_THAN(DISTANCE(scroll_target->x, THIS->x + 16), 40))  ){
                     data->state = 1;
+                    crusherDownSound();
                     SetSpriteAnim(THIS, crusher_blink, 20);
                 }
         }else if(current_level == 27 && THIS->x > 288 && THIS->x < 320){
             if(  ((THIS->y + 5) < scroll_target->y) && (U_LESS_THAN(DISTANCE(scroll_target->x, THIS->x + 16), 80))  ){
                 data->state = 1;
+                crusherDownSound();
                 SetSpriteAnim(THIS, crusher_blink, 20);
             }
         }else if(current_level == 29){
             if(THIS->x < 384){
                 if(  ((THIS->y + 5) < scroll_target->y) && (U_LESS_THAN(DISTANCE(scroll_target->x, THIS->x + 16), 34))  ){
                     data->state = 1;
+                    crusherDownSound();
                     SetSpriteAnim(THIS, crusher_blink, 20);
                 }
             }else if(THIS->x > 1192){
                if(  ((THIS->y + 5) > scroll_target->y) && (U_LESS_THAN(DISTANCE(scroll_target->x, THIS->x + 16), 35))  ){
                     data->state = 1;
+                    crusherDownSound();
                     SetSpriteAnim(THIS, crusher_blink, 20);
                 } 
             }else{
                 if(  ((THIS->y + 5) < scroll_target->y) && (U_LESS_THAN(DISTANCE(scroll_target->x, THIS->x + 16), 35))  ){
                     data->state = 1;
+                    crusherDownSound();
                     SetSpriteAnim(THIS, crusher_blink, 20);
                 }
             }
@@ -83,6 +97,7 @@ void UPDATE()
             if(  ((THIS->y + 5) < scroll_target->y) && (U_LESS_THAN(DISTANCE(scroll_target->x, THIS->x + 16), 55))  ){
                 data->state = 1;
                 SetSpriteAnim(THIS, crusher_blink, 20);
+                crusherDownSound();
             }
         }
             
@@ -91,11 +106,13 @@ void UPDATE()
         if(current_level == 29){
             if(THIS->x > 1192){
                 if(TranslateSprite(THIS, 0, -4 << delta_time)){
+                    PlayFx(CHANNEL_4, 60, 0x3F, 0xF5, 0xA8, 0x80);
                     data->state = 2;
                     data->counter = 50;
                 }
             }else{
                 if(TranslateSprite(THIS, 0, 4 << delta_time)){
+                    PlayFx(CHANNEL_4, 60, 0x3F, 0xF5, 0xA8, 0x80);
                     data->state = 2;
                     data->counter = 50;
                 } 
@@ -103,12 +120,14 @@ void UPDATE()
         }else if(current_level == 27 && THIS->x > 128 && THIS->x < 200){
           
             if(TranslateSprite(THIS, 0, -4 << delta_time)){
+                PlayFx(CHANNEL_4, 60, 0x3F, 0xF5, 0xA8, 0x80);
                 data->state = 2;
                 data->counter = 50;
             }
             
         }else{ 
             if(TranslateSprite(THIS, 0, 4 << delta_time)){
+                PlayFx(CHANNEL_4, 60, 0x3F, 0xF5, 0xA8, 0x80);
                 data->state = 2;
                 data->counter = 50;
             }

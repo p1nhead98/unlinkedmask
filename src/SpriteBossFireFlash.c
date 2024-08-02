@@ -34,6 +34,9 @@ extern UINT8 bossAttackState;
 extern Sprite* bossFireAttack_spr;
 extern UINT8 bossCanHurt;
 
+void flameSound(){
+    PlayFx(CHANNEL_4, 10, 0x3f, 0xf3, 0x90, 0x80);
+}
 
 void START()
 {
@@ -71,6 +74,7 @@ void UPDATE()
             }
             if(THIS->y == 134){
                 Attacks_Animations(0);
+                flameSound();
                 if(patternCounter > 0){
                     bossCanHurt = 0;
                     Attacks_Animations(7);
@@ -121,6 +125,7 @@ void UPDATE()
             }
             if(THIS->y == 134){
                 Attacks_Animations(3);
+                flameSound();
                 bossCanHurt = 0;
                 Attacks_Animations(2);
                 Attacks_Animations(5);
@@ -153,6 +158,7 @@ void UPDATE()
                     Attacks_Animations(7);
                 }else if(bossFireTimer == 4){
                     Attacks_Animations(9);
+
                 }
             }else{
                 bossFireState++;
@@ -187,6 +193,7 @@ void UPDATE()
             }
             if(THIS->y == 134){
                 Attacks_Animations(10);
+                flameSound();
                 if(patternCounter > 5){
                     bossCanHurt = 0;
                    Attacks_Animations(17);
@@ -196,6 +203,7 @@ void UPDATE()
             if(THIS->y == 126){
                 bossCanHurt = 3;
                 Attacks_Animations(11);
+              
                 if(patternCounter > 5){
                     Attacks_Animations(19);
                 }
@@ -235,6 +243,7 @@ void UPDATE()
             }
             if(THIS->y == 134){
                 bossCanHurt = 0;
+                flameSound();
                 Attacks_Animations(15);
                 Attacks_Animations(12);
                 Attacks_Animations(13); 
@@ -243,6 +252,7 @@ void UPDATE()
                 bossCanHurt = 4;
                 Attacks_Animations(16);
                 Attacks_Animations(14);
+                flameSound();
                 
             }
             THIS->x = pos_state_3[fire_pos_counter];
@@ -302,6 +312,7 @@ void UPDATE()
             }
             if(THIS->y == 134){
                 Attacks_Animations(20);
+                flameSound();
                 if(patternCounter > 10){
                     bossCanHurt = 0;
                     Attacks_Animations(27);
@@ -354,6 +365,7 @@ void UPDATE()
             }
             if(THIS->y == 134){
                  bossCanHurt = 0;
+                 flameSound();
                 Attacks_Animations(25);
                 Attacks_Animations(22);
                 Attacks_Animations(23);
