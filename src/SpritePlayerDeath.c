@@ -58,7 +58,7 @@ void UPDATE()
         }
         if(pdeath_counter == 0){
             pdeath_counter = 1;
-            pdeath_counter2 = 60;
+            pdeath_counter2 = 50;
         }
 
     }else{

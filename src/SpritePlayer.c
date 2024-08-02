@@ -340,7 +340,7 @@ void CheckCollisionTile()
             SetSpriteAnim(THIS, anim_death, 15);
             player_state = 11;
         }
-        if(colision == 116){
+        if(colision == 116 && current_life > 0){
             current_life = 0;
             player_state = 55;
             ScreenShake(1,1);
@@ -357,19 +357,19 @@ void CheckCollisionTile()
             }
         }
     }else{
-        if( (colision2 == 112 || colision2 == 113) ||  (colision3 == 112 || colision3 == 113)){
-            if((player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 2))  && player_accel_y > 2 && (boss_state > 24 && boss_state < 43) ){
-                player_state = 3;
-                player_accel_y = -83;
-                PlayFx(CHANNEL_4, 10, 0x02, 0xf1, 0x40, 0xc0);
-                // PlayFx(CHANNEL_2, 10, 0xc1, 0xb1, 0x2b, 0x87);
-                SetSpriteAnim(THIS, anim_spin, 20);
-                SpriteManagerAdd(SpritePlayerVfx, THIS->x - 4, THIS->y + 8);
-                if(boss_state == 25){
-                    boss_state = 26;
-                }
-            }
-        }
+        // if( (colision2 == 112 || colision2 == 113) ||  (colision3 == 112 || colision3 == 113)){
+        //     if((player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 2))  && player_accel_y > 2 && (boss_state > 24 && boss_state < 43) ){
+        //         player_state = 3;
+        //         player_accel_y = -83;
+        //         PlayFx(CHANNEL_4, 10, 0x02, 0xf1, 0x40, 0xc0);
+        //         // PlayFx(CHANNEL_2, 10, 0xc1, 0xb1, 0x2b, 0x87);
+        //         SetSpriteAnim(THIS, anim_spin, 20);
+        //         SpriteManagerAdd(SpritePlayerVfx, THIS->x - 4, THIS->y + 8);
+        //         if(boss_state == 25){
+        //             boss_state = 26;
+        //         }
+        //     }
+        // }
     }
 
 
