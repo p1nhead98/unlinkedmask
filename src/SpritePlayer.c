@@ -199,7 +199,7 @@ void CheckDeathTiles(){
         }
         if(current_level == 30 ){
             if((colision == 60 || colision == 61 || colision == 62 || colision == 63)){
-                if(on_off == 1 && player_state != 11){
+                if(canDo == 1 && player_state != 11){
                     current_life = 0;
                     ScreenShake(1,1);
                     RefreshLife();
@@ -207,7 +207,7 @@ void CheckDeathTiles(){
                     player_state = 11;
                 }
             }else if((colision == 56 || colision == 57 || colision == 58 || colision == 59)){
-                if(on_off == 0 && player_state != 11){
+                if(canDo == 0 && player_state != 11){
                     current_life = 0;
                     ScreenShake(1,1);
                     RefreshLife();
@@ -357,19 +357,19 @@ void CheckCollisionTile()
             }
         }
     }else{
-        // if( (colision2 == 112 || colision2 == 113) ||  (colision3 == 112 || colision3 == 113)){
-        //     if((player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 2))  && player_accel_y > 2 && (boss_state > 24 && boss_state < 43) ){
-        //         player_state = 3;
-        //         player_accel_y = -83;
-        //         PlayFx(CHANNEL_4, 10, 0x02, 0xf1, 0x40, 0xc0);
-        //         // PlayFx(CHANNEL_2, 10, 0xc1, 0xb1, 0x2b, 0x87);
-        //         SetSpriteAnim(THIS, anim_spin, 20);
-        //         SpriteManagerAdd(SpritePlayerVfx, THIS->x - 4, THIS->y + 8);
-        //         if(boss_state == 25){
-        //             boss_state = 26;
-        //         }
-        //     }
-        // }
+        if( (colision2 == 112 || colision2 == 113) ||  (colision3 == 112 || colision3 == 113)){
+            if((player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 2))  && player_accel_y > 2 && (boss_state > 24 && boss_state < 43) ){
+                player_state = 3;
+                player_accel_y = -83;
+                PlayFx(CHANNEL_4, 10, 0x02, 0xf1, 0x40, 0xc0);
+                // PlayFx(CHANNEL_2, 10, 0xc1, 0xb1, 0x2b, 0x87);
+                SetSpriteAnim(THIS, anim_spin, 20);
+                SpriteManagerAdd(SpritePlayerVfx, THIS->x - 4, THIS->y + 8);
+                if(boss_state == 25){
+                    boss_state = 26;
+                }
+            }
+        }
     }
 
 

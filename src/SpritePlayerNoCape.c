@@ -235,6 +235,7 @@ void UPDATE()
                     
                     SetSpriteAnim(THIS, nc_anim_jump, 15);
                     player_nc_state = 12;
+                    PlayFx(CHANNEL_4, 10, 0x02, 0xf1, 0x40, 0xc0);
                 }else{  
                     TranslateSprite(THIS, 1, 0);
                     SetSpriteAnim(THIS, nc_anim_walk, 15);
@@ -289,7 +290,7 @@ void UPDATE()
                 TranslateSprite(THIS, 2, 0);
                 if (player_nc_accel_y > 2)
                 {
-                    PlayFx(CHANNEL_4, 10, 0x02, 0xf1, 0x40, 0xc0);
+                    
                     SetSpriteAnim(THIS, nc_anim_fall, 15);
                 }
             break;

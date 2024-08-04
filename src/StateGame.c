@@ -46,7 +46,7 @@ IMPORT_MAP(lvl_19);
 IMPORT_MAP(lvl_20);
 IMPORT_MAP(lvl_20);
 IMPORT_MAP(bossfight1);
-IMPORT_MAP(bossfight2);
+IMPORT_MAP(boss222);
 
 
 //CUTSCENES
@@ -268,9 +268,8 @@ const struct MapInfoBanked levels[] = {
 	BANKED_MAP(bossfight1),
 	BANKED_MAP(bossCuts),
 	BANKED_MAP(bossfight1),
-	BANKED_MAP(bossfight2),
-		BANKED_MAP(ks),
-	
+	BANKED_MAP(boss222),
+	BANKED_MAP(ks),
 };
 
 
@@ -317,9 +316,7 @@ const START_POS start_positions[] = {
 	{0, 96}, // Boss Cutscene	----- current level = 33
 	{88, 136}, //Boss 1 fight Player Start Position	----- current level = 34
 
-	{112, 96},  //boss 2 fight Player Start Position	----- current level = 35
 
-	{112, 96},  //boss 2 fight Player Start Position	----- current level = 35
 };
 
 
