@@ -59,6 +59,7 @@ _SPRITE_DMG(SpriteBossElec, elecBoss)\
 _SPRITE_DMG(SpriteElectBossFx, elecBossFx)\
 _SPRITE_DMG(SpritePlayerFinal, playerBackCape)\
 _SPRITE_DMG(SpriteBossHair, hair_boss)\
+_SPRITE_DMG(SpriteTitleFlash, titleFlash)\
 SPRITE_DEF_END
 
 #include "ZGBMain_Init.h"

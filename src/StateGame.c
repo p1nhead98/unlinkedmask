@@ -424,6 +424,11 @@ void START()
 	switch (current_level){
 		case 0:
 			PlayMusic(unlinkedtitlescreen, 1);
+			AnimCounter = 0;
+			doAnimCount = 3;
+			AnimCounter2 = 0;
+			doAnimCount2 = 3;
+			BGP_REG = PAL_DEF(1, 0, 2, 3);
 		break;
 
 		case 1:
@@ -779,14 +784,6 @@ void UPDATE()
 		}
 	}
 
-	if(current_level == 35){
-		if(--AnimCounter == 0){
-			current_level++;
-			SetState(current_state);
-		}
-	}
-
-
 	if(pdeath_counter == 1){
 		if(--pdeath_counter2 == 0){
 			pdeath_counter2 = 0;
@@ -796,7 +793,35 @@ void UPDATE()
 	}
 
 
-	if(current_level == 33){
+	if(current_level == 0){
+		if(--doAnimCount == 0){
+			doAnimCount = 10;
+			TitleScreenAnimation(AnimCounter);
+			if(AnimCounter < 6){
+				AnimCounter++;
+			}else{
+				AnimCounter = 0;
+				SpriteManagerAdd(SpriteTitleFlash, 16, 32);
+			}
+		}
+		if(--doAnimCount2 == 0){
+			doAnimCount2 = 20;
+			AnimCounter2 = AnimCounter2 == 8 ? 7 : 8;
+			TitleScreenAnimation(AnimCounter2);
+		}
+		if(KEY_TICKED(J_START) && current_level == 0){
+			start_fade = 1;
+			FadeColorAndMusic();
+			current_level++;
+			SetState(current_state);
+		}
+
+	}else if(current_level == 35){
+		if(--AnimCounter == 0){
+			current_level++;
+			SetState(current_state);
+		}
+	}else if(current_level == 33){
 		if(--state_counter == 0 ){
 			if(doAnimCount2 == 0){
 				doAnimCount2 = 1;
@@ -808,9 +833,7 @@ void UPDATE()
 				LYC_REG = 0;
 			}
 		}
-	}
-
-	if(current_level == 31){
+	}else if(current_level == 31){
 		if(--doAnimCount2 == 0 && doAnimCount != 0){
 			AnimCounter2--;
 			Tile_Anim(AnimCounter2, 8, &corridorSky3, 28, BANK(corridorSky3));
@@ -850,10 +873,7 @@ void UPDATE()
 		}
 		
 		
-	}
-
-
-	if(current_level == 34){
+	}else if(current_level == 34){
 		if(--doAnimCount == 0){
 			AnimCounter++;
 
@@ -875,14 +895,7 @@ void UPDATE()
 				
 			doAnimCount = 4;
 		}
-	}
-
-	
-
-
-
-	
-	if(current_level != 32 && current_level != 31 && current_level != 35 && current_level != 36 ){
+	}else if(current_level != 32 && current_level != 31 && current_level != 35 && current_level != 36 && current_level != 0 ){
 
 		if(current_level == 2){
 			if(canDoInterrupt == 0){
@@ -1070,13 +1083,7 @@ void UPDATE()
 		}
 
 		
-		if(KEY_TICKED(J_START) && current_level == 0){
-			start_fade = 1;
-			FadeColorAndMusic();
-			current_level++;
-			SetState(current_state);
-		}
-
+		
 
 
 		if(--doAnimCount == 0 && IsCutscene == 0  && current_level != 32 ){
