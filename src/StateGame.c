@@ -196,7 +196,7 @@ extern UINT8 dialog_pos;
 
 UINT8 event = 0;
 UINT8 canDo = 0;
-UINT8 dialog = 0;
+extern UINT8 dialog;
 UINT8 anim_index = 0;
 
 UINT8 IsCutscene = 0;
@@ -796,7 +796,7 @@ void UPDATE()
 	if(current_level == 0){
 		if(--doAnimCount == 0){
 			doAnimCount = 10;
-			TitleScreenAnimation(AnimCounter);
+			//TitleScreenAnimation(AnimCounter);
 			if(AnimCounter < 6){
 				AnimCounter++;
 			}else{
@@ -807,7 +807,7 @@ void UPDATE()
 		if(--doAnimCount2 == 0){
 			doAnimCount2 = 20;
 			AnimCounter2 = AnimCounter2 == 8 ? 7 : 8;
-			TitleScreenAnimation(AnimCounter2);
+			// TitleScreenAnimation(AnimCounter2);
 		}
 		if(KEY_TICKED(J_START) && current_level == 0){
 			start_fade = 1;

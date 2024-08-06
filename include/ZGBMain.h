@@ -2,6 +2,8 @@
 #define ZGBMAIN_H
 
 #define STATES \
+_STATE(StateTitleScreen)\
+_STATE(StateCutscenes)\
 _STATE(StateGame)\
 STATE_DEF_END
 

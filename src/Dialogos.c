@@ -16,10 +16,12 @@
 #define tDelay 25
 
 UINT8 current_dialog = 0;
+UINT8 dialog = 0;
+UINT8 can_dialog = 0;
+
 extern UINT8 text_delay;
 extern UINT8 current_level;
 extern UINT8 state_interrupts;
-extern UINT8 dialog;
 extern UINT8 canDo;
 extern UINT8 event;
 extern UINT8 state_counter;
@@ -176,7 +178,7 @@ void SetDialog() BANKED{
         state_interrupts = 0;
         HIDE_WIN;
         dialog = 0;
-        canDo = 0;
+        can_dialog = 0;
         state_counter = 3;
         event = 2;
         HIDE_WIN;
@@ -228,7 +230,7 @@ void SetDialog() BANKED{
         state_interrupts = 0;
         HIDE_WIN;
         dialog = 0;
-        canDo = 0;
+        can_dialog = 0;
         FadeColorAndMusic();
         current_level++;
         SetState(current_state);
@@ -302,7 +304,7 @@ void SetDialog() BANKED{
         state_interrupts = 0;
         HIDE_WIN;
         dialog = 0;
-        canDo = 0;
+        can_dialog = 0;
         player_cs_state = 8;
         // FadeColorAndMusic();
         // current_level++;
@@ -409,7 +411,7 @@ void SetDialog() BANKED{
         state_interrupts = 0;
         HIDE_WIN;
         dialog = 0;
-        canDo = 0;
+        can_dialog = 0;
         FadeColorAndMusic();
         current_level++;
         SetState(current_state);
@@ -439,7 +441,7 @@ void SetDialog() BANKED{
         state_interrupts = 0;
         HIDE_WIN;
         dialog = 0;
-        canDo = 0;
+        can_dialog = 0;
         boss_state = 60;
         break;
 
