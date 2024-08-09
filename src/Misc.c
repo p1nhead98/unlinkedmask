@@ -31,11 +31,15 @@ INT16 inmunity = 0;
 INT8 pal_tick = 0;
 UINT8 current_pal = 0;
 UINT8 on_off = 0;
+UINT8 start_screen;
 
-extern UINT8 start_screen;
-
-extern UINT8 original_lvl_bank;
-extern struct TilesInfo* original_tiles;
+// extern UINT8 original_lvl_bank;
+// struct TilesInfo* original_tiles;
+UINT8 IsCutscene = 0;
+UINT8 canDo = 0;
+Sprite* player_sprite = 0;
+Sprite* bossFireAttack_spr = 1;
+UINT8 change_jump_count = 0;
 
 UINT8 door_time = 0;
 UINT8 door_time_btwn = 0;
@@ -159,17 +163,17 @@ void ScrollRelocateMapTo(UINT16 new_x, UINT16 new_y) BANKED{
 
     // PUSH_BANK(scroll_bank);
     y = new_y >> 3;
-    // for(i = 0u; i != (SCREEN_TILE_REFRES_H) && y != scroll_h; ++i, y ++) {
-    //     ScrollUpdateRow((scroll_x >> 3) - SCREEN_PAD_LEFT,  y - SCREEN_PAD_TOP);
-    // }
-    for (UINT8 y = 0; y < 7; y++)
-	{
-		for (UINT8 x = 0; x < 32; x++)
-		{
-				ScrollUpdateColumn(x, y);
-		}
+    for(i = 0u; i != (SCREEN_TILE_REFRES_H) && y != scroll_h; ++i, y ++) {
+        ScrollUpdateRow((scroll_x >> 3) - SCREEN_PAD_LEFT,  y - SCREEN_PAD_TOP);
+    }
+    // for (UINT8 y = 0; y < 7; y++)
+	// {
+	// 	for (UINT8 x = 0; x < 32; x++)
+	// 	{
+	// 			ScrollUpdateColumn(x, y);
+	// 	}
 			
-	}
+	// }
     // POP_BANK;
 }
 
@@ -209,134 +213,134 @@ void RefreshTimer() BANKED{
 
 void SetOnOffColsEvent(UINT8 cols[], UINT8 onOff ) BANKED{
 
-    UINT8 i = 0;
+    // UINT8 i = 0;
     
-    if(onOff == 0){
-		for(i = 0u; cols[i] != 0u; ++i) {
-            if(i > 24u){
-				scroll_collisions[cols[i]] = 0u;
-				scroll_collisions_down[cols[i]] = 0u;
-			}
+    // if(onOff == 0){
+	// 	for(i = 0u; cols[i] != 0u; ++i) {
+    //         if(i > 24u){
+	// 			scroll_collisions[cols[i]] = 0u;
+	// 			scroll_collisions_down[cols[i]] = 0u;
+	// 		}
             
-		}
-        Onoff_tile_anim(&OffAnim, 0, BANK(OffAnim), 77);
+	// 	}
+    //     Onoff_tile_anim(&OffAnim, 0, BANK(OffAnim), 77);
        
         
-    }else if(onOff == 1){
-        for(i = 0u; cols[i] != 0u; ++i) {
-            if(i > 24u && i < 28u){
-				scroll_collisions[cols[i]] = 1u;
-				scroll_collisions_down[cols[i]] = 1u;
-			}
-		}
+    // }else if(onOff == 1){
+    //     for(i = 0u; cols[i] != 0u; ++i) {
+    //         if(i > 24u && i < 28u){
+	// 			scroll_collisions[cols[i]] = 1u;
+	// 			scroll_collisions_down[cols[i]] = 1u;
+	// 		}
+	// 	}
 
-        Onoff_tile_anim(&OnAnim, 0, BANK(OnAnim), 77);
-        SpriteManagerAdd(SpriteSpinOrbEvent, 1095, 192);
-    }else if (onOff == 2){
-        for(i = 0u; cols[i] != 0u; ++i) {
-            if(i > 24u && i < 29u){
-				scroll_collisions[cols[i]] = 0u;
-				scroll_collisions_down[cols[i]] = 0u;
-			}else if(i > 28u){
-                scroll_collisions[cols[i]] = 1u;
-				scroll_collisions_down[cols[i]] = 1u;
-            }
+    //     Onoff_tile_anim(&OnAnim, 0, BANK(OnAnim), 77);
+    //     SpriteManagerAdd(SpriteSpinOrbEvent, 1095, 192);
+    // }else if (onOff == 2){
+    //     for(i = 0u; cols[i] != 0u; ++i) {
+    //         if(i > 24u && i < 29u){
+	// 			scroll_collisions[cols[i]] = 0u;
+	// 			scroll_collisions_down[cols[i]] = 0u;
+	// 		}else if(i > 28u){
+    //             scroll_collisions[cols[i]] = 1u;
+	// 			scroll_collisions_down[cols[i]] = 1u;
+    //         }
             
-		}
-        Onoff_tile_anim(&OffAnim, 0, BANK(OffAnim), 77);
-        Onoff_tile_anim(&OnAnim, 0, BANK(OffAnim), 81);
-    }
+	// 	}
+    //     Onoff_tile_anim(&OffAnim, 0, BANK(OffAnim), 77);
+    //     Onoff_tile_anim(&OnAnim, 0, BANK(OffAnim), 81);
+    // }
 
 }
 
 void SetOnOffCols(UINT8 cols[], UINT8 onOff ) BANKED{
 
-    UINT8 i = 0;
+    // UINT8 i = 0;
 
-    if(onOff == 0){
-		for(i = 0u; cols[i] != 0u; ++i) {
-            if(i > 15u && i < 20u){
-				scroll_collisions[cols[i]] = 1u;
-				scroll_collisions_down[cols[i]] = 1u;
-			}else if(i > 19u && i < 25u){
-				scroll_collisions[cols[i]] = 0u;
-				scroll_collisions_down[cols[i]] = 0u;
-			}
+    // if(onOff == 0){
+	// 	for(i = 0u; cols[i] != 0u; ++i) {
+    //         if(i > 15u && i < 20u){
+	// 			scroll_collisions[cols[i]] = 1u;
+	// 			scroll_collisions_down[cols[i]] = 1u;
+	// 		}else if(i > 19u && i < 25u){
+	// 			scroll_collisions[cols[i]] = 0u;
+	// 			scroll_collisions_down[cols[i]] = 0u;
+	// 		}
             
-		}
+	// 	}
         
-        Onoff_tile_anim(&OffAnim, 0, BANK(OffAnim), 60);
-        Onoff_tile_anim(&OnAnim, 0, BANK(OnAnim), 56);
+    //     Onoff_tile_anim(&OffAnim, 0, BANK(OffAnim), 60);
+    //     Onoff_tile_anim(&OnAnim, 0, BANK(OnAnim), 56);
         
-        Onoff_tile_anim(&spikesAnim, 0, BANK(spikesAnim), 81);
-        Onoff_tile_anim(&spikesAnim3, 0, BANK(spikesAnim3), 85);
+    //     Onoff_tile_anim(&spikesAnim, 0, BANK(spikesAnim), 81);
+    //     Onoff_tile_anim(&spikesAnim3, 0, BANK(spikesAnim3), 85);
         
-    }else if(onOff == 1){
-        for(i = 0u; cols[i] != 0u; ++i) {
-            if(i > 15u && i < 20u){
-				scroll_collisions[cols[i]] = 0u;
-				scroll_collisions_down[cols[i]] = 0u;
-			}else if(i > 19u && i < 25u){
-				scroll_collisions[cols[i]] = 1u;
-				scroll_collisions_down[cols[i]] = 1u;
-			}
-		}
+    // }else if(onOff == 1){
+    //     for(i = 0u; cols[i] != 0u; ++i) {
+    //         if(i > 15u && i < 20u){
+	// 			scroll_collisions[cols[i]] = 0u;
+	// 			scroll_collisions_down[cols[i]] = 0u;
+	// 		}else if(i > 19u && i < 25u){
+	// 			scroll_collisions[cols[i]] = 1u;
+	// 			scroll_collisions_down[cols[i]] = 1u;
+	// 		}
+	// 	}
 
-        Onoff_tile_anim(&OnAnim, 0, BANK(OnAnim), 60);
-        Onoff_tile_anim(&OffAnim, 0, BANK(OffAnim), 56);
-        Onoff_tile_anim(&spikesAnim3, 0, BANK(spikesAnim3), 81);
-        Onoff_tile_anim(&spikesAnim, 0, BANK(spikesAnim), 85);
-    }
+    //     Onoff_tile_anim(&OnAnim, 0, BANK(OnAnim), 60);
+    //     Onoff_tile_anim(&OffAnim, 0, BANK(OffAnim), 56);
+    //     Onoff_tile_anim(&spikesAnim3, 0, BANK(spikesAnim3), 81);
+    //     Onoff_tile_anim(&spikesAnim, 0, BANK(spikesAnim), 85);
+    // }
 
 }
 
 void SetDoorCols(UINT8 off) BANKED{
-    if(off == 1){
-        Door_Anim(&darkTileAnim, 0, BANK(darkTileAnim), 64, 1);
-        // Tile_Anim(9 , 12, &doorAnim, 64, BANK(doorAnim));
-        // Tile_Anim(11 , 12, &doorAnim, 66, BANK(doorAnim));
-    }else{
-        Door_Anim(&doorAnim, 0, BANK(doorAnim), 64, 0);
-        ScreenShake(1,1);
+    // if(off == 1){
+    //     Door_Anim(&darkTileAnim, 0, BANK(darkTileAnim), 64, 1);
+    //     // Tile_Anim(9 , 12, &doorAnim, 64, BANK(doorAnim));
+    //     // Tile_Anim(11 , 12, &doorAnim, 66, BANK(doorAnim));
+    // }else{
+    //     Door_Anim(&doorAnim, 0, BANK(doorAnim), 64, 0);
+    //     ScreenShake(1,1);
         
-    }
+    // }
      
 }
 void AutomaticOnOff(UINT8 cols[], UINT8 onOff ) BANKED{
   UINT8 i = 0;
 
-    if(onOff == 0){
-		for(i = 0u; cols[i] != 0u; ++i) {
-            if(i > 15u && i < 20u){
-				scroll_collisions[cols[i]] = 1u;
-				scroll_collisions_down[cols[i]] = 1u;
-			}else if(i > 19u && i < 25u){
-				scroll_collisions[cols[i]] = 0u;
-				scroll_collisions_down[cols[i]] = 0u;
-			}
+    // if(onOff == 0){
+	// 	for(i = 0u; cols[i] != 0u; ++i) {
+    //         if(i > 15u && i < 20u){
+	// 			scroll_collisions[cols[i]] = 1u;
+	// 			scroll_collisions_down[cols[i]] = 1u;
+	// 		}else if(i > 19u && i < 25u){
+	// 			scroll_collisions[cols[i]] = 0u;
+	// 			scroll_collisions_down[cols[i]] = 0u;
+	// 		}
             
-		}
-        Onoff_tile_anim(&OffAnim, 0, BANK(OffAnim), 60);
-        Onoff_tile_anim(&OnAnim, 0, BANK(OnAnim), 56);
-        Onoff_tile_anim(&spikesAnim, 0, BANK(spikesAnim), 81);
-        Onoff_tile_anim(&spikesAnim3, 0, BANK(spikesAnim3), 85);
+	// 	}
+    //     Onoff_tile_anim(&OffAnim, 0, BANK(OffAnim), 60);
+    //     Onoff_tile_anim(&OnAnim, 0, BANK(OnAnim), 56);
+    //     Onoff_tile_anim(&spikesAnim, 0, BANK(spikesAnim), 81);
+    //     Onoff_tile_anim(&spikesAnim3, 0, BANK(spikesAnim3), 85);
         
-    }else if(onOff == 1){
-        for(i = 0u; cols[i] != 0u; ++i) {
-            if(i > 15u && i < 20u){
-				scroll_collisions[cols[i]] = 0u;
-				scroll_collisions_down[cols[i]] = 0u;
-			}else if(i > 19u && i < 25u){
-				scroll_collisions[cols[i]] = 1u;
-				scroll_collisions_down[cols[i]] = 1u;
-			}
-		}
+    // }else if(onOff == 1){
+    //     for(i = 0u; cols[i] != 0u; ++i) {
+    //         if(i > 15u && i < 20u){
+	// 			scroll_collisions[cols[i]] = 0u;
+	// 			scroll_collisions_down[cols[i]] = 0u;
+	// 		}else if(i > 19u && i < 25u){
+	// 			scroll_collisions[cols[i]] = 1u;
+	// 			scroll_collisions_down[cols[i]] = 1u;
+	// 		}
+	// 	}
 
-        Onoff_tile_anim(&OnAnim, 0, BANK(OnAnim), 60);
-        Onoff_tile_anim(&OffAnim, 0, BANK(OffAnim), 56);
-        Onoff_tile_anim(&spikesAnim3, 0, BANK(spikesAnim3), 81);
-        Onoff_tile_anim(&spikesAnim, 0, BANK(spikesAnim), 85);
-    }
+    //     Onoff_tile_anim(&OnAnim, 0, BANK(OnAnim), 60);
+    //     Onoff_tile_anim(&OffAnim, 0, BANK(OffAnim), 56);
+    //     Onoff_tile_anim(&spikesAnim3, 0, BANK(spikesAnim3), 81);
+    //     Onoff_tile_anim(&spikesAnim, 0, BANK(spikesAnim), 85);
+    // }
 
 }
 

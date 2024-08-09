@@ -17,7 +17,7 @@ void Tile_Anim(UINT8 x, UINT8 tilesAmount, struct TilesInfo *tile, UINT8 first_t
         POP_BANK;
 }
 
-void Spike_anim(struct TilesInfo *tile, UINT8 tileStart, UINT8 bank) __nonbanked{
+void Spike_anim(struct TilesInfo *tile, UINT8 tileStart, UINT8 bank) __nonbanked{ // si se usa por el momento
     
     PUSH_BANK(bank);
      set_bkg_data(tileStart, 4, tile->data);
@@ -33,12 +33,12 @@ void Set_Sprite_Tiles(struct TilesInfo *tile, UINT8 bank, UINT8 tile_amount, UIN
  
 }
 
-void Set_SpinChange_Tiles(struct TilesInfo *tile, UINT8 bank, UINT8 tile_amount) __nonbanked{
+// void Set_SpinChange_Tiles(struct TilesInfo *tile, UINT8 bank, UINT8 tile_amount) __nonbanked{
    
-    PUSH_BANK(bank);
-    set_bkg_data(48, tile_amount, tile->data);
-    POP_BANK;
-}
+//     PUSH_BANK(bank);
+//     set_bkg_data(48, tile_amount, tile->data);
+//     POP_BANK;
+// }
 
 void SetMugTiles(struct TilesInfo *tile, UINT8 bank, UINT8 init_tile) __nonbanked{
     PUSH_BANK(bank);
@@ -54,36 +54,36 @@ void SetMugTiles(struct TilesInfo *tile, UINT8 bank, UINT8 init_tile) __nonbanke
     POP_BANK;
 }
 
-void Onoff_tile_anim(struct TilesInfo *tile, UINT8 tileStart, UINT8 bank, UINT8 firstTile) __nonbanked{
+// void Onoff_tile_anim(struct TilesInfo *tile, UINT8 tileStart, UINT8 bank, UINT8 firstTile) __nonbanked{
     
-    PUSH_BANK(bank);
-    Tile_Anim(tileStart, 12, tile, firstTile, bank);
-	Tile_Anim(tileStart + 1, 12, tile, firstTile + 1, bank);
-	Tile_Anim(tileStart + 2, 12, tile, firstTile + 2, bank);
-	Tile_Anim(tileStart + 3, 12, tile, firstTile + 3, bank);
-    POP_BANK;
-}
-void Door_Anim(struct TilesInfo *tile, UINT8 tileStart, UINT8 bank, UINT8 firstTile, UINT8 off) __nonbanked{
-    UINT8 i = 0;
-    PUSH_BANK(bank);
-    for ( i = 0; i < 12; i++)
-    {
-        if(off == 1){
-            if(i > 2){
-                Tile_Anim(tileStart + 1, 12, tile, firstTile + i, bank);
-            }else{
-                Tile_Anim(tileStart + i, 12, tile, firstTile + i, bank);
-            }
+//     PUSH_BANK(bank);
+//     Tile_Anim(tileStart, 12, tile, firstTile, bank);
+// 	Tile_Anim(tileStart + 1, 12, tile, firstTile + 1, bank);
+// 	Tile_Anim(tileStart + 2, 12, tile, firstTile + 2, bank);
+// 	Tile_Anim(tileStart + 3, 12, tile, firstTile + 3, bank);
+//     POP_BANK;
+// }
+// void Door_Anim(struct TilesInfo *tile, UINT8 tileStart, UINT8 bank, UINT8 firstTile, UINT8 off) __nonbanked{
+//     UINT8 i = 0;
+//     PUSH_BANK(bank);
+//     for ( i = 0; i < 12; i++)
+//     {
+//         if(off == 1){
+//             if(i > 2){
+//                 Tile_Anim(tileStart + 1, 12, tile, firstTile + i, bank);
+//             }else{
+//                 Tile_Anim(tileStart + i, 12, tile, firstTile + i, bank);
+//             }
             
-        }else{
-            Tile_Anim(tileStart + i, 12, tile, firstTile + i, bank);
-        }
+//         }else{
+//             Tile_Anim(tileStart + i, 12, tile, firstTile + i, bank);
+//         }
         
-    }
+//     }
     
  
-    POP_BANK;
-}
+//     POP_BANK;
+// }
 
 
 

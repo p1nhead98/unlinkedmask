@@ -10,6 +10,7 @@
 #include "TileAnimation.h"
 #include "BossAttacks.h"
 #include "Dialogos.h"
+#include "Misc.h"
 #include "WinController.h"
 
 //ANIMATION TILES
@@ -45,7 +46,7 @@ UINT8 cantChangeAnim = 0;
 extern Sprite* bossFireAttack_spr;
 extern Sprite* player_sprite;
 extern UINT8 current_level;
-extern UINT8 AnimCounter2;
+UINT8 AnimCounter2 = 0;
 extern UINT8 dialog;
 extern UINT8 player_cs_state;
 extern UINT8 player_state;

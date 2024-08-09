@@ -1,17 +1,8 @@
 #include "Banks/SetAutoBank.h"
-#include <string.h>
-#include "ZGBMain.h"
-#include "SpriteManager.h"
 #include <BankManager.h>
 #include "Misc.h"
-#include "Scroll.h"
 #include "Palette.h"
-#include "Sprite.h"
-#include "Sound.h"
-#include "Music.h"
-#include "rand.h"
 #include "TileAnimation.h"
-#include "Banks/SetAutoBank.h"
 #include "Print.h"
 #include "Math.h"
 #include "WinController.h"
@@ -143,7 +134,7 @@ void RefreshLifePause() BANKED
     
 }
 
-void cleanWindow(struct MapInfo *map, UINT8 map_bank) __nonbanked{
+void cleanWindow() BANKED{
     const UINT8 emptyWindow  = 0;
 
     for (UINT8 i = 0; i != 50; ++i)
@@ -167,13 +158,13 @@ void SetHudWin( UINT8 on) BANKED{
     
     if(on == 1){
         
-        cleanWindow(&window, BANK(window));
+        cleanWindow();
         SetWindowY(128);
         // state_interrupts = 0;
         RefreshLife();
     }else{
         
-        cleanWindow(&window, BANK(window));
+        cleanWindow();
         SetWindowY(144);
         // LYC_REG = 0;
         // WY_REG = 128; 
@@ -182,46 +173,46 @@ void SetHudWin( UINT8 on) BANKED{
     }
 }
 
-void SetPauseTiles( struct MapInfo *map, UINT8 map_bank, UINT8 tiles_amount, UINT8 isPause) __nonbanked{
-	UINT8 tiles_banks;
-	struct TilesInfo* tiles;
-    CRITICAL{
-	PUSH_BANK(map_bank)
-		tiles_banks = map->tiles_bank;
-		tiles = map->tiles;
-	POP_BANK;
+// void SetPauseTiles( struct MapInfo *map, UINT8 map_bank, UINT8 tiles_amount, UINT8 isPause) __nonbanked{
+// 	UINT8 tiles_banks;
+// 	struct TilesInfo* tiles;
+//     CRITICAL{
+// 	PUSH_BANK(map_bank)
+// 		tiles_banks = map->tiles_bank;
+// 		tiles = map->tiles;
+// 	POP_BANK;
 
 
-        PUSH_BANK( tiles_banks);
-            set_bkg_data(0, tiles_amount, tiles->data);
-        POP_BANK;
-        if(isPause == 1){
-            PUSH_BANK(map_bank);
-                set_win_tiles(0, 0, 20, 18, map->data);
-            POP_BANK;
-        }
-    }
-}
+//         PUSH_BANK( tiles_banks);
+//             set_bkg_data(0, tiles_amount, tiles->data);
+//         POP_BANK;
+//         if(isPause == 1){
+//             PUSH_BANK(map_bank);
+//                 set_win_tiles(0, 0, 20, 18, map->data);
+//             POP_BANK;
+//         }
+//     }
+// }
 
 
 
-void SetPauseMenu(struct MapInfo *map, UINT8 map_bank) __nonbanked
-{
+// void SetPauseMenu(struct MapInfo *map, UINT8 map_bank) __nonbanked
+// {
 
-    if(start_screen == 1){
-        DISPLAY_OFF;
+//     if(start_screen == 1){
+//         DISPLAY_OFF;
     
-        SetPauseTiles( current_level > 12 ? &pauseCmMap : &pauseNmMap , current_level > 12 ? BANK(pauseCmMap) : BANK(pauseNmMap), current_level > 12 ? 139 : 136 , 1);
-        RefreshLifePause();
-        DISPLAY_ON;
-    }else{
-        DISPLAY_OFF;
-        SetPauseTiles(map, map_bank, 139, 0);
-        // PUSH_BANK(bank);
-        //     set_bkg_data(0, 139, tile->data);
-        // POP_BANK;
+//         SetPauseTiles( current_level > 12 ? &pauseCmMap : &pauseNmMap , current_level > 12 ? BANK(pauseCmMap) : BANK(pauseNmMap), current_level > 12 ? 139 : 136 , 1);
+//         RefreshLifePause();
+//         DISPLAY_ON;
+//     }else{
+//         DISPLAY_OFF;
+//         SetPauseTiles(map, map_bank, 139, 0);
+//         // PUSH_BANK(bank);
+//         //     set_bkg_data(0, 139, tile->data);
+//         // POP_BANK;
         
-        cleanWindow(&window, BANK(window));
-        DISPLAY_ON;
-    }
-}
+//         cleanWindow(&window, BANK(window));
+//         DISPLAY_ON;
+//     }
+// }

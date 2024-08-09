@@ -12,7 +12,7 @@ const UINT8 on_anim[] = {2, 0, 0};
 const UINT8 off_anim[] = {2, 1, 1};
 
 extern UINT8 on_off;
-extern UINT8 collision_tiles2[];
+ UINT8 collision_tiles2[] = {2, 0, 0};
 
 extern UINT8 start_screen;
 

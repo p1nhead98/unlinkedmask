@@ -1,6 +1,7 @@
 #include "Banks/SetAutoBank.h"
 #include "Math.h"
 
+UINT8 current_level = 0;
 
 void PerDelay(UINT8 numloops) BANKED
 {

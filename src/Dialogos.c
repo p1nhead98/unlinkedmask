@@ -23,16 +23,46 @@ extern UINT8 text_delay;
 extern UINT8 current_level;
 extern UINT8 state_interrupts;
 extern UINT8 canDo;
-extern UINT8 event;
-extern UINT8 state_counter;
+UINT8 event = 0;
+// extern UINT8 state_counter;
+extern UINT8 dialog_pos;
+extern UINT8 current_cs;
 
 extern UINT8 text_voice;
 extern UINT8 player_cs_state;
 
 extern INT8 boss_state;
 
+
+
 IMPORT_TILES(mugshots);
 IMPORT_MAP(capeCutsWin);
+
+void FadeDMGCs(UINT8 fadeout) BANKED {
+	
+	UINT8 pals3[] = {0, 1, 2, 3};
+    UINT8 pals2[] = {0, 0, 1, 2};
+    UINT8 pals1[] = {0, 0, 0, 1};
+	BGP_REG = OBP0_REG = OBP1_REG = PAL_DEF(0, pals1[fadeout], pals2[fadeout], pals3[fadeout] );
+		
+}
+
+void FadeColorAndMusicCs(){
+    FadeDMGCs(3);
+    pDelay(20);
+    NR50_REG = 0x55;
+    FadeDMGCs(2);
+    pDelay(20);
+    NR50_REG = 0x33;
+    FadeDMGCs(1);
+    pDelay(20);
+    NR50_REG = 0x11;
+    FadeDMGCs(0);
+    pDelay(20);
+    NR50_REG = 0x0;
+    StopMusic;
+}
+
 
 void SetMushot(){
     UINT8 i = 0;
@@ -49,6 +79,8 @@ void SetMushot(){
         set_win_tiles(0 + i, 2, 1, 1,  &mug_tiles_down[i]);
     }
 }
+
+
 void SetDialog() BANKED{
     switch (current_dialog)
     {
@@ -87,14 +119,18 @@ void SetDialog() BANKED{
         CleanText();
         LYC_REG = 0;
         WY_REG = 144;
-        state_interrupts = 0;
         HIDE_WIN;
+        dialog_pos = 144;
         dialog = 0;
+        state_interrupts = 10;
         pDelay(10);
-		FadeColorAndMusic();
-        current_level++;
+		FadeColorAndMusicCs();
+        current_cs++;
 		SetState(current_state);
         break;
+
+
+
      case 5:
         CleanWin();
         SetMugTiles(&mugshots, BANK(mugshots), 27);
@@ -119,13 +155,39 @@ void SetDialog() BANKED{
         CleanText();
         LYC_REG = 0;
         WY_REG = 144;
-        state_interrupts = 0;
         HIDE_WIN;
+        dialog_pos = 144;
+        state_interrupts = 10;
         dialog = 0;
         pDelay(10);
-		FadeColorAndMusic();
-        current_level++;
+		FadeColorAndMusicCs();
+        current_level = 0;
+        current_state = StateStage1;
 		SetState(current_state);
+
+
+        // CleanText();
+        // LYC_REG = 0;
+        // WY_REG = 144;
+        // HIDE_WIN;
+        // dialog_pos = 144;
+        // dialog = 0;
+        // state_interrupts = 10;
+        // pDelay(10);
+		// FadeColorAndMusicCs();
+        // current_cs++;
+		// SetState(current_state);
+        break;
+
+
+
+
+
+
+
+
+
+
     case 9:
         CleanWin();
         SetMugTiles(&mugshots, BANK(mugshots), 27);
@@ -179,7 +241,7 @@ void SetDialog() BANKED{
         HIDE_WIN;
         dialog = 0;
         can_dialog = 0;
-        state_counter = 3;
+        // state_counter = 3;
         event = 2;
         HIDE_WIN;
         break;
@@ -454,14 +516,27 @@ void SetDialog() BANKED{
 
  void CleanWin() BANKED{
     text_delay = 0;
-    PRINT(0, 0, "                     "); 
-    PRINT(0, 1, "                     "); 
-    PRINT(0, 2, "                     "); 
+    if(print_target == 0){
+        PRINT(0, 18, "                     "); 
+        PRINT(0, 19, "                     "); 
+        PRINT(0, 20, "                     "); 
+    }else{
+        PRINT(0, 0, "                     "); 
+        PRINT(0, 1, "                     "); 
+        PRINT(0, 2, "                     "); 
+    }
  }
 
 void CleanText() BANKED{
     text_delay = 0;
-    PRINT(3, 0, "                     "); 
-    PRINT(3, 1, "                     "); 
-    PRINT(3, 2, "                     "); 
+    if(print_target == 0){
+        PRINT(3, 18, "                     "); 
+        PRINT(3, 19, "                     "); 
+        PRINT(3, 20, "                     "); 
+    }else{
+        PRINT(3, 0, "                     "); 
+        PRINT(3, 1, "                     "); 
+        PRINT(3, 2, "                     "); 
+    }
+
 }

@@ -27,6 +27,7 @@
         "music.h": "c",
         "math.h": "c",
         "dialogos.h": "c",
-        "bossattacks.h": "c"
+        "bossattacks.h": "c",
+        "wincontroller.h": "c"
     }
 }

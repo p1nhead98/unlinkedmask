@@ -30,7 +30,7 @@ UINT8 bossFireState = 0;
 UINT8 bossFireTimer = 110;
 UINT8 patternCounter = 0;
 
-extern UINT8 bossAttackState;
+UINT8 bossAttackState;
 extern Sprite* bossFireAttack_spr;
 extern UINT8 bossCanHurt;
 

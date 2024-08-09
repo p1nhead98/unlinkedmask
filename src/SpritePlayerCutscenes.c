@@ -59,14 +59,14 @@ void UPDATE()
     case 0:
         if(THIS->x != 72){
             
-            // if(current_level == 8 && player_c_counter < 4){
-            //     if(--player_c_counter2 == 0){
-            //         FadeMusic(player_c_counter);
-            //         player_c_counter++;
-            //         player_c_counter2 = 20;
-            //     }
+            if(current_cs == 2 && player_c_counter < 4){
+                if(--player_c_counter2 == 0){
+                    FadeMusic(player_c_counter);
+                    player_c_counter++;
+                    player_c_counter2 = 20;
+                }
                
-            // }
+            }
             THIS->x++;
             if((THIS->anim_frame == 1 || THIS->anim_frame == 3) && player_c_canDo == 0){
                 player_c_canDo = 1;
@@ -87,6 +87,7 @@ void UPDATE()
             WY_REG = dialog_pos;
             state_interrupts = 1;
             dialog = 1;
+            player_cs_state = 10;
         }
         // if(current_level != 8){
 

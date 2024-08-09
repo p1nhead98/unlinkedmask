@@ -30,11 +30,12 @@ extern UINT8 current_pal;
 extern UINT8 current_life;
 extern UINT8 current_level;
 extern UINT8 door_open;
-extern UINT8 IsFirstLvl;
 extern UINT8 start_screen;
 
 extern UINT8 deaths_u_count;
 extern UINT8 deaths_d_count;
+
+extern UINT8 current_cs;
 BOOLEAN canHurtNc;
 
 
@@ -111,8 +112,8 @@ void START()
     // player_canDo = TRUE;
     player_nc_last_state = 0;
     player_nc_can = 0;
-    THIS->x -= 8;
-    if(IsFirstLvl){
+    // THIS->x -= 8;
+    if(current_level == 0){
         THIS->y -= 8;
     }
     player_nc_counter =  0;
@@ -161,11 +162,11 @@ void UPDATE()
             
             // SetState(current_state);
         }
-        if(current_level != 17 && current_level != 18){
+        // if(current_state == StateStage1 && current_level < 5){
             if( (THIS->x >= scroll_x + 150) && player_nc_state != 9 && player_nc_state != 8){
                 player_nc_state = 9;
             }
-        }
+        //}
 
 
 
@@ -229,7 +230,7 @@ void UPDATE()
                 }
             break;
             case 8: //animacion al entrar a un nivel
-                if(IsFirstLvl){
+                if(current_level == 0){
                     player_nc_accel_y = -70;
                     THIS->mirror = NO_MIRROR;
                     
@@ -250,8 +251,15 @@ void UPDATE()
                 THIS->x++;
                 THIS->mirror = NO_MIRROR;
                 if(THIS->x >= (scroll_x + 172)){
-                    current_level++;
-                    SetState(current_state);
+                    if(current_state == StateStage1 && current_level == 4){
+                        current_cs = 2;
+                        current_state = StateCutscenes;
+                        SetState(current_state);
+                    }else{
+                        current_level++;
+                        SetState(current_state);
+                    }
+                    
                 }
             break;
             case 10:

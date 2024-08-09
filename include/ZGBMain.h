@@ -4,7 +4,7 @@
 #define STATES \
 _STATE(StateTitleScreen)\
 _STATE(StateCutscenes)\
-_STATE(StateGame)\
+_STATE(StateStage1)\
 STATE_DEF_END
 
 #define SPRITES \
@@ -62,6 +62,7 @@ _SPRITE_DMG(SpriteElectBossFx, elecBossFx)\
 _SPRITE_DMG(SpritePlayerFinal, playerBackCape)\
 _SPRITE_DMG(SpriteBossHair, hair_boss)\
 _SPRITE_DMG(SpriteTitleFlash, titleFlash)\
+_SPRITE_DMG(SpriteMoon, moon)\
 SPRITE_DEF_END
 
 #include "ZGBMain_Init.h"

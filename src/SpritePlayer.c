@@ -34,7 +34,6 @@ extern UINT8 current_pal;
 extern UINT8 current_life;
 extern UINT8 current_level;
 extern UINT8 door_open;
-extern UINT8 IsFirstLvl;
 extern UINT8 start_screen;
 
 extern UINT8 deaths_u_count;
@@ -418,9 +417,9 @@ void START()
     player_last_state = 0;
     player_accel_x = 0;
     THIS->x -= 8;
-    if(IsFirstLvl){
-        THIS->y -= 8;
-    }
+    // if(IsFirstLvl){
+    //     THIS->y -= 8;
+    // }
     player_counter =  0;
     inmunity = 0;
     canHurt = inmunity < 1 ? 1 : 0;
@@ -663,20 +662,20 @@ void UPDATE()
                     }
                 break;
                 case 8: //animacion al entrar a un nivel
-                    if(IsFirstLvl){
-                        player_accel_y = -80;
-                        THIS->mirror = player_priority == 1 ? NM_PRIOR : NO_MIRROR;
+                    // if(IsFirstLvl){
+                    //     player_accel_y = -80;
+                    //     THIS->mirror = player_priority == 1 ? NM_PRIOR : NO_MIRROR;
                         
-                        SetSpriteAnim(THIS, anim_jump, 15);
-                        player_state = 12;
-                    }else{  
+                    //     SetSpriteAnim(THIS, anim_jump, 15);
+                    //     player_state = 12;
+                    // }else{  
                         TranslateSprite(THIS, 1, 0);
                         SetSpriteAnim(THIS, anim_walk, 15);
                         THIS->mirror = player_priority == 1 ? NM_PRIOR : NO_MIRROR;
                         if(THIS->x == 16){
                             player_state = 0;
                         }
-                    }
+                    // }
         
                 break;
                 case 9: //animacion al llegar al limite del nivel

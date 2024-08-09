@@ -8,6 +8,11 @@ typedef struct {
     UINT16 start_y;
 } START_POS;
 
+struct MapInfoBanked {
+	UINT8 bank;
+	struct MapInfo* map;
+};
+
 void PerDelay(UINT8 numloops) BANKED;
 
 #endif

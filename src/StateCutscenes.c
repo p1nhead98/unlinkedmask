@@ -8,41 +8,60 @@
 #include "Dialogos.h"
 #include "Print.h"
 #include "Misc2.h"
+#include "WinController.h"
+
 
 //importar mapas de cutscenes
 IMPORT_MAP(intro_door);
+IMPORT_MAP(doorCuts);
+IMPORT_MAP(cinematicCape);
+
+
 
 //importar fuentes de cutscenes
 IMPORT_TILES(font);
 
-UINT8 cs_state = 0;
+UINT8 cs_counter = 0;
+UINT8 cs_counter_2 = 0;
 UINT8 current_cs = 0;
+
 
 extern UINT8 current_dialog;
 extern UINT8 dialog_pos;
 extern UINT8 dialog;
 extern UINT8 can_dialog;
+extern UINT8 state_interrupts;
 
-struct MapInfoBanked {
-	UINT8 bank;
-	struct MapInfo* map;
-};
+extern UINT8 canDoInterrupt;
+extern UINT8 counterInterrupt;
+extern UINT8 counterInterrupt2;
+extern UINT8 can_scroll_x ;
+extern UINT8 can_scroll_y ;
 
-
-
+extern UINT16 scroller_y;
 
 const struct MapInfoBanked cs_levels[] = {
 	BANKED_MAP(intro_door),
-
+	BANKED_MAP(doorCuts),
+	BANKED_MAP(cinematicCape),
 };
-
-
-
 
 const START_POS cs_start_positions[] = {
-	{8, 96}, //TitleScreen	----- current level = 0 
-
+	{8, 96}, 
+	{64, 87}, 
+	{0, 96}, 
 };
+
+void FillDoorCinemCs() {
+    for (UINT8 y = 0u; y < 12u; y++)
+	{
+		for (UINT8 x = 0u; x < 20u; x++)
+		{
+				ScrollUpdateColumn(x, y);
+		}
+			
+	}
+}
 
 
 void START() {
@@ -64,7 +83,40 @@ void START() {
             SHOW_SPRITES;
             SpriteManagerAdd(SpritePlayerCutscenes, cs_start_positions[current_cs].start_x, cs_start_positions[current_cs].start_y);
             INIT_FONT(font, PRINT_WIN);
-        break;
+			dialog = 0;
+			can_dialog = 0;
+			current_dialog = 0;
+		break;
+
+		case 1:
+			FillDoorCinemCs();
+			SHOW_SPRITES;
+			can_scroll_y = 0;
+			SpriteManagerAdd(SpriteViewerH, cs_start_positions[current_cs].start_x, cs_start_positions[current_cs].start_y);
+			INIT_FONT(font, PRINT_WIN);
+			dialog = 0;
+			can_dialog = 0;
+			current_dialog = 5;
+			state_interrupts = 2;
+			scroll_y = 0;
+			cs_counter = 3;
+			cs_counter_2 = 90;
+			counterInterrupt = counterInterrupt2 = 3;
+			LYC_REG = 0;
+		break;
+
+		case 2:
+			SHOW_SPRITES;
+			can_scroll_y = 0;
+			can_scroll_x = 0;
+			SetHudWin(0);
+			SpriteManagerAdd(SpritePlayerCutscenes, cs_start_positions[current_cs].start_x, cs_start_positions[current_cs].start_y);
+			INIT_FONT(font, PRINT_WIN);
+			dialog = 0;
+			can_dialog = 0;
+			current_dialog = 0;
+			break;
+
 
         default:
         break;
@@ -73,6 +125,26 @@ void START() {
 }
 
 void UPDATE() {
+
+	if(current_cs == 1){
+		if(canDoInterrupt == 0){
+			if(--cs_counter == 0){
+				canDoInterrupt = 1;
+			}
+		}else if(canDoInterrupt == 2){
+			if(--cs_counter_2 == 0){
+				canDoInterrupt = 3;
+				LYC_REG = 0;
+				dialog_pos = 20;
+				WY_REG = dialog_pos;
+				state_interrupts = 1;
+				dialog = 1;
+			}
+		}
+
+	}
+
+
     if(dialog == 1){
 		if(can_dialog == 0){
 			SetDialog();
@@ -84,4 +156,5 @@ void UPDATE() {
 			can_dialog = 0;
 		}
 	}
+	
 }

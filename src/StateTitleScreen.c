@@ -19,7 +19,7 @@ UINT8 ts_anim = 0;
 UINT8 ts_anim2 = 0;
 UINT8 ts_state = 0;
 
-extern UINT8 cs_state;
+
 extern UINT8 current_cs;
 
 void TitleScreenAnimation(UINT8 index){
@@ -171,7 +171,7 @@ void START() {
 	InitScroll(BANK(titleScreen), &titleScreen, 0, 0);
     
     //Se da valor a variables
-    cs_state = current_cs = ts_state = ts_anim = ts_anim2 = 0;
+    current_cs = ts_state = ts_anim = ts_anim2 = 0;
     ts_counter = ts_counter2 = 3;
     
 }
