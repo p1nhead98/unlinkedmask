@@ -23,10 +23,14 @@ extern UINT8 text_delay;
 extern UINT8 current_level;
 extern UINT8 state_interrupts;
 extern UINT8 canDo;
+
 UINT8 event = 0;
 // extern UINT8 state_counter;
 extern UINT8 dialog_pos;
 extern UINT8 current_cs;
+extern UINT8 cs_cando_anim;
+extern UINT8 cs_anim_index;
+
 
 extern UINT8 text_voice;
 extern UINT8 player_cs_state;
@@ -215,13 +219,19 @@ void SetDialog() BANKED{
         dialog = 0;
         pDelay(10);
 		FadeColorAndMusic();
-        current_level++;
+        current_cs++;
 		current_dialog++;
         SetState(current_state);
         
         break;
+
+
+
+
+
     case 13:
         CleanWin();
+        text_voice = 1;
         SetMugTiles(&mugshots, BANK(mugshots), 0);
         SetMushot();
         text_delay = tDelay;
@@ -237,12 +247,12 @@ void SetDialog() BANKED{
         CleanWin();    
         LYC_REG = 0;
         WY_REG = 144;
-        state_interrupts = 0;
+        state_interrupts = 10;
         HIDE_WIN;
         dialog = 0;
         can_dialog = 0;
         // state_counter = 3;
-        event = 2;
+        cs_cando_anim = 1;
         HIDE_WIN;
         break;
         // pDelay(10);
@@ -260,6 +270,7 @@ void SetDialog() BANKED{
 
     case 16:
         CleanWin();
+        text_voice = 1;
         SetMugTiles(&mugshots, BANK(mugshots), 27);
         SetMushot();
         text_delay = tDelay;

@@ -89,17 +89,15 @@ void UPDATE()
             dialog = 1;
             player_cs_state = 10;
         }
-        // if(current_level != 8){
 
-        // }
-        // if(current_level == 8){
-        //     if(--player_c_counter2 == 0){
-        //         FadeColor();
-        //         current_level++;
-        //         SetState(current_state);
-        //     }
+        if(current_cs == 2){
+            if(--player_c_counter2 == 0){
+                FadeColor();
+                current_cs++;
+                SetState(current_state);
+            }
             
-        // }
+        }
         break;
     case 2:
         if(THIS->y != 96){
