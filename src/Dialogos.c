@@ -12,6 +12,8 @@
 #include "Banks/SetAutoBank.h"
 #include "Print.h"
 #include "Math.h"
+#include "CustomFade.h"
+#include "Misc2.h"
 
 #define tDelay 25
 
@@ -53,16 +55,16 @@ void FadeDMGCs(UINT8 fadeout) BANKED {
 
 void FadeColorAndMusicCs(){
     FadeDMGCs(3);
-    pDelay(20);
+    PerDelay(20);
     NR50_REG = 0x55;
     FadeDMGCs(2);
-    pDelay(20);
+    PerDelay(20);
     NR50_REG = 0x33;
     FadeDMGCs(1);
-    pDelay(20);
+    PerDelay(20);
     NR50_REG = 0x11;
     FadeDMGCs(0);
-    pDelay(20);
+    PerDelay(20);
     NR50_REG = 0x0;
     StopMusic;
 }
@@ -127,7 +129,7 @@ void SetDialog() BANKED{
         dialog_pos = 144;
         dialog = 0;
         state_interrupts = 10;
-        pDelay(10);
+        PerDelay(10);
 		FadeColorAndMusicCs();
         current_cs++;
 		SetState(current_state);
@@ -163,7 +165,7 @@ void SetDialog() BANKED{
         dialog_pos = 144;
         state_interrupts = 10;
         dialog = 0;
-        pDelay(10);
+        PerDelay(10);
 		FadeColorAndMusicCs();
         current_level = 0;
         current_state = StateStage1;
@@ -177,7 +179,7 @@ void SetDialog() BANKED{
         // dialog_pos = 144;
         // dialog = 0;
         // state_interrupts = 10;
-        // pDelay(10);
+        // PerDelay(10);
 		// FadeColorAndMusicCs();
         // current_cs++;
 		// SetState(current_state);
@@ -217,11 +219,13 @@ void SetDialog() BANKED{
         state_interrupts = 0;
         HIDE_WIN;
         dialog = 0;
-        pDelay(10);
+        PerDelay(10);
 		FadeColorAndMusic();
+        DISPLAY_OFF;
         current_cs++;
 		current_dialog++;
         SetState(current_state);
+        
         
         break;
 
@@ -305,9 +309,14 @@ void SetDialog() BANKED{
         dialog = 0;
         can_dialog = 0;
         FadeColorAndMusic();
-        current_level++;
+        DISPLAY_OFF;
+        current_cs++;
+		current_dialog++;
         SetState(current_state);
         break;
+
+
+
         
     case 21:
         CleanWin();

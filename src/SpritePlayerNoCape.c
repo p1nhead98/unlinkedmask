@@ -1,6 +1,7 @@
 #include "Banks/SetAutoBank.h"
 #include "Keys.h"
 #include "Misc.h"
+#include "Misc2.h"
 #include "SpriteManager.h"
 #include <gb/gb.h>
 #include "Sound.h"

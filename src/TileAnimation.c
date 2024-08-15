@@ -17,12 +17,13 @@ void Tile_Anim(UINT8 x, UINT8 tilesAmount, struct TilesInfo *tile, UINT8 first_t
         POP_BANK;
 }
 
-void Spike_anim(struct TilesInfo *tile, UINT8 tileStart, UINT8 bank) __nonbanked{ // si se usa por el momento
+void Set_Bkg_Data(struct TilesInfo *tile, UINT8 tileStart, UINT8 tileAmount, UINT8 bank) __nonbanked{ // si se usa por el momento
+  
+        PUSH_BANK(bank);
+            set_bkg_data(tileStart, tileAmount, tile->data);
+        POP_BANK;
     
-    PUSH_BANK(bank);
-     set_bkg_data(tileStart, 4, tile->data);
-
-    POP_BANK;
+    
 }
 
 
@@ -31,6 +32,15 @@ void Set_Sprite_Tiles(struct TilesInfo *tile, UINT8 bank, UINT8 tile_amount, UIN
     set_sprite_data(first_tile, tile_amount,  tile->data);
     POP_BANK;
  
+}
+
+
+void Set_Bkg_tiles( struct MapInfo *map) BANKED{
+  CRITICAL{
+    // PUSH_BANK(bank2);
+      set_bkg_tiles(0, 0, 20, 18, map->data);
+    // POP_BANK;
+  }
 }
 
 // void Set_SpinChange_Tiles(struct TilesInfo *tile, UINT8 bank, UINT8 tile_amount) __nonbanked{
@@ -61,27 +71,6 @@ void SetMugTiles(struct TilesInfo *tile, UINT8 bank, UINT8 init_tile) __nonbanke
 // 	Tile_Anim(tileStart + 1, 12, tile, firstTile + 1, bank);
 // 	Tile_Anim(tileStart + 2, 12, tile, firstTile + 2, bank);
 // 	Tile_Anim(tileStart + 3, 12, tile, firstTile + 3, bank);
-//     POP_BANK;
-// }
-// void Door_Anim(struct TilesInfo *tile, UINT8 tileStart, UINT8 bank, UINT8 firstTile, UINT8 off) __nonbanked{
-//     UINT8 i = 0;
-//     PUSH_BANK(bank);
-//     for ( i = 0; i < 12; i++)
-//     {
-//         if(off == 1){
-//             if(i > 2){
-//                 Tile_Anim(tileStart + 1, 12, tile, firstTile + i, bank);
-//             }else{
-//                 Tile_Anim(tileStart + i, 12, tile, firstTile + i, bank);
-//             }
-            
-//         }else{
-//             Tile_Anim(tileStart + i, 12, tile, firstTile + i, bank);
-//         }
-        
-//     }
-    
- 
 //     POP_BANK;
 // }
 

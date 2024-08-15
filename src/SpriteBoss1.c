@@ -11,6 +11,7 @@
 #include "BossAttacks.h"
 #include "Dialogos.h"
 #include "Misc.h"
+#include "Misc2.h"
 #include "WinController.h"
 
 //ANIMATION TILES

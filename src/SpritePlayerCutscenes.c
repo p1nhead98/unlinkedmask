@@ -21,7 +21,7 @@ const UINT8 pcs_cape_walk[] = {4, 12, 13, 12, 14};
 
 extern UINT8 state_interrupts;
 extern UINT8 dialog;
-// extern UINT8 current_level;
+extern UINT8 current_level;
 extern UINT8 dialog_pos;
 extern UINT8 current_cs;
 UINT8 player_cs_state = 0;
@@ -37,15 +37,15 @@ void START()
     THIS->x -= 8;
     player_c_counter = 0;
     player_c_counter2 = 20;
-    // if(current_level == 13){
-    //     SetSpriteAnim(THIS, pcs_air, 12);
-    //     player_cs_state = 2;
-    //     THIS->x = 72;
-    //     THIS->y = 16;
-    //     player_c_counter = 2;
-    //     player_c_counter2 = 1;
-    //     player_c_counter3 = 4;
-    // }
+    if(current_cs == 6){
+        SetSpriteAnim(THIS, pcs_air, 12);
+        player_cs_state = 2;
+        THIS->x = 72;
+        THIS->y = 16;
+        player_c_counter = 2;
+        player_c_counter2 = 1;
+        player_c_counter3 = 4;
+    }
     // if(current_level == 32){
     //     player_cs_state = 5;
     //     SetSpriteAnim(THIS, pcs_cape_walk, 15);
@@ -118,29 +118,31 @@ void UPDATE()
             }
         }else{
             player_cs_state++;
-            player_c_counter = 60;
+            player_c_counter = 80;
             SpriteManagerAdd(SpriteExplosionCuts, THIS->x - 8, THIS->y - 8);
             SetSpriteAnim(THIS, pcs_cape_stand, 15);
-            PlayMusic(unlinkedchainedsoul, 1);
+            PlayFx(CHANNEL_4, 60, 0x3f, 0xf7, 0x10, 0x80);
            
         }
         break;
     case 3:
         if(--player_c_counter == 0){
             player_cs_state++;
+            PlayMusic(unlinkedchainedsoul, 1);
             SetSpriteAnim(THIS, pcs_cape_walk, 15);
         }
         break;
     case 4:
         THIS->x++;
-        if((THIS->anim_frame == 1 || THIS->anim_frame == 3) && player_c_canDo == 0){
-            player_c_canDo = 1;
-            PlayFx(CHANNEL_4, 5, 0x3A, 0x81, 0x00, 0xC0);
-        }else if ((THIS->anim_frame == 0 || THIS->anim_frame == 2 ) && player_c_canDo == 1){
-            player_c_canDo = 0;
-        }
+        // if((THIS->anim_frame == 1 || THIS->anim_frame == 3) && player_c_canDo == 0){
+        //     player_c_canDo = 1;
+        //     PlayFx(CHANNEL_4, 5, 0x3A, 0x81, 0x00, 0xC0);
+        // }else if ((THIS->anim_frame == 0 || THIS->anim_frame == 2 ) && player_c_canDo == 1){
+        //     player_c_canDo = 0;
+        // }
         if(THIS->x == 158){
-            // current_level++;
+            current_level = 0;
+            current_state = StateStage2;
             SetState(current_state);
         }
         break;

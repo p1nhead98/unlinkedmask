@@ -81,7 +81,8 @@ void UPDATE()
                 THIS->y = -16;
             }
             if(THIS->x > 157){
-                current_level++;
+                current_level = 0;
+                current_state = StateStage3;
                 SetState(current_state);
             }
             break;

@@ -1,5 +1,6 @@
 #include "Banks/SetAutoBank.h"
 #include "Keys.h"
+#include "Misc2.h"
 #include "Misc.h"
 #include "SpriteManager.h"
 #include <gb/gb.h>
@@ -11,8 +12,10 @@
 const UINT8 on_anim[] = {2, 0, 0};
 const UINT8 off_anim[] = {2, 1, 1};
 
+
+extern UINT8 stage3_col_tiles[];
 extern UINT8 on_off;
- UINT8 collision_tiles2[] = {2, 0, 0};
+
 
 extern UINT8 start_screen;
 
@@ -22,11 +25,13 @@ void START()
     data->initial_frame_speed = 0;
     data->initial_y = THIS->y;
     data->start = 1;
+
     if(on_off == 0){
         SetSpriteAnim(THIS, on_anim, 20);
     }else{
         SetSpriteAnim(THIS, off_anim, 20);
     }
+
     data->state = 0;
     data->can_change = 0;
 }
@@ -50,13 +55,13 @@ void UPDATE()
                     SetSpriteAnim(THIS, off_anim, 15);
                     THIS->y -= 5;
                     data->state++;
-                    SetOnOffCols(collision_tiles2, on_off);
+                    SetOnOffCols(stage3_col_tiles, on_off);
                 }else{
                     on_off = 0;
                     SetSpriteAnim(THIS, on_anim, 15);
                     THIS->y -= 5;
                     data->state++;
-                    SetOnOffCols(collision_tiles2, on_off);
+                    SetOnOffCols(stage3_col_tiles, on_off);
                 }
             break;
             case 2:

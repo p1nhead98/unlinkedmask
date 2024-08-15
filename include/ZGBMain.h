@@ -5,6 +5,8 @@
 _STATE(StateTitleScreen)\
 _STATE(StateCutscenes)\
 _STATE(StateStage1)\
+_STATE(StateStage2)\
+_STATE(StateStage3)\
 STATE_DEF_END
 
 #define SPRITES \
@@ -22,16 +24,10 @@ _SPRITE_DMG(SpriteSpinOrbActivable, plataforma1)\
 _SPRITE_DMG(SpritePlayerDeath, playerDeath)\
 _SPRITE_DMG(SpritePlayerVfx, playerVFX)\
 _SPRITE_DMG(SpriteOnOffBtn, onOffButton)\
-_SPRITE_DMG(SpriteSpinOrbFall, plataforma1)\
-_SPRITE_DMG(SpriteSpinOrbStoppable, plataforma1)\
-_SPRITE_DMG(SpriteSpinOrbStoppable2, plataforma1)\
-_SPRITE_DMG(SpriteSpinOrbStoppable3, plataforma1)\
 _SPRITE_DMG(SpritePlayerNoCape, playerNoCape)\
 _SPRITE_DMG(SpriteIntroBigShine, introBigShine)\
 _SPRITE_DMG(SpriteIntroMiniShine, introMiniShine)\
 _SPRITE_DMG(SpriteIntroFx, introFx)\
-_SPRITE_DMG(SpriteWindEnemy, windEnemy)\
-_SPRITE_DMG(SpriteSpinOrbEvent, plataforma1)\
 _SPRITE_DMG(SpriteJumpBoxEvent, plataforma2)\
 _SPRITE_DMG(SpritePlayerCutscenes, playerNCinematic)\
 _SPRITE_DMG(SpriteViewerH, viewerHair)\
@@ -39,10 +35,7 @@ _SPRITE_DMG(SpriteCapeCuts, capeCuts)\
 _SPRITE_DMG(SpriteExplosionCuts, explosionCuts)\
 _SPRITE_DMG(SpritePlayerStars, playerStars)\
 _SPRITE_DMG(SpritePlayerCutsTemple, playerTempleCuts)\
-_SPRITE_DMG(SpriteSpinOrbStoppable4, plataforma1)\
-_SPRITE_DMG(SpriteSpinOrbStoppable5, plataforma1)\
 _SPRITE_DMG(SpriteCrusherUp, crusherDown)\
-_SPRITE_DMG(SpriteSpinOrbRooftop, plataforma1)\
 _SPRITE_DMG(SpriteCrusherLeft, crusherLeft)\
 _SPRITE_DMG(SpriteSplitBox, splitBox)\
 _SPRITE_DMG(SpriteBoss1, boss1)\
@@ -63,6 +56,8 @@ _SPRITE_DMG(SpritePlayerFinal, playerBackCape)\
 _SPRITE_DMG(SpriteBossHair, hair_boss)\
 _SPRITE_DMG(SpriteTitleFlash, titleFlash)\
 _SPRITE_DMG(SpriteMoon, moon)\
+_SPRITE_DMG(SpriteOrbForest, plataforma1)\
+_SPRITE_DMG(SpriteOrbTemple, plataforma1)\
 SPRITE_DEF_END
 
 #include "ZGBMain_Init.h"

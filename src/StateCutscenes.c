@@ -11,6 +11,8 @@
 #include "WinController.h"
 #include "Cinematicas.h"
 #include "Math.h"
+#include "Sgb.h"
+#include "CustomFade.h"
 
 //importar mapas de cutscenes
 IMPORT_MAP(intro_door);
@@ -19,7 +21,9 @@ IMPORT_MAP(cinematicCape);
 IMPORT_MAP(capeCuts1);
 IMPORT_MAP(capeCuts2);
 IMPORT_MAP(capeCuts7);
+IMPORT_MAP(templeCuts);
 
+IMPORT_MAP(linkedborder);
 
 //importar fuentes de cutscenes
 IMPORT_TILES(font);
@@ -27,14 +31,11 @@ IMPORT_TILES(fontCapeCuts);
 
 UINT8 cs_counter = 0;
 UINT8 cs_counter_2 = 0;
+UINT8 cs_counter_3 = 0;
 UINT8 cd_fade_idx = 0; 
-UINT8 current_cs = 3;
+UINT8 current_cs = 0;
 UINT8 cs_cando_anim = 0;
 UINT8 cs_anim_index = 0;
-
-
-extern UWORD ZGB_Fading_BPal[32];
-extern UWORD ZGB_Fading_SPal[32];
 
 extern UINT8 current_dialog;
 extern UINT8 dialog_pos;
@@ -57,11 +58,18 @@ const struct MapInfoBanked cs_levels[] = {
 	BANKED_MAP(capeCuts1),
 	BANKED_MAP(capeCuts2),
 	BANKED_MAP(capeCuts7),
+	BANKED_MAP(cinematicCape),
+	BANKED_MAP(templeCuts),
 };
 
 const START_POS cs_start_positions[] = {
 	{8, 96}, 
 	{64, 87}, 
+	{0, 96}, 
+	{0, 96}, 
+	{0, 96}, 
+	{0, 96}, 
+	{0, 96}, 
 	{0, 96}, 
 };
 
@@ -87,17 +95,7 @@ void FadeDMGCutscene(UINT8 fadeout) {
     BGP_REG = OBP0_REG = OBP1_REG = PAL_DEF(pals0[fadeout], pals1[fadeout], pals2[fadeout], pals3[fadeout] );
 		
 }
-void FadeDMGCutscene2(UINT8 fadeout) {
-	
-	UINT8 pals3[] = {3, 2, 1, 0, 0};
-    UINT8 pals2[] = {2, 1, 0, 0, 0};
-    UINT8 pals1[] = {1, 0, 0, 0, 0};
-	UINT8 pals0[] = {0, 0, 0, 0, 0};
 
-
-    BGP_REG = OBP0_REG = OBP1_REG = PAL_DEF(pals0[fadeout], pals1[fadeout], pals2[fadeout], pals3[fadeout] );
-		
-}
 
 void FadeAllCutscene(){
     FadeDMGCutscene(3);
@@ -120,50 +118,27 @@ void FadeAllCutscene(){
 
 
 
-UWORD UpdateColorCs(UINT8 i, UWORD col) {
-	//return RGB2(DespRight(PAL_RED(col), i), DespRight(PAL_GREEN(col), i), DespRight(PAL_BLUE(col), i));
-	return RGB2(PAL_RED(col) | DespRight(0x1F, 5 - i), PAL_GREEN(col) | DespRight(0x1F, 5 - i), PAL_BLUE(col) | DespRight(0x1F, 5 - i));
-}
-
-
-void FadeStepColorCutscene(UINT8 i) {
-	UINT8 pal, c;
-	UWORD palette[4];
-	UWORD palette_s[4];
-	UWORD* col = ZGB_Fading_BPal;
-	UWORD* col_s = ZGB_Fading_SPal;
-
-	for(pal = 0; pal < 8; pal ++) {
-		for(c = 0; c < 4; ++c, ++col, ++col_s) {
-				palette[c] = UpdateColorCs(i, *col);
-				palette_s[c] = UpdateColorCs(i, *col_s);
-		};
-		set_bkg_palette(pal, 1, palette);
-		set_sprite_palette(pal, 1, palette_s);
-	}
-	delay(20);
-}
 
 
 void FadeAllCapeCuts(){
 	FadeDMGCutscene(0);
-	FadeStepColorCutscene(5);
+	FadeStepColorCustom(5);
 	PerDelay(20);
 	FadeDMGCutscene(1);
-	FadeStepColorCutscene(3);
+	FadeStepColorCustom(3);
 	PerDelay(20);
 	FadeDMGCutscene(2);
-	FadeStepColorCutscene(1);
+	FadeStepColorCustom(1);
 	PerDelay(20);
 	FadeDMGCutscene(3);
-	FadeStepColorCutscene(0);
+	FadeStepColorCustom(0);
 	PerDelay(20);
 
 }
 
 void FadeIdx(UINT8 idx){
-	FadeDMGCutscene2(idx);
-	FadeStepColorCutscene(idx);
+	DMGFadeCustom(idx);
+	FadeStepColorCustom(idx);
 }
 
 void START() {
@@ -175,8 +150,27 @@ void START() {
     BGP_REG = PAL_DEF(0, 1, 2, 3);
     OBP0_REG = PAL_DEF(3, 0, 1, 2);
 	OBP1_REG = PAL_DEF(1, 0, 0, 0);
+
+    CRITICAL {
+	    LOAD_SGB_BORDER(linkedborder);
+    }
     
-    
+	CRITICAL {
+#ifdef CGB
+	if (_cpu == CGB_TYPE) {
+
+		TMA_REG = 102u;
+			
+	}else{
+	
+		TMA_REG = 180u;
+		
+	}
+#else
+	TMA_REG = 180u;
+		
+#endif
+	}
 
     InitScroll(level->bank, level->map, 0, 0);
     
@@ -233,7 +227,7 @@ void START() {
 		case 4:
 			SetHudWin(0);
 			INIT_FONT(fontCapeCuts, PRINT_WIN);
-			cs_counter = 90;
+			cs_counter = 50;
 			canDoInterrupt = 0;
 			cs_counter_2 = 3;
 			dialog = 0;
@@ -245,11 +239,12 @@ void START() {
 			break;
 		case 5:
 			SetHudWin(0);
-			INIT_FONT(fontCapeCuts, PRINT_WIN);
+			INIT_FONT(font, PRINT_WIN);
 			cs_counter = 3;
 			canDoInterrupt = 0;
 			cd_fade_idx = 0;
 			cs_counter_2 = 3;
+			cs_counter_3 = 30;
 			dialog = 0;
 			can_dialog = 0;
 			current_dialog = 16;
@@ -257,9 +252,39 @@ void START() {
 			cs_cando_anim = 0;
 			cs_anim_index = 5;
 			break;
-        default:
+        
+		case 6:
+			SHOW_SPRITES;
+			can_scroll_y = 0;
+			can_scroll_x = 0;
+			SetHudWin(0);
+			SpriteManagerAdd(SpritePlayerCutscenes, cs_start_positions[current_cs].start_x, cs_start_positions[current_cs].start_y);
+			INIT_FONT(font, PRINT_WIN);
+			dialog = 0;
+			can_dialog = 0;
+			current_dialog = 0;
+		break;
+
+		case 7:
+			SHOW_SPRITES;
+			can_scroll_y = 0;
+			can_scroll_x = 0;
+			SetHudWin(0);
+			SpriteManagerAdd(SpritePlayerCutsTemple, cs_start_positions[current_cs].start_x, cs_start_positions[current_cs].start_y);
+			INIT_FONT(font, PRINT_WIN);
+			dialog = 0;
+			can_dialog = 0;
+			current_dialog = 0;
+		break;
+		
+		default:
+		
         break;
     }
+	
+	NR52_REG = 0x80; //Enables sound, you should always setup this first
+	NR51_REG = 0xFF; //Enables all channels (left and right)
+	NR50_REG = 0x77; //Max volume
 
 }
 
@@ -289,67 +314,80 @@ void UPDATE() {
 			state_interrupts = 1;
 			dialog = 1;
 		}
-	}
 
-
-
-	if(current_cs == 4 && cs_cando_anim == 1){
-		if(--cs_counter_2 == 0 ){
-			cs_counter_2 = 4;
-			if(cs_anim_index != 5 ){
-				CapeCutsAnim(cs_anim_index);
-				cs_anim_index++;
-			}else{
-				cs_cando_anim = 2;
-				cs_counter_2 = 30;
+		if(current_cs == 4 && cs_cando_anim == 1){
+			if(--cs_counter_2 == 0 && delta_time == 0){
+				cs_counter_2 = _cpu == CGB_TYPE ? 6 : 2;
+				if(cs_anim_index != 5 ){
+					CapeCutsAnim(cs_anim_index);
+					cs_anim_index++;
+				}else{
+					cs_cando_anim = 2;
+					cs_counter_2 = 30;
+				}
+				
 			}
-			
-		}
 
-	}else if(current_cs == 4 && cs_cando_anim == 2){
-		if(--cs_counter_2 == 0){
-			current_cs++;
-			SetState(current_state);
+		}else if(current_cs == 4 && cs_cando_anim == 2){
+			if(--cs_counter_2 == 0){
+				current_cs++;
+				SetState(current_state);
+			}
 		}
-	}
-	if(current_cs == 5 ){
+	}else if(current_cs == 5 ){
 		if(cs_cando_anim == 0){
 			if(--cs_counter_2 == 0){
-				cs_counter_2 = 4;
+				cs_counter_2 = _cpu == CGB_TYPE ? 6 : 2;
 				if(cs_anim_index != 14 ){
 					CapeCutsAnim(cs_anim_index);
 					cs_anim_index++;
 				}else{
 					cs_cando_anim = 1;
 					cs_counter = 10;
-					cs_counter_2 = 4;
+					cs_counter_2 = _cpu == CGB_TYPE ? 6 : 2;
 					cd_fade_idx = 5;
 					FadeDMGCutscene(0);
-					FadeStepColorCutscene(5);
+					FadeStepColorCustom(5);
 					CapeCutsAnim(cs_anim_index);
 				}
 			}
 		}else if(cs_cando_anim == 1){
 			if(--cs_counter_2 == 0){
-				cs_counter_2 = 4;
+				cs_counter_2 = _cpu == CGB_TYPE ? 6 : 2;
 				if(cs_anim_index != 16 ){
+					SHOW_WIN;
 					CapeCutsAnim(cs_anim_index);
 					cs_anim_index++;
+					SHOW_WIN;
 				}else{
+					SHOW_WIN;
 					CapeCutsAnim(cs_anim_index);
+					SHOW_WIN;
 					cs_anim_index = 14;
 					
 					
 				}
 			}
-			if(--cs_counter == 0){
-				cs_counter = 10;
+
+			if(--cs_counter == 0 && cd_fade_idx != 0){
+				cs_counter = _cpu == CGB_TYPE ? 6 : 2;
 				if(cd_fade_idx > 0){
 					cd_fade_idx--;
 					FadeIdx(cd_fade_idx);
 
 				}
 			}
+			if(cs_counter_3 > 0 && cd_fade_idx == 0 ){
+				cs_counter_3--;
+				if(cs_counter_3 == 0 && dialog == 0){
+					LYC_REG = 0;
+					dialog_pos = 120;
+					WY_REG = dialog_pos;
+					state_interrupts = 1;
+					dialog = 1;
+				}
+			}
+
 		}
 	}
 

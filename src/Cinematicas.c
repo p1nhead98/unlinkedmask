@@ -5,6 +5,7 @@
 #include <BankManager.h>
 #include "Misc.h"
 #include "Scroll.h"
+#include "TileAnimation.h"
 
 IMPORT_MAP(capeCuts2);
 IMPORT_TILES(capeCuts2Tiles);
@@ -45,15 +46,16 @@ IMPORT_TILES(capeCuts18Tiles);
 
 
 
-void SetBkg(struct TilesInfo *tile, UINT8 bank,UINT8 bank2, struct MapInfo *map, UINT8 tiles_amount) __nonbanked{
+void SetBkg(struct TilesInfo *tile, UINT8 bank,UINT8 bank2, struct MapInfo *map, UINT8 tiles_amount){
   LYC_REG = 0;
   CRITICAL{
-    PUSH_BANK(bank);
-      set_bkg_data(0, tiles_amount, tile->data);
-    POP_BANK;
-    PUSH_BANK(bank2);
-      set_bkg_tiles(0, 0, 20, 18, map->data);
-    POP_BANK;
+    // PUSH_BANK(bank);
+    //   set_bkg_data(0, tiles_amount, tile->data);
+    // POP_BANK;
+    // PUSH_BANK(bank2);
+    Set_Bkg_Data(tile, 0, tiles_amount, bank);
+    set_bkg_tiles(0, 0, 20, 18, map->data);
+    // POP_BANK;
   }
 
   

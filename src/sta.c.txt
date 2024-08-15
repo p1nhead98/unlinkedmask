@@ -879,11 +879,11 @@ void UPDATE()
 
 			if( AnimCounter2  == 0){
 				if(AnimCounter == 0){
-					Spike_anim(&flameBoss2, 108, BANK(flameBoss2));
+					Set_Bkg_Data(&flameBoss2, 108, BANK(flameBoss2));
 				}else if(AnimCounter == 1){
-					Spike_anim(&flameBoss3, 108, BANK(flameBoss3));
+					Set_Bkg_Data(&flameBoss3, 108, BANK(flameBoss3));
 				} else if(AnimCounter == 2){
-					Spike_anim(&flameBoss, 108, BANK(flameBoss));
+					Set_Bkg_Data(&flameBoss, 108, BANK(flameBoss));
 				}
 				if(AnimCounter == 2){
 					AnimCounter = 0;
@@ -1094,9 +1094,9 @@ void UPDATE()
 			if(start_screen == 0){
 				
 				if(AnimCounter == 0 && current_level < 27){
-					Spike_anim(&spikesAnim, 112, BANK(spikesAnim));
+					Set_Bkg_Data(&spikesAnim, 112, BANK(spikesAnim));
 				}else{
-					Spike_anim(&spikesAnim2, 112, BANK(spikesAnim2));
+					Set_Bkg_Data(&spikesAnim2, 112, BANK(spikesAnim2));
 				}
 
 
@@ -1104,15 +1104,15 @@ void UPDATE()
 
 					if(canDo == 0){
 						if(AnimCounter == 0){
-							Spike_anim(&spikesAnim, 81, BANK(spikesAnim));
+							Set_Bkg_Data(&spikesAnim, 81, BANK(spikesAnim));
 						}else{
-							Spike_anim(&spikesAnim2, 81, BANK(spikesAnim2));
+							Set_Bkg_Data(&spikesAnim2, 81, BANK(spikesAnim2));
 						}
 					}else{
 						if(AnimCounter == 0){
-							Spike_anim(&spikesAnim, 85, BANK(spikesAnim));
+							Set_Bkg_Data(&spikesAnim, 85, BANK(spikesAnim));
 						}else{
-							Spike_anim(&spikesAnim2, 85, BANK(spikesAnim2));
+							Set_Bkg_Data(&spikesAnim2, 85, BANK(spikesAnim2));
 						}
 					}
 

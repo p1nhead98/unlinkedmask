@@ -7,7 +7,7 @@
 #include "Palette.h"
 #include "Math.h"
 #include "ZGBMain.h"
-
+#include "Misc2.h"
 
 const UINT8 door_op[] = {1, 0};
 const UINT8 door_cl[] = {1, 1};

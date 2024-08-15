@@ -21,9 +21,11 @@ void START()
 void UPDATE()
 {
     CUSTOM_DATA_BTN* data = (CUSTOM_DATA_BTN*)THIS->custom_data;  
-    if(--data->state == 0){
-        THIS->x++;
-        data->state = 3;
+    if(current_state == StateCutscenes){
+        if(--data->state == 0){
+            THIS->x++;
+            data->state = 3;
+        }
     }
     // THIS->x++;
     if(THIS->anim_frame == 2){

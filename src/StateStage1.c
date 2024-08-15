@@ -17,6 +17,7 @@ IMPORT_MAP(lvl_3);
 IMPORT_MAP(lvl_4);
 IMPORT_MAP(lvl_5);
 
+
 IMPORT_TILES(spikesAnimSt1);
 IMPORT_TILES(spikesAnim2St1);
 
@@ -43,10 +44,11 @@ const struct MapInfoBanked stage1_levels[] = {
 	BANKED_MAP(lvl_4),
 	BANKED_MAP(lvl_5),
 
+
 };
 
 const START_POS stage1_start_positions[] = {
-	{0, 160}, 
+	{0, 144}, 
 	{0, 128}, 
 	{0, 112}, 
 	{0, 128}, 
@@ -79,6 +81,7 @@ void START() {
 	OBP1_REG = PAL_DEF(1, 0, 0, 0);
 	BGP_REG	 = PAL_DEF(2, 0, 1, 3); 
 
+
 	can_scroll_x = 1;
 
 	current_life = max_life;
@@ -100,7 +103,9 @@ void START() {
 	if(current_level == 0){
 		SpriteManagerAdd(SpriteMoon, 0, 56);
 	}
-
+    NR52_REG = 0x80; //Enables sound, you should always setup this first
+	NR51_REG = 0xFF; //Enables all channels (left and right)
+	NR50_REG = 0x77; //Max volume
 
 }
 
@@ -118,9 +123,9 @@ void UPDATE() {
 	if(--stage1_counter == 0){
 		stage1_anim = stage1_anim == 1 ? 0 : 1;
 		if(stage1_anim == 0){
-			Spike_anim(&spikesAnimSt1, 112, BANK(spikesAnimSt1));
+			Set_Bkg_Data(&spikesAnimSt1, 112, 4, BANK(spikesAnimSt1));
 		}else{
-			Spike_anim(&spikesAnim2St1, 112, BANK(spikesAnim2St1));
+			Set_Bkg_Data(&spikesAnim2St1, 112, 4, BANK(spikesAnim2St1));
 		}
 		stage1_counter = 5;
 	}

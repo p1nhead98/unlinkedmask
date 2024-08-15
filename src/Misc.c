@@ -49,8 +49,7 @@ BOOLEAN door_button = 0;
 
 IMPORT_TILES(OnAnim);
 IMPORT_TILES(OffAnim);
-IMPORT_TILES(darkTileAnim);
-IMPORT_TILES(doorAnim);
+
 
 IMPORT_TILES(spikesAnim);
 IMPORT_TILES(spikesAnim3);
@@ -66,27 +65,7 @@ void pDelay(UINT8 numloops) BANKED
 	}
 }
 
-void ScreenShake(UINT8 duration, INT8 seismicscale) BANKED
-{
 
-	UINT8 d;
-
-	for (d = 0; d < duration; d++)
-	{
-
-		scroll_offset_y = seismicscale;
-
-		///scroll_offset_y=seismicscale;
-		pDelay(1);
-		scroll_offset_y = -seismicscale;
-
-		//scroll_offset_y=-seismicscale;
-		pDelay(1);
-	}
-
-	scroll_offset_x = 0;
-	scroll_offset_y = 0;
-}
 
 void ScreenShakeX(UINT8 duration, INT8 seismicscale) BANKED
 {
@@ -253,59 +232,8 @@ void SetOnOffColsEvent(UINT8 cols[], UINT8 onOff ) BANKED{
 
 }
 
-void SetOnOffCols(UINT8 cols[], UINT8 onOff ) BANKED{
 
-    // UINT8 i = 0;
 
-    // if(onOff == 0){
-	// 	for(i = 0u; cols[i] != 0u; ++i) {
-    //         if(i > 15u && i < 20u){
-	// 			scroll_collisions[cols[i]] = 1u;
-	// 			scroll_collisions_down[cols[i]] = 1u;
-	// 		}else if(i > 19u && i < 25u){
-	// 			scroll_collisions[cols[i]] = 0u;
-	// 			scroll_collisions_down[cols[i]] = 0u;
-	// 		}
-            
-	// 	}
-        
-    //     Onoff_tile_anim(&OffAnim, 0, BANK(OffAnim), 60);
-    //     Onoff_tile_anim(&OnAnim, 0, BANK(OnAnim), 56);
-        
-    //     Onoff_tile_anim(&spikesAnim, 0, BANK(spikesAnim), 81);
-    //     Onoff_tile_anim(&spikesAnim3, 0, BANK(spikesAnim3), 85);
-        
-    // }else if(onOff == 1){
-    //     for(i = 0u; cols[i] != 0u; ++i) {
-    //         if(i > 15u && i < 20u){
-	// 			scroll_collisions[cols[i]] = 0u;
-	// 			scroll_collisions_down[cols[i]] = 0u;
-	// 		}else if(i > 19u && i < 25u){
-	// 			scroll_collisions[cols[i]] = 1u;
-	// 			scroll_collisions_down[cols[i]] = 1u;
-	// 		}
-	// 	}
-
-    //     Onoff_tile_anim(&OnAnim, 0, BANK(OnAnim), 60);
-    //     Onoff_tile_anim(&OffAnim, 0, BANK(OffAnim), 56);
-    //     Onoff_tile_anim(&spikesAnim3, 0, BANK(spikesAnim3), 81);
-    //     Onoff_tile_anim(&spikesAnim, 0, BANK(spikesAnim), 85);
-    // }
-
-}
-
-void SetDoorCols(UINT8 off) BANKED{
-    // if(off == 1){
-    //     Door_Anim(&darkTileAnim, 0, BANK(darkTileAnim), 64, 1);
-    //     // Tile_Anim(9 , 12, &doorAnim, 64, BANK(doorAnim));
-    //     // Tile_Anim(11 , 12, &doorAnim, 66, BANK(doorAnim));
-    // }else{
-    //     Door_Anim(&doorAnim, 0, BANK(doorAnim), 64, 0);
-    //     ScreenShake(1,1);
-        
-    // }
-     
-}
 void AutomaticOnOff(UINT8 cols[], UINT8 onOff ) BANKED{
   UINT8 i = 0;
 
@@ -397,21 +325,7 @@ void FadeCapeCuts() BANKED{
     FadeDMGCustom(3);
     pDelay(30);
 }
-void FadeColorAndMusic() BANKED{
-    FadeDMGCustom(3);
-    pDelay(20);
-    NR50_REG = 0x55;
-    FadeDMGCustom(2);
-    pDelay(20);
-    NR50_REG = 0x33;
-    FadeDMGCustom(1);
-    pDelay(20);
-    NR50_REG = 0x11;
-    FadeDMGCustom(0);
-    pDelay(20);
-    NR50_REG = 0x0;
-    StopMusic;
-}
+
 
 void FadeMusic(UINT8 pointer) BANKED{
     UINT8 volume[] = {0x55,  0x33, 0x11, 0x0}; 

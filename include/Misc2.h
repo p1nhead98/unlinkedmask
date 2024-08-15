@@ -14,5 +14,8 @@ struct MapInfoBanked {
 };
 
 void PerDelay(UINT8 numloops) BANKED;
+void ScreenShake(UINT8 duration, INT8 seismicscale) BANKED;
+void SetDoorCols(UINT8 off) BANKED;
+void SetOnOffCols(UINT8 cols[], UINT8 onOff ) BANKED;
 
 #endif

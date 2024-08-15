@@ -28,6 +28,12 @@
         "math.h": "c",
         "dialogos.h": "c",
         "bossattacks.h": "c",
-        "wincontroller.h": "c"
+        "wincontroller.h": "c",
+        "string.h": "c",
+        "misc2.h": "c",
+        "gb.h": "c",
+        "keys.h": "c",
+        "customfade.h": "c",
+        "bankmanager.h": "c"
     }
 }
