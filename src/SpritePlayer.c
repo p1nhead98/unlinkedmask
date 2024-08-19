@@ -47,6 +47,8 @@ extern INT8 boss_state;
 
 extern UINT8 IsCutscene;
 
+extern UINT8 current_cs;
+
 BOOLEAN canHurt;
 
 
@@ -691,8 +693,14 @@ void UPDATE()
                     THIS->x++;
                     THIS->mirror = player_priority == 1 ? NM_PRIOR : NO_MIRROR;
                     if(THIS->x >= (scroll_x + 172)){
-                        current_level++;
-                        SetState(current_state);
+                        if(current_state == StateStage2 && current_level == 4){
+                            current_cs = 7;
+                            current_state = StateCutscenes;
+                            SetState(current_state);
+                        }else{
+                            current_level++;
+                            SetState(current_state);
+                        }
                     }
                 break;
                 case 10:
@@ -904,7 +912,7 @@ void UPDATE()
                         
                         SetSpriteAnim(THIS, anim_spin, 20);
                         SpriteManagerAdd(SpritePlayerVfx, THIS->x - 4, THIS->y + 8);
-                        if(current_level == 0){
+                        if(current_level == 0 || current_level == 1 || current_level == 2){
                             if(sprData->state == 10){
                                 sprData->state = 6;
                             }

@@ -79,6 +79,7 @@ const START_POS stage3_start_positions[] = {
 
 
 void START() {
+	// current_level = 2;
 	const struct MapInfoBanked* st_3_level = &stage3_levels[current_level]; 
 
 	CRITICAL {
@@ -124,6 +125,16 @@ void START() {
 
 			// SetOnOffCols(collision_tiles2, on_off);
 		break;
+		case 1:
+			door_time_btwn_start = door_time_btwn = 120;
+			scroll_target = SpriteManagerAdd(SpritePlayer, stage3_start_positions[current_level].start_x, stage3_start_positions[current_level].start_y);
+			InitScroll(st_3_level->bank, st_3_level->map, stage3_col_tiles, 0);
+			ScrollRelocateMapTo(0,48);
+			SetHudWin(1);
+			stage3_counter = 3;
+			stage3_anim = 0;
+			state_interrupts = 0;
+			break;
 		default:
 			
 			scroll_target = SpriteManagerAdd(SpritePlayer, stage3_start_positions[current_level].start_x, stage3_start_positions[current_level].start_y);
