@@ -14,21 +14,23 @@
 #include "Music.h"
 
 
-typedef struct {
-	INT16 accel_y;
-	INT16 accel_x;
-	INT8 state;
-	INT8 life;
-	UINT8 collision;
-	UINT8 counter;
-	UINT16 initial_x;
-	UINT16 initial_y;
-} CUSTOM_DATA;
+// typedef struct {
+// 	INT16 accel_y;
+// 	INT16 accel_x;
+// 	INT8 state;
+// 	INT8 life;
+// 	UINT8 collision;
+// 	UINT8 counter;
+// 	UINT16 initial_x;
+// 	UINT16 initial_y;
+// } CUSTOM_DATA;
 
 typedef struct {
 	INT8 state;
-	UINT8 initial_x;
+	INT8 start;
+	UINT8 initial_frame_speed;
 	UINT8 initial_y;
+	UINT8 can_change;
 } CUSTOM_DATA_BOX;
 
 typedef struct {
@@ -36,10 +38,24 @@ typedef struct {
 	UINT8 initial_state;
 	UINT8 speed;
 	UINT8 initial_speed;
+	UINT8 initial_frame_speed;
+	UINT8 initial_y;
+	INT8 start;
 } CUSTOM_DATA_ORB;
 
-void RefreshLife() BANKED;
-// void ScreenVerticalShake(UINT8 framesBtw, UINT8 seconds, UINT8 intensity) BANKED;
+typedef struct {
+	UINT8 state;
+} CUSTOM_DATA_BTN;
+
+typedef struct {
+	UINT8 initial_frame_speed;
+	UINT8 initial_y;
+	INT8 start;
+} CUSTOM_DATA_PFX;
+
+
+
+
 void pDelay(UINT8 numloops) BANKED;
 void ScreenShake(UINT8 duration, INT8 seismicscale) BANKED;
 void JumpRandSound(BOOLEAN spin) BANKED;
@@ -47,21 +63,15 @@ void ScrollRelocateMapTo(UINT16 new_x, UINT16 new_y) BANKED;
 void RefreshTimer( UINT8 timer ) BANKED;
 void SetOnOffCols(UINT8 cols[], UINT8 onOff ) BANKED;
 void SetDoorCols(UINT8 off) BANKED;
-
-// void clean() BANKED;
-// void RefreshHud() BANKED;
-// // void SetAlertWindow() BANKED;
-// // void startWindow() BANKED;
-// void setDialogFace(BOOLEAN player) BANKED;
-// void RefreshLife() BANKED;
-// void EnemyMovement(Sprite *this, UINT8 velocity, UINT8 yaxis) BANKED;
-// void addExplosion(UINT16 x, UINT16 y, 	MirroMode mirrorParent) BANKED;
-// // void Gravity(struct commonData *data, INT16 maxGravity, INT16 gravity, BOOLEAN changeState) BANKED;
-// // void pDelay(UINT8 numloops) BANKED;
-// // void ScreenShake(UINT8 duration, INT8 seismicscale) BANKED;
-// // void blackOut() BANKED;
-// // void blackOutPlayer() BANKED;
-// // void musicStop() BANKED;
-// // void DropItem(Sprite *this) BANKED;
+void SetOnOffColsEvent(UINT8 cols[], UINT8 onOff ) BANKED;
+void TextWithDelay(const char* txt) BANKED;
+void AutomaticOnOff(UINT8 cols[], UINT8 onOff ) BANKED;
+void FadeDMGCustom(UINT8 fadeout) BANKED;
+void FadeColorAndMusic() BANKED;
+void FadeColor() BANKED;
+void FadeInColor() BANKED;
+void FadeMusic(UINT8 pointer) BANKED;
+void FadeCapeCuts() BANKED;
+void FillDoorCinem() BANKED; 
 
 #endif

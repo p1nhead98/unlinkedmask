@@ -16,7 +16,7 @@ const UINT8 time_door[] = {4, 0, 1, 2, 3};
 
 void START()
 {
-    CUSTOM_DATA* data = (CUSTOM_DATA*)THIS->custom_data;
+
     SetSpriteAnim(THIS, time_door, 15);
 }
 

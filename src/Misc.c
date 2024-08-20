@@ -12,7 +12,8 @@
 #include "rand.h"
 #include "TileAnimation.h"
 #include "Banks/SetAutoBank.h"
-
+#include "Print.h"
+#include "Math.h"
 
 #define SCREEN_TILES_W       20 // 160 >> 3 = 20
 #define SCREEN_TILES_H       18 // 144 >> 3 = 18
@@ -25,72 +26,30 @@
 #define SCREEN_TILE_REFRES_H (SCREEN_TILES_H + SCREEN_PAD_TOP  + SCREEN_PAD_BOTTOM)
 
 
-UINT8 max_life = 2;
-UINT8 current_life = 2;
+
 INT16 inmunity = 0;
 INT8 pal_tick = 0;
 UINT8 current_pal = 0;
 UINT8 on_off = 0;
+
+extern UINT8 start_screen;
+
+extern UINT8 original_lvl_bank;
+extern struct TilesInfo* original_tiles;
+
+UINT8 door_time = 0;
+UINT8 door_time_btwn = 0;
+UINT8 door_time_btwn_start = 0;
+UINT8 door_open = 0;
+BOOLEAN door_button = 0;
 
 IMPORT_TILES(OnAnim);
 IMPORT_TILES(OffAnim);
 IMPORT_TILES(darkTileAnim);
 IMPORT_TILES(doorAnim);
 
-void RefreshLife() BANKED
-{
-
-    const UINT8 HEART_TILE  = 129;
-    const UINT8 HEART_TILE2 = 130;
-    const UINT8 HEART_TILE3 = 131;
-    const UINT8 HEART_TILE4 = 132;
-    const UINT8 EMPTY_HEART_TILE  = 125;
-    const UINT8 EMPTY_HEART_TILE2 = 126;
-    const UINT8 EMPTY_HEART_TILE3 = 127;
-    const UINT8 EMPTY_HEART_TILE4 = 128;
-
-    UINT8 i = 0;
-    UINT8 last_tile = 0;
-
-    // RefreshHud();
-    // set_win_tiles(2, 0, 1, 1, &LIFE_ICON);
-    last_tile = (current_life + 1) / 2;
 
 
-    
-    for (i = 0; i != (max_life * 2); ++i)
-    {
-        if( i % 2 == 0){
-            set_win_tiles(4 + i, 0, 1, 1, &EMPTY_HEART_TILE);
-            set_win_tiles(4 + i, 1, 1, 1, &EMPTY_HEART_TILE2);
-        }else{
-            set_win_tiles(4 + i, 0, 1, 1, &EMPTY_HEART_TILE3);
-            set_win_tiles(4 + i, 1, 1, 1, &EMPTY_HEART_TILE4);
-        }
-        
-        // set_win_tiles(3 + i, 0, 1, 1, &EMPTY_HEART_TILE2);
-        // set_win_tiles(3 + i, 0, 1, 1, &EMPTY_HEART_TILE3);
-        // set_win_tiles(3 + i, 0, 1, 1, &EMPTY_HEART_TILE4);
-    }
-   
-    for (i = 0; i != (current_life * 2); ++i)
-    {
-        if( i % 2 == 0){
-            set_win_tiles(4 + i, 0, 1, 1, &HEART_TILE);
-            set_win_tiles(4 + i, 1, 1, 1, &HEART_TILE2);
-        }else{
-            set_win_tiles(4 + i, 0, 1, 1, &HEART_TILE3);
-            set_win_tiles(4 + i, 1, 1, 1, &HEART_TILE4);
-        }
-    }
-    // for (; i != (max_life / 2); ++i)
-    // {
-    //     set_win_tiles(3 + i, 0, 1, 1, &EMPTY_HEART_TILE);
-    // }
-    
-
-
-}
 
 
 void pDelay(UINT8 numloops) BANKED
@@ -145,7 +104,16 @@ void JumpRandSound(BOOLEAN spin) BANKED{
     }
  
 }
-
+void FillDoorCinem() BANKED{
+    for (UINT8 y = 0u; y < 12u; y++)
+	{
+		for (UINT8 x = 0u; x < 20u; x++)
+		{
+				ScrollUpdateColumn(x, y);
+		}
+			
+	}
+}
 void ScrollRelocateMapTo(UINT16 new_x, UINT16 new_y) BANKED{
     UINT8 i;
     INT16 y;
@@ -157,9 +125,17 @@ void ScrollRelocateMapTo(UINT16 new_x, UINT16 new_y) BANKED{
 
     // PUSH_BANK(scroll_bank);
     y = new_y >> 3;
-    for(i = 0u; i != (SCREEN_TILE_REFRES_H) && y != scroll_h; ++i, y ++) {
-        ScrollUpdateRow((scroll_x >> 3) - SCREEN_PAD_LEFT,  y - SCREEN_PAD_TOP);
-    }
+    // for(i = 0u; i != (SCREEN_TILE_REFRES_H) && y != scroll_h; ++i, y ++) {
+    //     ScrollUpdateRow((scroll_x >> 3) - SCREEN_PAD_LEFT,  y - SCREEN_PAD_TOP);
+    // }
+    for (UINT8 y = 0; y < 7; y++)
+	{
+		for (UINT8 x = 0; x < 32; x++)
+		{
+				ScrollUpdateColumn(x, y);
+		}
+			
+	}
     // POP_BANK;
 }
 
@@ -203,6 +179,48 @@ void RefreshTimer( UINT8 timer ) BANKED{
   
 }
 
+void SetOnOffColsEvent(UINT8 cols[], UINT8 onOff ) BANKED{
+
+    UINT8 i = 0;
+    
+    if(onOff == 0){
+		for(i = 0u; cols[i] != 0u; ++i) {
+            if(i > 24u){
+				scroll_collisions[cols[i]] = 0u;
+				scroll_collisions_down[cols[i]] = 0u;
+			}
+            
+		}
+        Onoff_tile_anim(&OffAnim, 0, BANK(OffAnim), 77);
+       
+        
+    }else if(onOff == 1){
+        for(i = 0u; cols[i] != 0u; ++i) {
+            if(i > 24u && i < 28u){
+				scroll_collisions[cols[i]] = 1u;
+				scroll_collisions_down[cols[i]] = 1u;
+			}
+		}
+
+        Onoff_tile_anim(&OnAnim, 0, BANK(OnAnim), 77);
+        SpriteManagerAdd(SpriteSpinOrbEvent, 1095, 192);
+    }else if (onOff == 2){
+        for(i = 0u; cols[i] != 0u; ++i) {
+            if(i > 24u && i < 29u){
+				scroll_collisions[cols[i]] = 0u;
+				scroll_collisions_down[cols[i]] = 0u;
+			}else if(i > 28u){
+                scroll_collisions[cols[i]] = 1u;
+				scroll_collisions_down[cols[i]] = 1u;
+            }
+            
+		}
+        Onoff_tile_anim(&OffAnim, 0, BANK(OffAnim), 77);
+        Onoff_tile_anim(&OnAnim, 0, BANK(OffAnim), 81);
+    }
+
+}
+
 void SetOnOffCols(UINT8 cols[], UINT8 onOff ) BANKED{
 
     UINT8 i = 0;
@@ -212,7 +230,7 @@ void SetOnOffCols(UINT8 cols[], UINT8 onOff ) BANKED{
             if(i > 15u && i < 20u){
 				scroll_collisions[cols[i]] = 1u;
 				scroll_collisions_down[cols[i]] = 1u;
-			}else if(i > 19u){
+			}else if(i > 19u && i < 25u){
 				scroll_collisions[cols[i]] = 0u;
 				scroll_collisions_down[cols[i]] = 0u;
 			}
@@ -226,7 +244,7 @@ void SetOnOffCols(UINT8 cols[], UINT8 onOff ) BANKED{
             if(i > 15u && i < 20u){
 				scroll_collisions[cols[i]] = 0u;
 				scroll_collisions_down[cols[i]] = 0u;
-			}else if(i > 19u){
+			}else if(i > 19u && i < 25u){
 				scroll_collisions[cols[i]] = 1u;
 				scroll_collisions_down[cols[i]] = 1u;
 			}
@@ -248,3 +266,126 @@ void SetDoorCols(UINT8 off) BANKED{
     }
      
 }
+void AutomaticOnOff(UINT8 cols[], UINT8 onOff ) BANKED{
+  UINT8 i = 0;
+
+    if(onOff == 0){
+		for(i = 0u; cols[i] != 0u; ++i) {
+            if(i > 15u && i < 20u){
+				scroll_collisions[cols[i]] = 1u;
+				scroll_collisions_down[cols[i]] = 1u;
+			}else if(i > 19u && i < 25u){
+				scroll_collisions[cols[i]] = 0u;
+				scroll_collisions_down[cols[i]] = 0u;
+			}
+            
+		}
+        Onoff_tile_anim(&OffAnim, 0, BANK(OffAnim), 60);
+        Onoff_tile_anim(&OnAnim, 0, BANK(OnAnim), 56);
+        
+    }else if(onOff == 1){
+        for(i = 0u; cols[i] != 0u; ++i) {
+            if(i > 15u && i < 20u){
+				scroll_collisions[cols[i]] = 0u;
+				scroll_collisions_down[cols[i]] = 0u;
+			}else if(i > 19u && i < 25u){
+				scroll_collisions[cols[i]] = 1u;
+				scroll_collisions_down[cols[i]] = 1u;
+			}
+		}
+
+        Onoff_tile_anim(&OnAnim, 0, BANK(OnAnim), 60);
+        Onoff_tile_anim(&OffAnim, 0, BANK(OffAnim), 56);
+    }
+
+}
+
+void TextWithDelay(const char* txt) BANKED{
+    UINT8 i = 0;
+    char* name = "Dragon";
+    char char_ptr = name[2];
+    PRINT(i, 0, char_ptr);
+    for(i = 0u; i < 5; ++i) {
+        //char_ptr = &name[i];
+        //PRINT(i, 0, "A");
+        pDelay(10);
+	}
+}
+
+void FadeDMGCustom(UINT8 fadeout) BANKED {
+	
+	UINT8 pals3[] = {0, 1, 2, 3};
+    UINT8 pals2[] = {0, 0, 1, 2};
+    UINT8 pals1[] = {0, 0, 0, 1};
+	BGP_REG = OBP0_REG = OBP1_REG = PAL_DEF(0, pals1[fadeout], pals2[fadeout], pals3[fadeout] );
+		
+}
+
+void FadeColor() BANKED{
+    FadeDMGCustom(3);
+    pDelay(20);
+    FadeDMGCustom(2);
+    pDelay(20);
+    FadeDMGCustom(1);
+    pDelay(20);
+    FadeDMGCustom(0);
+    pDelay(20);
+}
+
+void FadeInColor() BANKED{
+    FadeDMGCustom(0);
+    pDelay(20);
+    FadeDMGCustom(1);
+    pDelay(20);
+    FadeDMGCustom(2);
+    pDelay(20);
+    FadeDMGCustom(3);
+}
+
+void FadeCapeCuts() BANKED{
+    FadeDMGCustom(0);
+    SHOW_WIN;
+    pDelay(30);
+    FadeDMGCustom(1);
+    pDelay(30);
+    FadeDMGCustom(2);
+    pDelay(30);
+    FadeDMGCustom(3);
+    pDelay(30);
+}
+void FadeColorAndMusic() BANKED{
+    FadeDMGCustom(3);
+    pDelay(20);
+    NR50_REG = 0x55;
+    FadeDMGCustom(2);
+    pDelay(20);
+    NR50_REG = 0x33;
+    FadeDMGCustom(1);
+    pDelay(20);
+    NR50_REG = 0x11;
+    FadeDMGCustom(0);
+    pDelay(20);
+    NR50_REG = 0x0;
+    StopMusic;
+}
+
+void FadeMusic(UINT8 pointer) BANKED{
+    UINT8 volume[] = {0x55,  0x33, 0x11, 0x0}; 
+    NR50_REG = volume[pointer];
+    if (pointer == 3)
+    {
+        StopMusic;
+    }
+    
+}
+// void SetDialogFace(UINT8 face) BANKED {
+//     switch (face)
+//     {
+//     case 0: //VIEWER
+        
+//         break;
+    
+//     case 1: ///ORB??
+        
+//         break;
+// }

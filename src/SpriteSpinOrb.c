@@ -10,6 +10,8 @@
 
 extern UINT8 current_level;
 
+extern UINT8 start_screen;
+
 void CheckCollisionTilePlt(CUSTOM_DATA_ORB* data)
 {
     UINT8 colision = GetScrollTile((THIS->x ) >> 3, (THIS->y + 6u) >> 3);
@@ -55,6 +57,11 @@ void CheckCollisionTilePlt(CUSTOM_DATA_ORB* data)
 void START()
 {
     CUSTOM_DATA_ORB* data = (CUSTOM_DATA_ORB*)THIS->custom_data;
+
+    data->initial_frame_speed = 0;
+    data->initial_y = THIS->y;
+    data->start = 1;
+
     data->state = 0;
     data->initial_speed = 2;
     data->speed = data->initial_speed;
@@ -75,38 +82,54 @@ void UPDATE()
     CUSTOM_DATA_ORB* data = (CUSTOM_DATA_ORB*)THIS->custom_data;
     UINT8 i;
 	Sprite* spr;
- 
 
-    switch (data->state)
-    {
-        case 1:
-            if(--data->speed == 0){
-                THIS->x++;
-                data->speed = data->initial_speed;
-            }
-        break;
-        case 2:
-            if(--data->speed == 0){
-                THIS->y--;
-                data->speed = data->initial_speed;
-            }
-        break;
-        case 3:
-            if(--data->speed == 0){
-                THIS->x--;
-                data->speed = data->initial_speed;
-            }
-        break;
-        case 4:
-            if(--data->speed == 0){
-                THIS->y++;
-                data->speed = data->initial_speed;
-            }
-        break;
-    default:
-        break;
-    }
-    CheckCollisionTilePlt(data);
+     if(start_screen == 0){
+
+        if(data->start == 0){
+            data->start = 1;
+            THIS->y = data->initial_y;
+            THIS->anim_speed = data->initial_frame_speed;
+        }
+
+        switch (data->state)
+        {
+            case 1:
+                if(--data->speed == 0){
+                    THIS->x++;
+                    data->speed = data->initial_speed;
+                }
+            break;
+            case 2:
+                if(--data->speed == 0){
+                    THIS->y--;
+                    data->speed = data->initial_speed;
+                }
+            break;
+            case 3:
+                if(--data->speed == 0){
+                    THIS->x--;
+                    data->speed = data->initial_speed;
+                }
+            break;
+            case 4:
+                if(--data->speed == 0){
+                    THIS->y++;
+                    data->speed = data->initial_speed;
+                }
+            break;
+        default:
+            break;
+        }
+        CheckCollisionTilePlt(data);
+     }else{
+        if(THIS->y != 0  && data->start == 1){
+            data->start = 0;
+            data->initial_y = THIS->y;
+            THIS->y = 0;
+            data->initial_frame_speed = THIS->anim_speed;
+            THIS->anim_speed =0;
+        } 
+     }
 }
 
 void DESTROY()

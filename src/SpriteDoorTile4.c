@@ -13,17 +13,17 @@ extern UINT8 door_open;
 
 void START()
 {
-    CUSTOM_DATA* data = (CUSTOM_DATA*)THIS->custom_data;
+    // CUSTOM_DATA* data = (CUSTOM_DATA*)THIS->custom_data;
 
 }
 
 void UPDATE()
 {
-    CUSTOM_DATA* data = (CUSTOM_DATA*)THIS->custom_data;
+    // CUSTOM_DATA* data = (CUSTOM_DATA*)THIS->custom_data;
 
-     if(door_open == 0){
-        SpriteManagerRemove(THIS_IDX);
-     }
+    //  if(door_open == 0){
+    //     SpriteManagerRemove(THIS_IDX);
+    //  }
 }
 
 void DESTROY()
