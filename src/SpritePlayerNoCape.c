@@ -37,6 +37,8 @@ extern UINT8 deaths_u_count;
 extern UINT8 deaths_d_count;
 
 extern UINT8 current_cs;
+
+extern UINT8 load_next;
 BOOLEAN canHurtNc;
 
 
@@ -249,16 +251,18 @@ void UPDATE()
     
             break;
             case 9: //animacion al llegar al limite del nivel
+                
+                
                 THIS->x++;
                 THIS->mirror = NO_MIRROR;
-                if(THIS->x >= (scroll_x + 172)){
+                if(THIS->x >= (scroll_x + 164)){
                     if(current_state == StateStage1 && current_level == 4){
+                        load_next = 0; 
                         current_cs = 2;
                         current_state = StateCutscenes;
                         SetState(current_state);
                     }else{
-                        current_level++;
-                        SetState(current_state);
+                        load_next = 1;
                     }
                     
                 }

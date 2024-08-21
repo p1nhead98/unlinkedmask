@@ -65,7 +65,7 @@ void UPDATE()
                     door_time = 6;
                     door_button = 0;
                     RefreshTimer();
-                    SetDoorCols(1);
+                    SetDoorCols(1, 0);
                     PlayFx(CHANNEL_4, 15, 0x3F, 0xF1, 0x64, 0x80);
 			    }
             }else{
@@ -78,7 +78,7 @@ void UPDATE()
                     door_open = 1;
                     door_button = 0;
                     RefreshTimer();
-                    SetDoorCols( 1 );
+                    SetDoorCols( 1 , 0);
                     PlayFx(CHANNEL_4, 15, 0x3F, 0xF1, 0x64, 0x80);
 			    }
             }

@@ -37,7 +37,7 @@ UINT8 start_screen;
 // struct TilesInfo* original_tiles;
 UINT8 IsCutscene = 0;
 UINT8 canDo = 0;
-Sprite* player_sprite = 0;
+
 Sprite* bossFireAttack_spr = 1;
 UINT8 change_jump_count = 0;
 
@@ -190,47 +190,7 @@ void RefreshTimer() BANKED{
   
 }
 
-void SetOnOffColsEvent(UINT8 cols[], UINT8 onOff ) BANKED{
 
-    // UINT8 i = 0;
-    
-    // if(onOff == 0){
-	// 	for(i = 0u; cols[i] != 0u; ++i) {
-    //         if(i > 24u){
-	// 			scroll_collisions[cols[i]] = 0u;
-	// 			scroll_collisions_down[cols[i]] = 0u;
-	// 		}
-            
-	// 	}
-    //     Onoff_tile_anim(&OffAnim, 0, BANK(OffAnim), 77);
-       
-        
-    // }else if(onOff == 1){
-    //     for(i = 0u; cols[i] != 0u; ++i) {
-    //         if(i > 24u && i < 28u){
-	// 			scroll_collisions[cols[i]] = 1u;
-	// 			scroll_collisions_down[cols[i]] = 1u;
-	// 		}
-	// 	}
-
-    //     Onoff_tile_anim(&OnAnim, 0, BANK(OnAnim), 77);
-    //     SpriteManagerAdd(SpriteSpinOrbEvent, 1095, 192);
-    // }else if (onOff == 2){
-    //     for(i = 0u; cols[i] != 0u; ++i) {
-    //         if(i > 24u && i < 29u){
-	// 			scroll_collisions[cols[i]] = 0u;
-	// 			scroll_collisions_down[cols[i]] = 0u;
-	// 		}else if(i > 28u){
-    //             scroll_collisions[cols[i]] = 1u;
-	// 			scroll_collisions_down[cols[i]] = 1u;
-    //         }
-            
-	// 	}
-    //     Onoff_tile_anim(&OffAnim, 0, BANK(OffAnim), 77);
-    //     Onoff_tile_anim(&OnAnim, 0, BANK(OffAnim), 81);
-    // }
-
-}
 
 
 

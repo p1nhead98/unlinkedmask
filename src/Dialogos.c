@@ -26,7 +26,7 @@ extern UINT8 current_level;
 extern UINT8 state_interrupts;
 extern UINT8 canDo;
 
-UINT8 event = 0;
+
 // extern UINT8 state_counter;
 extern UINT8 dialog_pos;
 extern UINT8 current_cs;

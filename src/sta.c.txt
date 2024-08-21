@@ -219,7 +219,7 @@ IMPORT_TILES(flameBoss5);
 // IMPORT_TILES(waterfallAnim2);
 
 
-Sprite* player_sprite = 0;
+//Sprite* player_sprite = 0;
 
 Sprite* bossFireAttack_spr = 1;
 

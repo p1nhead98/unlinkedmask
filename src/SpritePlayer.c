@@ -29,6 +29,8 @@ const UINT8 anim_back[] = {3, 19, 20, 21};
 
 // DECLARE_MUSIC(unlinkedunchainedsoul);
 
+extern UINT8 load_next;
+
 extern INT16 inmunity;
 extern INT8 pal_tick;
 extern UINT8 current_pal;
@@ -694,12 +696,12 @@ void UPDATE()
                     THIS->mirror = player_priority == 1 ? NM_PRIOR : NO_MIRROR;
                     if(THIS->x >= (scroll_x + 172)){
                         if(current_state == StateStage2 && current_level == 4){
+                            load_next = 0;
                             current_cs = 7;
                             current_state = StateCutscenes;
                             SetState(current_state);
                         }else{
-                            current_level++;
-                            SetState(current_state);
+                            load_next = 1;
                         }
                     }
                 break;
@@ -916,11 +918,29 @@ void UPDATE()
                             if(sprData->state == 10){
                                 sprData->state = 6;
                             }
+                        }else if(current_level == 3){
+                            if(sprData->state == 10){
+                                sprData->state = 7;
+                            }
+                        }else if(current_level == 4){
+                            if(sprData->state == 13){
+                                sprData->state = 9;
+                            }else if(sprData->state == 10 || sprData->state == 21){
+                                sprData->state = 6;
+                            }else if(sprData->state == 20){
+                                sprData->state = 8;
+                            }else if(sprData->state == 22){
+                                sprData->state = 15;
+                            }else if(sprData->state == 23){
+                                sprData->state = 0;
+                            }else if(sprData->state == 24){
+                                sprData->state = 11;
+                            }
                         }
                     }
                 }
 
-                if(spr->type == SpriteSpinOrb && player_accel_y > 0) {
+                if((spr->type == SpriteSpinOrb || spr->type == SpriteSpinOrbEvent) && player_accel_y > 0) {
                     if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && (player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 2))) {
                         player_state = 3;
                         player_accel_y = -83;

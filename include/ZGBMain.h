@@ -58,6 +58,7 @@ _SPRITE_DMG(SpriteTitleFlash, titleFlash)\
 _SPRITE_DMG(SpriteMoon, moon)\
 _SPRITE_DMG(SpriteOrbForest, plataforma1)\
 _SPRITE_DMG(SpriteOrbTemple, plataforma1)\
+_SPRITE_DMG(SpriteSpinOrbEvent, plataforma1)\
 SPRITE_DEF_END
 
 #include "ZGBMain_Init.h"

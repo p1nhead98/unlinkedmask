@@ -33,7 +33,7 @@ UINT8 cs_counter = 0;
 UINT8 cs_counter_2 = 0;
 UINT8 cs_counter_3 = 0;
 UINT8 cd_fade_idx = 0; 
-UINT8 current_cs = 0;
+UINT8 current_cs = 3;
 UINT8 cs_cando_anim = 0;
 UINT8 cs_anim_index = 0;
 
@@ -140,6 +140,7 @@ void FadeIdx(UINT8 idx){
 	DMGFadeCustom(idx);
 	FadeStepColorCustom(idx);
 }
+void ClampScrollLimits();
 
 void START() {
     const struct MapInfoBanked* level = &cs_levels[current_cs]; 
@@ -151,6 +152,8 @@ void START() {
     OBP0_REG = PAL_DEF(3, 0, 1, 2);
 	OBP1_REG = PAL_DEF(1, 0, 0, 0);
 
+	
+	
     CRITICAL {
 	    LOAD_SGB_BORDER(linkedborder);
     }
@@ -215,6 +218,7 @@ void START() {
 
 		case 3:
 			SetHudWin(0);
+			scroll_offset_x = 0;
 			INIT_FONT(font, PRINT_WIN);
 			cs_counter = 90;
 			canDoInterrupt = 0;
@@ -226,6 +230,7 @@ void START() {
 			break;
 		case 4:
 			SetHudWin(0);
+			scroll_offset_x = 0;
 			INIT_FONT(fontCapeCuts, PRINT_WIN);
 			cs_counter = 50;
 			canDoInterrupt = 0;
@@ -239,6 +244,7 @@ void START() {
 			break;
 		case 5:
 			SetHudWin(0);
+			scroll_offset_x = 0;
 			INIT_FONT(font, PRINT_WIN);
 			cs_counter = 3;
 			canDoInterrupt = 0;
@@ -267,6 +273,7 @@ void START() {
 
 		case 7:
 			SHOW_SPRITES;
+			scroll_offset_x = 0;
 			can_scroll_y = 0;
 			can_scroll_x = 0;
 			SetHudWin(0);
@@ -281,6 +288,13 @@ void START() {
 		
         break;
     }
+
+	// scroll_target = 0;
+	// clamp_enabled = 1;
+	// scroll_x = 0;
+	// ScrollRelocateMapTo(0,0);
+	//scroll_x_vblank = 0 ;
+	
 	
 	NR52_REG = 0x80; //Enables sound, you should always setup this first
 	NR51_REG = 0xFF; //Enables all channels (left and right)
