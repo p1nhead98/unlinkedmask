@@ -50,19 +50,7 @@ void Set_Bkg_tiles( struct MapInfo *map) BANKED{
 //     POP_BANK;
 // }
 
-void SetMugTiles(struct TilesInfo *tile, UINT8 bank, UINT8 init_tile) __nonbanked{
-    PUSH_BANK(bank);
-    Tile_Anim(init_tile, 36, tile, 247, bank);
-    Tile_Anim(init_tile + 1, 36, tile, 248, bank);
-    Tile_Anim(init_tile + 2, 36, tile, 249, bank);
-    Tile_Anim(init_tile + 3, 36, tile, 250, bank);
-    Tile_Anim(init_tile + 4, 36, tile, 251, bank);
-    Tile_Anim(init_tile + 5, 36, tile, 252, bank);
-    Tile_Anim(init_tile + 6, 36, tile, 253, bank);
-    Tile_Anim(init_tile + 7, 36, tile, 254, bank);
-    Tile_Anim(init_tile + 8, 36, tile, 255, bank);
-    POP_BANK;
-}
+
 
 // void Onoff_tile_anim(struct TilesInfo *tile, UINT8 tileStart, UINT8 bank, UINT8 firstTile) __nonbanked{
     

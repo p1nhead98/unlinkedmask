@@ -56,9 +56,9 @@ void UPDATE()
 
     SPRITEMANAGER_ITERATE(i, spr) {
 		if(spr->type == SpritePlayer ) {
-            if(current_level == 24 && THIS->x > 840){
+            if(current_level == 4 && current_state == StateStage3 && THIS->x > 840){
                 if(CheckCollision(THIS, spr) && data->state == 0 ) {
-                    door_time_btwn_start = door_time_btwn = 110;
+                    door_time_btwn_start = door_time_btwn = 130;
                     SetSpriteAnim(THIS, door_cl, 0);
                     data->state = 1;
                     door_open = 1;
@@ -71,8 +71,8 @@ void UPDATE()
             }else{
                 if(CheckCollision(THIS, spr) && door_button == 1 && data->state == 0 ) {
                     SetSpriteAnim(THIS, door_cl, 0);
-                    if(current_level == 24){
-                        door_time_btwn_start = door_time_btwn = 200;
+                    if(current_level == 4 && current_state == StateStage3){
+                        door_time_btwn_start = door_time_btwn = 150;
                     }
                     data->state = 1;
                     door_open = 1;

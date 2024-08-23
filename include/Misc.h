@@ -59,14 +59,14 @@ typedef struct {
 
 void pDelay(UINT8 numloops) BANKED;
 
-void ScreenShakeX(UINT8 duration, INT8 seismicscale) BANKED;
+// void ScreenShakeX(UINT8 duration, INT8 seismicscale) BANKED;
 void JumpRandSound(BOOLEAN spin) BANKED;
 void ScrollRelocateMapTo(UINT16 new_x, UINT16 new_y) BANKED;
 void RefreshTimer() BANKED;
 
 
 void TextWithDelay(const char* txt) BANKED;
-void AutomaticOnOff(UINT8 cols[], UINT8 onOff ) BANKED;
+
 void FadeDMGCustom(UINT8 fadeout) BANKED;
 void FadeColor() BANKED;
 void FadeInColor() BANKED;

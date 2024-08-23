@@ -1,6 +1,8 @@
 #ifndef MISC2_H
 #define MISC2_H
 
+#include "Banks/SetAutoBank.h"
+
 #define BANKED_MAP(MAP) {BANK(MAP), &MAP}
 
 typedef struct {

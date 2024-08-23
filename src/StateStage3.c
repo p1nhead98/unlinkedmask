@@ -25,6 +25,13 @@ IMPORT_TILES(templeCloudAnim);
 IMPORT_TILES(templeCloudAnim2);
 IMPORT_TILES(templeCloudAnim3);
 
+IMPORT_TILES(OnAnim);
+IMPORT_TILES(OffAnim);
+
+IMPORT_TILES(spikesAnim);
+IMPORT_TILES(spikesAnim3);
+
+
 DECLARE_MUSIC(unlinkedinside1);
 
 UINT8 stage3_col_tiles[] = {4, 5, 6 ,7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 56, 57, 58, 59, 60, 61, 62, 63, 77, 78, 79, 80, 81, 82, 83, 84, 0};
@@ -40,6 +47,7 @@ UINT8 stage3_anim = 0;
 UINT8 stage3_anim_2 = 0;
 UINT8 stage3_anim_3 = 0;
 UINT8 stage3_anim_4 = 0;
+UINT8 onoff_auto_time = 0;
 
 
 extern UINT8 door_time;
@@ -81,7 +89,47 @@ const START_POS stage3_start_positions[] = {
 	{0, 112}, 
 	{0, 96}, 
 	{0, 112}, 
+	{0 , 104},
 };
+
+// void AutomaticOnOff(UINT8 cols[], UINT8 onOff ){
+//   UINT8 i = 0;
+
+//     if(onOff == 0){
+// 		for(i = 0u; cols[i] != 0u; ++i) {
+//             if(i > 15u && i < 20u){
+// 				scroll_collisions[cols[i]] = 1u;
+// 				scroll_collisions_down[cols[i]] = 1u;
+// 			}else if(i > 19u && i < 25u){
+// 				scroll_collisions[cols[i]] = 0u;
+// 				scroll_collisions_down[cols[i]] = 0u;
+// 			}
+            
+// 		}
+  
+// 		Set_Bkg_Data(&OffAnim, 60, 4, BANK(OffAnim));
+// 		Set_Bkg_Data(&OnAnim, 56, 4, BANK(OnAnim));
+// 		Set_Bkg_Data(&spikesAnim, 81, 4, BANK(spikesAnim));
+// 		Set_Bkg_Data(&spikesAnim3, 85, 4, BANK(spikesAnim3));
+        
+//     }else if(onOff == 1){
+//         for(i = 0u; cols[i] != 0u; ++i) {
+//             if(i > 15u && i < 20u){
+// 				scroll_collisions[cols[i]] = 0u;
+// 				scroll_collisions_down[cols[i]] = 0u;
+// 			}else if(i > 19u && i < 25u){
+// 				scroll_collisions[cols[i]] = 1u;
+// 				scroll_collisions_down[cols[i]] = 1u;
+// 			}
+// 		}
+
+// 		Set_Bkg_Data(&OnAnim, 60, 4, BANK(OnAnim));
+// 		Set_Bkg_Data(&OffAnim, 56, 4, BANK(OffAnim));
+// 		Set_Bkg_Data(&spikesAnim3, 81, 4, BANK(spikesAnim3));
+// 		Set_Bkg_Data(&spikesAnim, 85, 4, BANK(spikesAnim));
+//     }
+
+// }
 
 
 void START() {
@@ -163,6 +211,18 @@ void START() {
 			stage3_counter = 3;
 			stage3_anim = 0;
 			state_interrupts = 0;
+			break;
+		case 5:
+			player_sprite = scroll_target = SpriteManagerAdd(SpritePlayer, stage3_start_positions[current_level].start_x, stage3_start_positions[current_level].start_y);
+			InitScroll(st_3_level->bank, st_3_level->map, stage3_col_tiles, 0);
+			ScrollRelocateMapTo(0,48);
+			SetHudWin(1);
+			stage3_counter = 3;
+			stage3_anim = 0;
+			state_interrupts = 0;
+			onoff_auto_time = 20;
+			stage3_cando = 0;
+			// AutomaticOnOff(stage3_col_tiles, stage3_cando);
 			break;
 		default:
 			
@@ -395,7 +455,7 @@ void UPDATE() {
 		if(--stage3_counter_4 == 0){
 			stage3_counter_4 = 2;
 			stage3_anim_4++;
-			Tile_Anim(stage3_anim_4, 8, &templeCloudAnim3, 47, BANK(templeCloudAnim3));
+			// Tile_Anim(stage3_anim_4, 8, &templeCloudAnim3, 47, BANK(templeCloudAnim3));
 		}
 	// }
 
@@ -418,17 +478,29 @@ void UPDATE() {
 		PlayFx(CHANNEL_4, 60, 0x3F, 0xF5, 0xA8, 0x80);
 	}
 
-		if(current_level == 3 && player_sprite->x > 1142 && stage3_cando == 0 && event == 0){
-			stage3_cando = 1;
-			SetOnOffColsEvent(stage3_col_tiles, 1);
-		}
-		if(event == 1 ){
-			// can_scroll_x = 1;
-			event++;
-			SetOnOffColsEvent(stage3_col_tiles, 2);
-		}
-
-
+	if(current_level == 3 && player_sprite->x > 1142 && stage3_cando == 0 && event == 0){
+		stage3_cando = 1;
+		SetOnOffColsEvent(stage3_col_tiles, 1);
+	}
+	if(event == 1 ){
+		// can_scroll_x = 1;
+		event++;
+		SetOnOffColsEvent(stage3_col_tiles, 2);
+	}
+	if(current_level == 5){
+		if(--onoff_auto_time == 0){
+			if(current_level == 30){
+				onoff_auto_time = 60;
+			}else{
+				onoff_auto_time = 90;
+			}
+			
+			stage3_cando = stage3_cando == 0 ? 1 : 0;
+			// AutomaticOnOff(stage3_col_tiles, stage3_cando);
+			PlayFx(CHANNEL_1, 20, 0x1C, 0x8D, 0xF1, 0xD6, 0x86);
+			PlayFx(CHANNEL_4, 20, 0x3A, 0x91, 0x40, 0xC0);
+		}	
+	}
 
 	if(load_next) {
 		if( load_next) { //current_level > 0 || load_next == 1 (to avoid going under 0)
@@ -450,7 +522,8 @@ void UPDATE() {
 			case 0: door_time_btwn_start = door_time_btwn = 35; break;
 			case 1: door_time_btwn_start = door_time_btwn = 120; break;
 			case 3: event = stage3_cando = 0; door_time_btwn_start = door_time_btwn = 170; SetOnOffColsEvent(stage3_col_tiles, 0); break;
-			case 4: door_time_btwn_start = door_time_btwn = 220; break;
+			case 4: door_time_btwn_start = door_time_btwn = 150; break;
+			case 5:	stage3_cando = 0; onoff_auto_time = 20;  break;
 		}
 
 		door_open = 0;

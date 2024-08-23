@@ -935,7 +935,12 @@ void UPDATE()
                                 sprData->state = 0;
                             }else if(sprData->state == 24){
                                 sprData->state = 11;
+                            }else if(sprData->state == 30){
+                                sprData->state = 27;
+                            }else if(sprData->state == 31){
+                                sprData->state = 14;
                             }
+                            
                         }
                     }
                 }

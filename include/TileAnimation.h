@@ -14,7 +14,7 @@ void Set_Bkg_Data(struct TilesInfo *tile, UINT8 tileStart, UINT8 tileAmount, UIN
 void Set_Sprite_Tiles(struct TilesInfo *tile, UINT8 bank, UINT8 tile_amount, UINT8 first_tile) __nonbanked;
 void Set_Bkg_tiles( struct MapInfo *map) BANKED;
 // void Set_SpinChange_Tiles(struct TilesInfo *tile, UINT8 bank, UINT8 tile_amount) __nonbanked;
-void SetMugTiles(struct TilesInfo *tile, UINT8 bank, UINT8 init_tile) __nonbanked;
+
 // void Onoff_tile_anim(struct TilesInfo *tile, UINT8 tileStart, UINT8 bank, UINT8 firstTile) __nonbanked;
 
 #endif

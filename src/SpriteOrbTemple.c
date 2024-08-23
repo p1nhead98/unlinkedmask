@@ -71,7 +71,27 @@ void START()
             data->state = 24;
             THIS->y -= 4;
             THIS->x -= 4;
+        }else if(THIS->x > 936 && THIS->x < 1304 && THIS->y > 104){
+            data->state = 13;
+            THIS->x += 4;
+            THIS->lim_x = 200;
+            THIS->lim_y = 160;
+        }else if(THIS->x > 1350 && THIS->x < 1624 && THIS->y > 128){
+            data->state = 24;
+            THIS->y -= 4;
+            THIS->x -= 4;
+            THIS->lim_x = 200;
+            THIS->lim_y = 160;
+        }else if(THIS->x > 1350 && THIS->x < 1624 && THIS->y < 128){
+            data->state = 31;
+            THIS->y -= 4;
+            THIS->x += 4;
+        }else if(THIS->x > 1624){
+            data->state = 30;
+            THIS->x += 4;
+            THIS->y -= 4;
         }
+
     }
     // if(current_level == 3){
     //     if(THIS->x < 200){
@@ -183,6 +203,19 @@ void UPDATE()
         case 17:
             THIS->y += 2;
             
+            break;
+        
+        case 26:
+            THIS->y -= 5;
+            break;
+        case 27:
+            THIS->y += 5;
+            break;
+        case 28:
+            THIS->x += 5;
+            break;
+        case 29:
+            THIS->x -= 5;
             break;
 
      }
@@ -325,6 +358,50 @@ void UPDATE()
                 data->state = 8;
             }else if(data->state == 8 && THIS->y < 112){
                 data->state = 50;
+            }
+        }else if(THIS->x > 936 && THIS->x < 1304 && THIS->y > 104){
+            if(data->state == 9 && THIS->y > 162 && THIS->x < 1040){
+                data->state = 11;
+            }else if(data->state == 11 && THIS->x > 1067 && THIS->y < 166){
+                data->state = 8;
+            }else if(data->state == 8 && THIS->y < 130 && THIS->x < 1112){
+                data->state = 13;
+            }else if(data->state == 9 && THIS->y > 178 ){
+                data->state = 11;
+            }else if(data->state == 11 && THIS->y > 166 && THIS->x > 1259){
+                data->state = 8;
+            }else if(data->state == 8 && THIS->y < 146 && THIS->x > 1112){
+                data->state = 50;
+            }
+        }else if(THIS->x > 1350 && THIS->x < 1624 && THIS->y > 128 && THIS->y < 160){
+            if(data->state == 11 && THIS->x > 1459 && THIS->x < 1463){
+                data->state = 24;
+            }else if(data->state == 11 && THIS->x > 1523){
+                data->state = 50;
+            }
+        }else if(THIS->x > 1350 && THIS->x < 1624 && THIS->y > 160 ){
+            if(data->state == 11 && THIS->x > 1603){
+                data->state = 50;
+                THIS->x-=2;
+            }
+        }else if(THIS->x > 1232 && THIS->x < 1624 && THIS->y < 128 ){
+            if(data->state == 14 && THIS->x < 1264){
+                data->state = 16;
+            }
+        }else if(THIS->x > 1624){
+            if(data->state == 27 && THIS->y > 208){
+                data->state = 28;
+            }else if(data->state == 28 && THIS->x > 1696 && THIS->x < 1702){
+                data->state = 26;
+                THIS->x+=1;
+            }else if(data->state == 26 && THIS->y < 144 && THIS->x < 1747){
+                data->state = 30;
+            }else if(data->state == 28 && THIS->x > 1747){
+                data->state = 26;
+                THIS->x+=1;
+            }else if(data->state == 26 && THIS->y < 126){
+                data->state = 50;
+                THIS->x -= 3;
             }
         }
     }
