@@ -89,47 +89,47 @@ const START_POS stage3_start_positions[] = {
 	{0, 112}, 
 	{0, 96}, 
 	{0, 112}, 
-	{0 , 104},
+	{0 , 112},
 };
 
-// void AutomaticOnOff(UINT8 cols[], UINT8 onOff ){
-//   UINT8 i = 0;
+void AutomaticOnOff(UINT8 cols[], UINT8 onOff ){
+  UINT8 i = 0;
 
-//     if(onOff == 0){
-// 		for(i = 0u; cols[i] != 0u; ++i) {
-//             if(i > 15u && i < 20u){
-// 				scroll_collisions[cols[i]] = 1u;
-// 				scroll_collisions_down[cols[i]] = 1u;
-// 			}else if(i > 19u && i < 25u){
-// 				scroll_collisions[cols[i]] = 0u;
-// 				scroll_collisions_down[cols[i]] = 0u;
-// 			}
+    if(onOff == 0){
+		for(i = 0u; cols[i] != 0u; ++i) {
+            if(i > 15u && i < 20u){
+				scroll_collisions[cols[i]] = 1u;
+				scroll_collisions_down[cols[i]] = 1u;
+			}else if(i > 19u && i < 25u){
+				scroll_collisions[cols[i]] = 0u;
+				scroll_collisions_down[cols[i]] = 0u;
+			}
             
-// 		}
+		}
   
-// 		Set_Bkg_Data(&OffAnim, 60, 4, BANK(OffAnim));
-// 		Set_Bkg_Data(&OnAnim, 56, 4, BANK(OnAnim));
-// 		Set_Bkg_Data(&spikesAnim, 81, 4, BANK(spikesAnim));
-// 		Set_Bkg_Data(&spikesAnim3, 85, 4, BANK(spikesAnim3));
+		Set_Bkg_Data(&OffAnim, 60, 4, BANK(OffAnim));
+		Set_Bkg_Data(&OnAnim, 56, 4, BANK(OnAnim));
+		Set_Bkg_Data(&spikesAnim, 81, 4, BANK(spikesAnim));
+		Set_Bkg_Data(&spikesAnim3, 85, 4, BANK(spikesAnim3));
         
-//     }else if(onOff == 1){
-//         for(i = 0u; cols[i] != 0u; ++i) {
-//             if(i > 15u && i < 20u){
-// 				scroll_collisions[cols[i]] = 0u;
-// 				scroll_collisions_down[cols[i]] = 0u;
-// 			}else if(i > 19u && i < 25u){
-// 				scroll_collisions[cols[i]] = 1u;
-// 				scroll_collisions_down[cols[i]] = 1u;
-// 			}
-// 		}
+    }else if(onOff == 1){
+        for(i = 0u; cols[i] != 0u; ++i) {
+            if(i > 15u && i < 20u){
+				scroll_collisions[cols[i]] = 0u;
+				scroll_collisions_down[cols[i]] = 0u;
+			}else if(i > 19u && i < 25u){
+				scroll_collisions[cols[i]] = 1u;
+				scroll_collisions_down[cols[i]] = 1u;
+			}
+		}
 
-// 		Set_Bkg_Data(&OnAnim, 60, 4, BANK(OnAnim));
-// 		Set_Bkg_Data(&OffAnim, 56, 4, BANK(OffAnim));
-// 		Set_Bkg_Data(&spikesAnim3, 81, 4, BANK(spikesAnim3));
-// 		Set_Bkg_Data(&spikesAnim, 85, 4, BANK(spikesAnim));
-//     }
+		Set_Bkg_Data(&OnAnim, 60, 4, BANK(OnAnim));
+		Set_Bkg_Data(&OffAnim, 56, 4, BANK(OffAnim));
+		Set_Bkg_Data(&spikesAnim3, 81, 4, BANK(spikesAnim3));
+		Set_Bkg_Data(&spikesAnim, 85, 4, BANK(spikesAnim));
+    }
 
-// }
+}
 
 
 void START() {
@@ -222,7 +222,7 @@ void START() {
 			state_interrupts = 0;
 			onoff_auto_time = 20;
 			stage3_cando = 0;
-			// AutomaticOnOff(stage3_col_tiles, stage3_cando);
+			AutomaticOnOff(stage3_col_tiles, stage3_cando);
 			break;
 		default:
 			
@@ -303,14 +303,7 @@ void LoadNextScreenSt3(UINT8 current_level, UINT8 next_level) {
 
 	GetMapSize(next_map->bank, next_map->map, &next_level_w, &next_level_h);
 	GetMapSize(current_map->bank, current_map->map, &current_level_w, &current_level_h);
-
-	// ScrollFindTileInCorners(next_level_w, next_level_h, next_map, load_next == -1 ? 1 : 2, &tile_start_x, &tile_start_y);
-
-		ScrollFindTileInCornersSt3(next_level_w, next_level_h, next_map, load_next == 1 ? 104 : 1, &tile_start_x, &tile_start_y);
-		// ScrollFindTileInCorners(next_level_w, next_level_h, next_map, load_next_x == -1 ? 4 : 3, &tile_start_x, &tile_start_y);
-
-	// ScrollFindTileInCorners(next_level_w, next_level_h, next_map, load_next, &tile_start_x, &tile_start_y);
-
+	ScrollFindTileInCornersSt3(next_level_w, next_level_h, next_map, load_next == 1 ? 104 : 1, &tile_start_x, &tile_start_y);
 	wait_vbl_done();
 	InitPlayerPos(tile_start_x, tile_start_y, stage3_levels);
 	ScrollSetMap(next_map->bank, next_map->map);
@@ -342,27 +335,18 @@ void LoadNextScreenSt3(UINT8 current_level, UINT8 next_level) {
 
 	//Adding offset_x and offset_y will convert coordinates from old screen to the new one
 
-		scroll_offset_x = 0x1F & (scroll_offset_x - (offset_x >> 3));
-		scroll_start_x += offset_x;
+	scroll_offset_x = 0x1F & (scroll_offset_x - (offset_x >> 3));
+	scroll_start_x += offset_x;
 
 		// scroll_offset_y = 0x1F & (scroll_offset_y - (offset_y >> 3));
 		// scroll_start_y += offset_y;
-	
-
-
-
 
 	scroll_end_x = scroll_x;
 	scroll_end_y = scroll_y;
 	scroll_x_vblank = scroll_x = scroll_start_x;
 	scroll_y_vblank = scroll_y = scroll_start_y;
-	
-
-		player_start_x += offset_x;
-
-
+	player_start_x += offset_x;
 		// player_start_y += offset_y;
-	
 	player_end_x = player->x;
 	player_end_y = player->y;
 	player->anim_data = 0; //Animation data is in another bank, we must remove it
@@ -439,8 +423,9 @@ void UPDATE() {
 
 
 	// if(_cpu == CGB_TYPE){
+
 		if(--stage3_counter_2 == 0){
-			stage3_counter_2 = 6;
+			stage3_counter_2 = 8;
 			stage3_anim_2++;
 			Tile_Anim(stage3_anim_2, 8, &templeCloudAnim, 76, BANK(templeCloudAnim));
 		}
@@ -455,8 +440,9 @@ void UPDATE() {
 		if(--stage3_counter_4 == 0){
 			stage3_counter_4 = 2;
 			stage3_anim_4++;
-			// Tile_Anim(stage3_anim_4, 8, &templeCloudAnim3, 47, BANK(templeCloudAnim3));
+			Tile_Anim(stage3_anim_4, 8, &templeCloudAnim3, 47, BANK(templeCloudAnim3));
 		}
+	
 	// }
 
 
@@ -496,7 +482,7 @@ void UPDATE() {
 			}
 			
 			stage3_cando = stage3_cando == 0 ? 1 : 0;
-			// AutomaticOnOff(stage3_col_tiles, stage3_cando);
+			AutomaticOnOff(stage3_col_tiles, stage3_cando);
 			PlayFx(CHANNEL_1, 20, 0x1C, 0x8D, 0xF1, 0xD6, 0x86);
 			PlayFx(CHANNEL_4, 20, 0x3A, 0x91, 0x40, 0xC0);
 		}	
@@ -523,7 +509,7 @@ void UPDATE() {
 			case 1: door_time_btwn_start = door_time_btwn = 120; break;
 			case 3: event = stage3_cando = 0; door_time_btwn_start = door_time_btwn = 170; SetOnOffColsEvent(stage3_col_tiles, 0); break;
 			case 4: door_time_btwn_start = door_time_btwn = 150; break;
-			case 5:	stage3_cando = 0; onoff_auto_time = 20;  break;
+			case 5:	stage3_cando = 0; onoff_auto_time = 20; AutomaticOnOff(stage3_col_tiles, stage3_cando); break;
 		}
 
 		door_open = 0;

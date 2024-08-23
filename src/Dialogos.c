@@ -69,8 +69,8 @@ void FadeColorAndMusicCs(){
     StopMusic;
 }
 
-void SetMugTiles(struct TilesInfo *tile, UINT8 bank, UINT8 init_tile) __nonbanked{
-    PUSH_BANK(bank);
+void SetMugTiles(struct TilesInfo *tile, UINT8 bank, UINT8 init_tile) {
+  
     Tile_Anim(init_tile, 36, tile, 247, bank);
     Tile_Anim(init_tile + 1, 36, tile, 248, bank);
     Tile_Anim(init_tile + 2, 36, tile, 249, bank);
@@ -80,7 +80,7 @@ void SetMugTiles(struct TilesInfo *tile, UINT8 bank, UINT8 init_tile) __nonbanke
     Tile_Anim(init_tile + 6, 36, tile, 253, bank);
     Tile_Anim(init_tile + 7, 36, tile, 254, bank);
     Tile_Anim(init_tile + 8, 36, tile, 255, bank);
-    POP_BANK;
+
 }
 
 void SetMushot(){
