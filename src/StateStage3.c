@@ -89,7 +89,7 @@ const START_POS stage3_start_positions[] = {
 	{0, 112}, 
 	{0, 96}, 
 	{0, 112}, 
-	{0 , 112},
+	{0 , 104},
 };
 
 void AutomaticOnOff(UINT8 cols[], UINT8 onOff ){
@@ -213,6 +213,7 @@ void START() {
 			state_interrupts = 0;
 			break;
 		case 5:
+			PlayMusic(unlinkedinside1, 1);
 			player_sprite = scroll_target = SpriteManagerAdd(SpritePlayer, stage3_start_positions[current_level].start_x, stage3_start_positions[current_level].start_y);
 			InitScroll(st_3_level->bank, st_3_level->map, stage3_col_tiles, 0);
 			ScrollRelocateMapTo(0,48);

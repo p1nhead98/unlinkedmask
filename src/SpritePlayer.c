@@ -51,6 +51,8 @@ extern UINT8 IsCutscene;
 
 extern UINT8 current_cs;
 
+extern UINT8 stage3_cando;
+
 BOOLEAN canHurt;
 
 
@@ -157,10 +159,10 @@ void CheckDeathTiles(){
     UINT8 colision = GetScrollTile((THIS->x + 3u) >> 3, (THIS->y + 12u) >> 3);
     
 
-    if(current_level != 32){
-        if(current_level == 25){
+
+        if(current_state == StateStage3 && current_level == 5){
             if(  ( THIS->x > 1449 && THIS->x < 1488) || ( THIS->x > 1697 && THIS->x < 1736) || ( THIS->x > 1825 && THIS->x < 1864)  ){
-                if(canDo == 0 && player_state != 11){
+                if(stage3_cando == 0 && player_state != 11){
                     current_life = 0;
                     ScreenShake(1,1);
                     RefreshLife();
@@ -168,7 +170,7 @@ void CheckDeathTiles(){
                     player_state = 11;
                 }
             }else if(( (THIS->x > 1281 && THIS->x < 1336) && THIS->y < 104)){
-                if(canDo == 0 && player_state != 11){
+                if(stage3_cando == 0 && player_state != 11){
                     current_life = 0;
                     ScreenShake(1,1);
                     RefreshLife();
@@ -176,7 +178,7 @@ void CheckDeathTiles(){
                     player_state = 11;
                 }
             }else if( ( THIS->x > 169 && THIS->x < 224 ) || ( THIS->x > 297 && THIS->x < 336) || ( THIS->x > 705 && THIS->x < 432) || ( THIS->x > 449 && THIS->x < 488) || ( THIS->x > 505 && THIS->x < 544) || ( THIS->x > 1369 && THIS->x < 1408) || ( THIS->x > 1553 && THIS->x < 1592 ) || ( THIS->x > 1761 && THIS->x < 1800) ){
-                if(canDo == 1 && player_state != 11){
+                if(stage3_cando == 1 && player_state != 11){
                     current_life = 0;
                     ScreenShake(1,1);
                     RefreshLife();
@@ -184,7 +186,7 @@ void CheckDeathTiles(){
                     player_state = 11;
                 }
             }else if((colision == 60 || colision == 61 || colision == 62 || colision == 63)){
-                if(canDo == 1 && player_state != 11){
+                if(stage3_cando == 1 && player_state != 11){
                     current_life = 0;
                     ScreenShake(1,1);
                     RefreshLife();
@@ -192,7 +194,7 @@ void CheckDeathTiles(){
                     player_state = 11;
                 }
             }else if((colision == 56 || colision == 57 || colision == 58 || colision == 59)){
-                if(canDo == 0 && player_state != 11){
+                if(stage3_cando == 0 && player_state != 11){
                     current_life = 0;
                     ScreenShake(1,1);
                     RefreshLife();
@@ -265,7 +267,7 @@ void CheckDeathTiles(){
             
         }
 
-    }
+    
 }
 
 void ChangeJumpCollision(){
@@ -850,7 +852,8 @@ void UPDATE()
             if(current_level != 31){
                 
                 CheckCollisionTile();
-                if(current_level == 25 || current_level == 29 || current_level == 30 ){
+                if( current_state == StateStage3 && current_level == 5 
+                 ){
                     CheckDeathTiles();
                 }
                 if(current_level > 26 && current_level < 31){
@@ -914,15 +917,11 @@ void UPDATE()
                         
                         SetSpriteAnim(THIS, anim_spin, 20);
                         SpriteManagerAdd(SpritePlayerVfx, THIS->x - 4, THIS->y + 8);
-                        if(current_level == 0 || current_level == 1 || current_level == 2){
-                            if(sprData->state == 10){
-                                sprData->state = 6;
-                            }
-                        }else if(current_level == 3){
+                        if(current_level == 3){
                             if(sprData->state == 10){
                                 sprData->state = 7;
                             }
-                        }else if(current_level == 4){
+                        }else if(current_level == 0 || current_level == 1 || current_level == 2 || current_level == 4 || current_level == 5){
                             if(sprData->state == 13){
                                 sprData->state = 9;
                             }else if(sprData->state == 10 || sprData->state == 21){
@@ -939,6 +938,8 @@ void UPDATE()
                                 sprData->state = 27;
                             }else if(sprData->state == 31){
                                 sprData->state = 14;
+                            }else if(sprData->state == 33){
+                                sprData->state = 32;
                             }
                             
                         }

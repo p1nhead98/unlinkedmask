@@ -24,75 +24,85 @@ void START()
     data->state = 0;
     data->initial_speed = 2;
     data->speed = data->initial_speed;
-    if(current_level == 0 ){
-        data->state = 10;
-        THIS->y -= 4;
-        THIS->x -= 4;
-    }
-    if(current_level == 1){
-        if(THIS->x < 680){
+    switch(current_level){
+        case 0:
             data->state = 10;
             THIS->y -= 4;
             THIS->x -= 4;
-        }else if(THIS->x > 1088 ){
-            THIS->x += 4;
-            data->state = 3;
-        }
+        break;
+        case 1:
+            if(THIS->x < 680){
+                data->state = 10;
+                THIS->y -= 4;
+                THIS->x -= 4;
+            }else if(THIS->x > 1088 ){
+                THIS->x += 4;
+                data->state = 3;
+            }
+        break;
+        case 2:
+            if(THIS->x < 968){
+                data->state = 10;
+                THIS->y -= 4;
+                THIS->x -= 4;
+            }else if (THIS->x > 1256){
+                THIS->y -= 4;
+                data->state = 0;
+            }
+        break;
+        case 3:
+            if(THIS->x < 672){
+                data->state = 10;
+                THIS->y -= 4;
+                // THIS->x -= 4;
+            }else if (THIS->x > 1256){
+                // THIS->y -= 4;
+                // data->state = 0;
+            }
+        break;
+        case 4:
+            if(THIS->x < 496){
+                data->state = 13;
+                THIS->x += 4;
+            }else if(THIS->x > 496 && THIS->x < 792){
+                data->state = 10;
+                THIS->y -= 4;
+                THIS->x -= 4;
+            }else if(THIS->x > 792 && THIS->x < 944){
+                data->state = 24;
+                THIS->y -= 4;
+                THIS->x -= 4;
+            }else if(THIS->x > 936 && THIS->x < 1304 && THIS->y > 104){
+                data->state = 13;
+                THIS->x += 4;
+                THIS->lim_x = 200;
+                THIS->lim_y = 160;
+            }else if(THIS->x > 1350 && THIS->x < 1624 && THIS->y > 128){
+                data->state = 24;
+                THIS->y -= 4;
+                THIS->x -= 4;
+                THIS->lim_x = 200;
+                THIS->lim_y = 160;
+            }else if(THIS->x > 1350 && THIS->x < 1624 && THIS->y < 128){
+                data->state = 31;
+                THIS->y -= 4;
+                THIS->x += 4;
+            }else if(THIS->x > 1624){
+                data->state = 30;
+                THIS->x += 4;
+                THIS->y -= 4;
+            }
+        break;
+        case 5:
+            if(THIS->x < 592){
+                data->state = 13;
+                THIS->y+=12;
+                THIS->x-=4;
+            }
+        break;
     }
-    if(current_level == 2){
-        if(THIS->x < 968){
-            data->state = 10;
-            THIS->y -= 4;
-            THIS->x -= 4;
-        }else if (THIS->x > 1256){
-            THIS->y -= 4;
-            data->state = 0;
-        }
-    }
-    if(current_level == 3){
-        if(THIS->x < 672){
-            data->state = 10;
-            THIS->y -= 4;
-            // THIS->x -= 4;
-        }else if (THIS->x > 1256){
-            // THIS->y -= 4;
-            // data->state = 0;
-        }
-    }
-    if(current_level == 4){
-        if(THIS->x < 496){
-            data->state = 13;
-            THIS->x += 4;
-        }else if(THIS->x > 496 && THIS->x < 792){
-            data->state = 10;
-            THIS->y -= 4;
-            THIS->x -= 4;
-        }else if(THIS->x > 792 && THIS->x < 944){
-            data->state = 24;
-            THIS->y -= 4;
-            THIS->x -= 4;
-        }else if(THIS->x > 936 && THIS->x < 1304 && THIS->y > 104){
-            data->state = 13;
-            THIS->x += 4;
-            THIS->lim_x = 200;
-            THIS->lim_y = 160;
-        }else if(THIS->x > 1350 && THIS->x < 1624 && THIS->y > 128){
-            data->state = 24;
-            THIS->y -= 4;
-            THIS->x -= 4;
-            THIS->lim_x = 200;
-            THIS->lim_y = 160;
-        }else if(THIS->x > 1350 && THIS->x < 1624 && THIS->y < 128){
-            data->state = 31;
-            THIS->y -= 4;
-            THIS->x += 4;
-        }else if(THIS->x > 1624){
-            data->state = 30;
-            THIS->x += 4;
-            THIS->y -= 4;
-        }
+    
 
-    }
     // if(current_level == 3){
     //     if(THIS->x < 200){
     //         THIS->y -= 4;
@@ -217,7 +227,12 @@ void UPDATE()
         case 29:
             THIS->x -= 5;
             break;
-
+        case 32:
+            if(--data->speed == 0){
+                data->speed = 2;
+                THIS->x+=3;
+            }
+        break;
      }
 
     if(current_level == 0){
@@ -402,6 +417,21 @@ void UPDATE()
             }else if(data->state == 26 && THIS->y < 126){
                 data->state = 50;
                 THIS->x -= 3;
+            }
+        }
+    }else if(current_level == 5){
+        if(THIS->x < 592){
+            if(data->state == 9 && THIS->y > 122 && THIS->y < 130){
+                data->state = 13;
+                THIS->y += 3;
+            }else if(data->state == 9 && THIS->y > 150  && THIS->y < 153){
+                data->state = 13;
+            }else if(data->state == 9 && THIS->y > 162){
+                data->state = 33;
+               
+            }else if(data->state == 32 && THIS->x > 570){
+                data->state = 3;
+                
             }
         }
     }
