@@ -60,6 +60,7 @@ void UPDATE()
                         FadeMusic(player_cst_counter);
                         player_cst_counter++;
                         player_cst_counter2 = 20;
+                        
                     }
                 
                 }

@@ -17,6 +17,8 @@ IMPORT_MAP(lvl_3);
 IMPORT_MAP(lvl_4);
 IMPORT_MAP(lvl_5);
 
+IMPORT_MAP(window);
+
 
 IMPORT_TILES(spikesAnimSt1);
 IMPORT_TILES(spikesAnim2St1);
@@ -126,7 +128,8 @@ void START() {
 			player_sprite = scroll_target = SpriteManagerAdd(SpritePlayerNoCape, stage1_start_positions[current_level].start_x, stage1_start_positions[current_level].start_y);
 			InitScroll(st_1_level->bank, st_1_level->map, stage1_col_tiles, 0);
 			ScrollRelocateMapTo(0,48);
-			SetHudWin(1);
+			// SetHudWin(1);
+			
 			stage1_counter = 3;
 			stage1_anim = 0;
 			state_interrupts = 0;
@@ -137,6 +140,8 @@ void START() {
 		SpriteManagerAdd(SpriteMoon, 0, 56);
 	}
 	
+	INIT_HUD(window);
+	RefreshLife();
     NR52_REG = 0x80; //Enables sound, you should always setup this first
 	NR51_REG = 0xFF; //Enables all channels (left and right)
 	NR50_REG = 0x77; //Max volume

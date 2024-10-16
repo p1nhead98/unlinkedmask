@@ -78,6 +78,8 @@ void UPDATE()
             player_cs_state++;
             player_c_counter2 = 20;
             SetSpriteAnim(THIS, pcs_stand, 15);
+            
+            
         }
         break;
     case 1:
@@ -95,6 +97,7 @@ void UPDATE()
                 FadeColor();
                 current_cs++;
                 SetState(current_state);
+                // scroll_offset_x = 0;
             }
             
         }

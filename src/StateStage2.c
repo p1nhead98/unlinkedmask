@@ -18,6 +18,8 @@ IMPORT_MAP(lvl_8);
 IMPORT_MAP(lvl_9);
 IMPORT_MAP(lvl_10);
 
+IMPORT_MAP(window);
+
 //Mapas para DMG
 IMPORT_MAP(lvl_6Gb);
 IMPORT_MAP(lvl_7Gb);
@@ -123,13 +125,16 @@ void START() {
 			player_sprite = scroll_target = SpriteManagerAdd(SpritePlayer, stage2_start_positions[current_level].start_x, stage2_start_positions[current_level].start_y);
 			InitScroll( st_2_level->bank, st_2_level->map, stage2_col_tiles, 0);
 			ScrollRelocateMapTo(0,48);
-			SetHudWin(1);
+			// SetHudWin(1);
 			stage2_counter = stage2_counter_2 = 3;
 			
 			stage2_anim = stage2_anim_2 = 0;
 			state_interrupts = 0;
 		break;
 	}
+
+	INIT_HUD(window);
+	RefreshLife();
 
 	// if(current_level == 0){
 	if(_cpu == CGB_TYPE){

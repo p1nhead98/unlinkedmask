@@ -18,6 +18,8 @@ IMPORT_MAP(lvl_14);
 IMPORT_MAP(lvl_15);
 IMPORT_MAP(lvl_16);
 
+IMPORT_MAP(window2);
+
 
 IMPORT_TILES(spikesAnim);
 IMPORT_TILES(spikesAnim2);
@@ -172,7 +174,7 @@ void START() {
 			player_sprite = scroll_target = SpriteManagerAdd(SpritePlayer, stage3_start_positions[current_level].start_x, stage3_start_positions[current_level].start_y);
 			InitScroll(st_3_level->bank, st_3_level->map, stage3_col_tiles, 0);
 			ScrollRelocateMapTo(0,48);
-			SetHudWin(1);
+			//SetHudWin(1);
 			stage3_counter = 3;
 			stage3_anim = 0;
 			state_interrupts = 0;
@@ -184,7 +186,7 @@ void START() {
 			player_sprite = scroll_target = SpriteManagerAdd(SpritePlayer, stage3_start_positions[current_level].start_x, stage3_start_positions[current_level].start_y);
 			InitScroll(st_3_level->bank, st_3_level->map, stage3_col_tiles, 0);
 			ScrollRelocateMapTo(0,48);
-			SetHudWin(1);
+			//SetHudWin(1);
 			stage3_counter = 3;
 			stage3_anim = 0;
 			state_interrupts = 0;
@@ -194,7 +196,7 @@ void START() {
 			player_sprite = scroll_target = SpriteManagerAdd(SpritePlayer, stage3_start_positions[current_level].start_x, stage3_start_positions[current_level].start_y);
 			InitScroll(st_3_level->bank, st_3_level->map, stage3_col_tiles, 0);
 			ScrollRelocateMapTo(0,48);
-			SetHudWin(1);
+			//SetHudWin(1);
 			SetOnOffColsEvent(stage3_col_tiles, 0);
 			stage3_cando = event = 0;
 			stage3_counter = 3;
@@ -207,7 +209,7 @@ void START() {
 			player_sprite = scroll_target = SpriteManagerAdd(SpritePlayer, stage3_start_positions[current_level].start_x, stage3_start_positions[current_level].start_y);
 			InitScroll(st_3_level->bank, st_3_level->map, stage3_col_tiles, 0);
 			ScrollRelocateMapTo(0,48);
-			SetHudWin(1);
+			//SetHudWin(1);
 			stage3_counter = 3;
 			stage3_anim = 0;
 			state_interrupts = 0;
@@ -217,7 +219,7 @@ void START() {
 			player_sprite = scroll_target = SpriteManagerAdd(SpritePlayer, stage3_start_positions[current_level].start_x, stage3_start_positions[current_level].start_y);
 			InitScroll(st_3_level->bank, st_3_level->map, stage3_col_tiles, 0);
 			ScrollRelocateMapTo(0,48);
-			SetHudWin(1);
+			//SetHudWin(1);
 			stage3_counter = 3;
 			stage3_anim = 0;
 			state_interrupts = 0;
@@ -230,7 +232,7 @@ void START() {
 			player_sprite = scroll_target = SpriteManagerAdd(SpritePlayer, stage3_start_positions[current_level].start_x, stage3_start_positions[current_level].start_y);
 			InitScroll(st_3_level->bank, st_3_level->map, stage3_col_tiles, 0);
 			ScrollRelocateMapTo(0,48);
-			SetHudWin(1);
+			//SetHudWin(1);
 			stage3_counter = 3;
 			stage3_anim = 0;
 			state_interrupts = 0;
@@ -240,6 +242,10 @@ void START() {
 	// if(current_level == 0){
 	// 	SpriteManagerAdd(SpriteMoon, 0, 56);
 	// }
+
+	INIT_HUD(window2);
+	RefreshLife();
+
 
 	stage3_counter_2 = stage3_counter_3 = stage3_counter_4 = 1;
 	stage3_anim_2 = stage3_anim_3 = stage3_anim_4 = 0;

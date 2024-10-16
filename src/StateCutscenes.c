@@ -152,7 +152,9 @@ void START() {
     OBP0_REG = PAL_DEF(3, 0, 1, 2);
 	OBP1_REG = PAL_DEF(1, 0, 0, 0);
 
-	
+	if(current_cs == 3 || current_cs == 7){
+		scroll_offset_x = 0;
+	}
 	
     CRITICAL {
 	    LOAD_SGB_BORDER(linkedborder);
@@ -206,6 +208,7 @@ void START() {
 
 		case 2:
 			SHOW_SPRITES;
+			
 			can_scroll_y = 0;
 			can_scroll_x = 0;
 			SetHudWin(0);
@@ -218,7 +221,7 @@ void START() {
 
 		case 3:
 			SetHudWin(0);
-			scroll_offset_x = 0;
+			
 			INIT_FONT(font, PRINT_WIN);
 			cs_counter = 90;
 			canDoInterrupt = 0;
