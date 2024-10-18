@@ -41,11 +41,19 @@ void START()
             THIS->x += 4;
         }
     }else{
-        data->state = 10;
-        THIS->x = 76;
-        THIS->y = 148;
-        THIS->lim_x = 100;
-        THIS->lim_y = 160;
+        if(THIS->x < 530){
+            data->state = 10;
+            THIS->x = 76;
+            THIS->y = 148;
+            THIS->lim_x = 100;
+            THIS->lim_y = 160;
+        }else{
+            data->state = 11;
+            THIS->x = 668;
+            THIS->y = 140;
+            THIS->lim_x = 100;
+            THIS->lim_y = 160;
+        }
 
     }
 }
@@ -137,13 +145,24 @@ void UPDATE()
             }
         }
      }else{
-        if(THIS->x > 668 && THIS->y < 163 && data->state == 6){
+        // if(THIS->x > 668 && THIS->y < 163 && data->state == 6){
+        //     data->state = 4;
+        // }else if(THIS->y > 164 && data->state == 4){
+        //     data->state = 6;
+        // }else if(THIS->x > 755 && THIS->y > 164 && data->state == 6){
+        //     data->state = 5;
+        // }
+
+        if(THIS->x > 291 &&  THIS->x < 568 && THIS->y < 163 && data->state == 6){
             data->state = 4;
-        }else if(THIS->y > 164 && data->state == 4){
+        }
+
+        if(THIS->y > 164 && THIS->x > 568 && data->state == 4){
             data->state = 6;
         }else if(THIS->x > 755 && THIS->y > 164 && data->state == 6){
             data->state = 5;
         }
+
      }
 
 

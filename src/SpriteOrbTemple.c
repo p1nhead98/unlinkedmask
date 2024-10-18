@@ -54,7 +54,9 @@ void START()
             if(THIS->x < 672){
                 data->state = 10;
                 THIS->y -= 4;
-                // THIS->x -= 4;
+                THIS->x -= 8;
+                THIS->lim_x = 200;
+                THIS->lim_y = 160;
             }else if (THIS->x > 1256){
                 // THIS->y -= 4;
                 // data->state = 0;
@@ -95,6 +97,10 @@ void START()
         break;
         case 5:
             if(THIS->x < 592){
+                data->state = 13;
+                THIS->y+=12;
+                THIS->x-=4;
+            }else if(THIS->x > 1080 && THIS->x < 1264){
                 data->state = 13;
                 THIS->y+=12;
                 THIS->x-=4;
@@ -261,19 +267,19 @@ void UPDATE()
                 data->state = 4;
             }
         }else if(THIS->x > 1088 && THIS->x < 1144){
-            if(data->state == 3 && THIS->y < 83){
+            if(data->state == 3 && THIS->y < 128){
                 data->state = 2;
-            }else if(data->state == 2 && THIS->y > 139){
+            }else if(data->state == 2 && THIS->y > 160){
                 data->state = 3;
             }
         }else if(THIS->x > 1152 && THIS->x < 1223){
-            if(data->state == 3 && THIS->y < 123){
+            if(data->state == 3 && THIS->y < 128){
                 data->state = 2;
             }else if(data->state == 2 && THIS->y > 160){
                 data->state = 3;
             }
         }else if(THIS->x > 1224){
-            if(data->state == 3 && THIS->y < 99){
+            if(data->state == 3 && THIS->y < 112){
                 data->state = 2;
             }else if(data->state == 2 && THIS->y > 163){
                 data->state = 3;
@@ -304,15 +310,13 @@ void UPDATE()
             }
         }
     }else if(current_level == 3){
-        if(data->state == 7 && THIS->x < 155 ){
-            data->state = 6;
-        }else if(data->state == 6 && THIS->x > 443 && THIS->y > 144 && THIS->x < 464){
+        if(data->state == 6 && THIS->x > 443 && THIS->y > 144 && THIS->x < 464){
             data->state = 5;
         }else if (data->state == 5 && THIS->y < 133 && THIS->x > 443){
             data->state = 7;
-        }else if(data->state == 7 && THIS->x > 336 && THIS->x < 389 ){
+        }else if(data->state == 7 && THIS->x > 336 && THIS->x < 405 ){
             data->state = 5;
-        }else if(data->state == 5 && THIS->y < 101 && THIS->x < 389){
+        }else if(data->state == 5 && THIS->y < 101 && THIS->x < 405){
             data->state = 6;
         }else if(data->state == 6 && THIS->x > 499 && THIS->y < 101){
             data->state = 4;
@@ -432,6 +436,10 @@ void UPDATE()
             }else if(data->state == 32 && THIS->x > 570){
                 data->state = 3;
                 
+            }
+        }else if (THIS->x > 1080 && THIS->x < 1264){
+            if(data->state == 9 && THIS->y > 162){
+                data->state = 99;
             }
         }
     }

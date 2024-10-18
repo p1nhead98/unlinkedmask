@@ -903,7 +903,10 @@ void UPDATE()
                         if(current_level == 4){
                             if(sprData->state == 10){
                                 sprData->state = 6;
+                            }else if(sprData->state == 11){
+                                sprData->state = 4;
                             }
+
                         }
                     }
                 }
@@ -919,7 +922,7 @@ void UPDATE()
                         SpriteManagerAdd(SpritePlayerVfx, THIS->x - 4, THIS->y + 8);
                         if(current_level == 3){
                             if(sprData->state == 10){
-                                sprData->state = 7;
+                                sprData->state = 6;
                             }
                         }else if(current_level == 0 || current_level == 1 || current_level == 2 || current_level == 4 || current_level == 5){
                             if(sprData->state == 13){
