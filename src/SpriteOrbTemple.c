@@ -79,19 +79,19 @@ void START()
                 THIS->x += 4;
                 THIS->lim_x = 200;
                 THIS->lim_y = 160;
-            }else if(THIS->x > 1350 && THIS->x < 1624 && THIS->y > 128){
+            }else if(THIS->x > 1350 && THIS->x < 1568 && THIS->y > 128){
                 data->state = 24;
                 THIS->y -= 4;
                 THIS->x -= 4;
                 THIS->lim_x = 200;
                 THIS->lim_y = 160;
-            }else if(THIS->x > 1350 && THIS->x < 1624 && THIS->y < 128){
+            }else if(THIS->x > 1350 && THIS->x < 1568 && THIS->y < 128){
                 data->state = 31;
                 THIS->y -= 4;
                 THIS->x += 4;
-            }else if(THIS->x > 1624){
+            }else if(THIS->x > 1568){
                 data->state = 30;
-                THIS->x += 4;
+                THIS->x += 12;
                 THIS->y -= 4;
             }
         break;
@@ -392,30 +392,30 @@ void UPDATE()
             }else if(data->state == 8 && THIS->y < 146 && THIS->x > 1112){
                 data->state = 50;
             }
-        }else if(THIS->x > 1350 && THIS->x < 1624 && THIS->y > 128 && THIS->y < 160){
+        }else if(THIS->x > 1350 && THIS->x < 1568 && THIS->y > 128 && THIS->y < 160){
             if(data->state == 11 && THIS->x > 1459 && THIS->x < 1463){
                 data->state = 24;
             }else if(data->state == 11 && THIS->x > 1523){
                 data->state = 50;
             }
-        }else if(THIS->x > 1350 && THIS->x < 1624 && THIS->y > 160 ){
-            if(data->state == 11 && THIS->x > 1603){
-                data->state = 50;
+        }else if(THIS->x > 1350 && THIS->x < 1568 && THIS->y > 160 ){
+            if(data->state == 11 && THIS->x > 1464){
+                data->state = 9;
                 THIS->x-=2;
             }
-        }else if(THIS->x > 1232 && THIS->x < 1624 && THIS->y < 128 ){
+        }else if(THIS->x > 1232 && THIS->x < 1568 && THIS->y < 128 ){
             if(data->state == 14 && THIS->x < 1264){
                 data->state = 16;
             }
-        }else if(THIS->x > 1624){
+        }else if(THIS->x > 1568){
             if(data->state == 27 && THIS->y > 208){
                 data->state = 28;
-            }else if(data->state == 28 && THIS->x > 1696 && THIS->x < 1702){
+            }else if(data->state == 28 && THIS->x > 1648 && THIS->x < 1654){
                 data->state = 26;
                 THIS->x+=1;
-            }else if(data->state == 26 && THIS->y < 144 && THIS->x < 1747){
+            }else if(data->state == 26 && THIS->y < 144 && THIS->x < 1699){
                 data->state = 30;
-            }else if(data->state == 28 && THIS->x > 1747){
+            }else if(data->state == 28 && THIS->x > 1699){
                 data->state = 26;
                 THIS->x+=1;
             }else if(data->state == 26 && THIS->y < 126){
