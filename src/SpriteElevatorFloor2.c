@@ -25,7 +25,7 @@ void UPDATE()
     switch (data->state)
     {
         case 0:
-            THIS->y = scroller_y + 113;
+            THIS->y = scroller_y + 161;
             if(scroller_y == 1){
                 data->state++;
             }

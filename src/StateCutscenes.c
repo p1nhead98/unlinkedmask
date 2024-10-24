@@ -13,6 +13,7 @@
 #include "Math.h"
 #include "Sgb.h"
 #include "CustomFade.h"
+#include "TileAnimation.h"
 
 //importar mapas de cutscenes
 IMPORT_MAP(intro_door);
@@ -23,19 +24,28 @@ IMPORT_MAP(capeCuts2);
 IMPORT_MAP(capeCuts7);
 IMPORT_MAP(templeCuts);
 
+IMPORT_MAP(cs_elev);
+
 IMPORT_MAP(linkedborder);
 
 //importar fuentes de cutscenes
 IMPORT_TILES(font);
 IMPORT_TILES(fontCapeCuts);
 
+IMPORT_TILES(elevScrewAnim1);
+IMPORT_TILES(elevScrewAnim2);
+IMPORT_TILES(elevScrewAnim3);
+IMPORT_TILES(elevScrewAnim4);
+
 UINT8 cs_counter = 0;
 UINT8 cs_counter_2 = 0;
 UINT8 cs_counter_3 = 0;
 UINT8 cd_fade_idx = 0; 
-UINT8 current_cs = 3;
+UINT8 current_cs = 8;
 UINT8 cs_cando_anim = 0;
 UINT8 cs_anim_index = 0;
+
+UINT8 anim_counter = 0;
 
 extern UINT8 current_dialog;
 extern UINT8 dialog_pos;
@@ -60,6 +70,7 @@ const struct MapInfoBanked cs_levels[] = {
 	BANKED_MAP(capeCuts7),
 	BANKED_MAP(cinematicCape),
 	BANKED_MAP(templeCuts),
+	BANKED_MAP(cs_elev),
 };
 
 const START_POS cs_start_positions[] = {
@@ -71,12 +82,24 @@ const START_POS cs_start_positions[] = {
 	{0, 96}, 
 	{0, 96}, 
 	{0, 96}, 
+	{0, 208}, 
 };
 
 void FillDoorCinemCs() {
     for (UINT8 y = 0u; y < 12u; y++)
 	{
 		for (UINT8 x = 0u; x < 20u; x++)
+		{
+				ScrollUpdateColumn(x, y);
+		}
+			
+	}
+}
+
+void FillElevCinemCs() {
+    for (UINT8 y = 0u; y < 12u; y++)
+	{
+		for (UINT8 x = 0u; x < 30u; x++)
 		{
 				ScrollUpdateColumn(x, y);
 		}
@@ -287,6 +310,32 @@ void START() {
 			current_dialog = 0;
 		break;
 		
+		case 8:
+			FillElevCinemCs();
+			SHOW_SPRITES;
+			can_scroll_y = 0;
+			SetHudWin(0);
+			state_interrupts = 3;
+			scroll_y = 112;
+			scroller_y = 63;
+			anim_counter = 0;
+			// cs_counter = 3;
+			// cs_counter_2 = 90;
+			counterInterrupt = counterInterrupt2 = 10;
+			SpriteManagerAdd(SpriteElevatorPilar1, 48, 80);
+			SpriteManagerAdd(SpriteElevatorPilar2, 48, 80);
+			SpriteManagerAdd(SpriteElevatorPilar3, 48, 80);
+
+			SpriteManagerAdd(SpriteElevatorPilar1, 96, 80);
+			SpriteManagerAdd(SpriteElevatorPilar2, 104, 80);
+			SpriteManagerAdd(SpriteElevatorPilar3, 104, 80);
+
+			SpriteManagerAdd(SpriteElevatorFloor1, 40, 112);
+			SpriteManagerAdd(SpriteElevatorFloor2, 72, 112);
+			SpriteManagerAdd(SpriteElevatorFloor3, 104, 112);
+			SpriteManagerAdd(SpritePlayerCutscenes, cs_start_positions[current_cs].start_x, cs_start_positions[current_cs].start_y);
+			LYC_REG = 0;
+		break;
 		default:
 		
         break;
@@ -405,6 +454,32 @@ void UPDATE() {
 				}
 			}
 
+		}
+	}else if(current_cs == 8){
+		// if(counterInterrupt == 0){
+			
+	
+		// }
+		if(canDoInterrupt == 4){
+			if(--counterInterrupt == 0){
+				scroller_y--;
+				if(scroller_y == 0){
+					state_interrupts = 0;	
+				}
+				anim_counter++;
+				// Tile_Anim(anim_counter, 2, &elevScrewAnim1, 6, BANK(elevScrewAnim1));
+				// Tile_Anim(anim_counter, 2, &elevScrewAnim2, 7, BANK(elevScrewAnim2));
+				Tile_Anim(anim_counter, 8, &elevScrewAnim3, 1, BANK(elevScrewAnim3));
+				Tile_Anim(anim_counter, 8, &elevScrewAnim4, 2, BANK(elevScrewAnim4));
+				if(counterInterrupt2 != 1){
+					counterInterrupt2--;
+					PlayFx(CHANNEL_4, 5, 0x3b, 0xf1, 0x30, 0x80);
+				}
+				counterInterrupt = counterInterrupt2;
+				
+				// scroll_x = scroll_x == 2 ? 0 : 2;
+			}
+			
 		}
 	}
 

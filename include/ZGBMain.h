@@ -59,6 +59,9 @@ _SPRITE_DMG(SpriteMoon, moon)\
 _SPRITE_DMG(SpriteOrbForest, plataforma1)\
 _SPRITE_DMG(SpriteOrbTemple, plataforma1)\
 _SPRITE_DMG(SpriteSpinOrbEvent, plataforma1)\
+_SPRITE_DMG(SpriteElevatorPilar1, elevPilar1)\
+_SPRITE_DMG(SpriteElevatorPilar2, elevPilar2)\
+_SPRITE_DMG(SpriteElevatorPilar3, elevPilar3)\
 SPRITE_DEF_END
 
 #include "ZGBMain_Init.h"

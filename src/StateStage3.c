@@ -210,6 +210,7 @@ void START() {
 			InitScroll(st_3_level->bank, st_3_level->map, stage3_col_tiles, 0);
 			ScrollRelocateMapTo(0,48);
 			//SetHudWin(1);
+			SetOnOffColsEvent(stage3_col_tiles, 0);
 			stage3_counter = 3;
 			stage3_anim = 0;
 			state_interrupts = 0;
@@ -220,6 +221,7 @@ void START() {
 			InitScroll(st_3_level->bank, st_3_level->map, stage3_col_tiles, 0);
 			ScrollRelocateMapTo(0,48);
 			//SetHudWin(1);
+			SetOnOffColsEvent(stage3_col_tiles, 0);
 			stage3_counter = 3;
 			stage3_anim = 0;
 			state_interrupts = 0;
@@ -421,8 +423,19 @@ void UPDATE() {
 		stage3_anim = stage3_anim == 1 ? 0 : 1;
 		if(stage3_anim == 0){
 			Set_Bkg_Data(&spikesAnim, 112, 4, BANK(spikesAnim));
+			if(stage3_cando == 1){
+				Set_Bkg_Data(&spikesAnim, 85, 4, BANK(spikesAnim));
+			}else{
+				Set_Bkg_Data(&spikesAnim, 81, 4, BANK(spikesAnim));
+			}
+			
 		}else{
 			Set_Bkg_Data(&spikesAnim2, 112, 4, BANK(spikesAnim2));
+			if(stage3_cando == 1){
+				Set_Bkg_Data(&spikesAnim2, 85, 4, BANK(spikesAnim2));
+			}else{
+				Set_Bkg_Data(&spikesAnim2, 81, 4, BANK(spikesAnim2));
+			}
 		}
 		stage3_counter = 5;
 	}
@@ -515,8 +528,8 @@ void UPDATE() {
 			case 0: door_time_btwn_start = door_time_btwn = 35; break;
 			case 1: door_time_btwn_start = door_time_btwn = 120; break;
 			case 3: event = stage3_cando = 0; door_time_btwn_start = door_time_btwn = 170; SetOnOffColsEvent(stage3_col_tiles, 0); break;
-			case 4: door_time_btwn_start = door_time_btwn = 150; break;
-			case 5:	stage3_cando = 0; onoff_auto_time = 20; AutomaticOnOff(stage3_col_tiles, stage3_cando); break;
+			case 4: door_time_btwn_start = door_time_btwn = 150; SetOnOffColsEvent(stage3_col_tiles, 0);  break;
+			case 5:	stage3_cando = 0; onoff_auto_time = 20; AutomaticOnOff(stage3_col_tiles, stage3_cando); SetOnOffColsEvent(stage3_col_tiles, 0);  break;
 		}
 
 		door_open = 0;

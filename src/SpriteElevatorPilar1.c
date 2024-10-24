@@ -16,7 +16,9 @@ void START()
 {
     CUSTOM_DATA_BTN* data = (CUSTOM_DATA_BTN*)THIS->custom_data;
     data->state = 0;
-
+    if(THIS->x > 94){
+        THIS->mirror = V_MIRROR;
+    }
 }
 
 void UPDATE()
@@ -25,7 +27,7 @@ void UPDATE()
     switch (data->state)
     {
         case 0:
-            THIS->y = scroller_y + 161;
+            THIS->y = scroller_y + 145;
             if(scroller_y == 1){
                 data->state++;
             }

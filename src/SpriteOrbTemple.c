@@ -96,6 +96,8 @@ void START()
             }
         break;
         case 5:
+            THIS->lim_x = 200;
+            THIS->lim_y = 160;
             if(THIS->x < 592){
                 data->state = 13;
                 THIS->y+=12;
@@ -104,7 +106,10 @@ void START()
                 data->state = 13;
                 THIS->y+=12;
                 THIS->x-=4;
-            }
+            }else if(THIS->x > 1304){
+                data->state = 10;
+                THIS->y -= 4;
+            }   
         break;
     }
     
@@ -433,13 +438,23 @@ void UPDATE()
             }else if(data->state == 9 && THIS->y > 162){
                 data->state = 33;
                
-            }else if(data->state == 32 && THIS->x > 570){
-                data->state = 3;
+            }else if(data->state == 15 && THIS->x > 570){
+                data->state = 16;
                 
+            }else if(data->state == 16 && THIS->x > 570 && THIS->y < 128){
+                data->state = 34;
             }
         }else if (THIS->x > 1080 && THIS->x < 1264){
             if(data->state == 9 && THIS->y > 162){
+                data->state = 10;
+            }else if(data->state == 6 && THIS->x > 1203){
+                data->state = 5;
+            }else if(data->state == 5  && THIS->y < 84){
                 data->state = 99;
+            }
+        }else if(THIS->x > 1268){
+            if(data->state == 6 && THIS->x > 1531){
+                data->state = 36;
             }
         }
     }

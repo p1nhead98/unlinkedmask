@@ -161,7 +161,7 @@ void CheckDeathTiles(){
 
 
         if(current_state == StateStage3 && current_level == 5){
-            if(  ( THIS->x > 1449 && THIS->x < 1488) || ( THIS->x > 1697 && THIS->x < 1736) || ( THIS->x > 1825 && THIS->x < 1864)  ){
+            if(  ( THIS->x > 1481 && THIS->x < 1512) ){
                 if(stage3_cando == 0 && player_state != 11){
                     current_life = 0;
                     ScreenShake(1,1);
@@ -169,7 +169,7 @@ void CheckDeathTiles(){
                     SetSpriteAnim(THIS, anim_death, 15);
                     player_state = 11;
                 }
-            }else if(( (THIS->x > 1281 && THIS->x < 1336) && THIS->y < 104)){
+            }else if(( (THIS->x > 1281 && THIS->x < 1312) && THIS->y < 104)){
                 if(stage3_cando == 0 && player_state != 11){
                     current_life = 0;
                     ScreenShake(1,1);
@@ -177,7 +177,7 @@ void CheckDeathTiles(){
                     SetSpriteAnim(THIS, anim_death, 15);
                     player_state = 11;
                 }
-            }else if( ( THIS->x > 169 && THIS->x < 224 ) || ( THIS->x > 297 && THIS->x < 336) || ( THIS->x > 705 && THIS->x < 432) || ( THIS->x > 449 && THIS->x < 488) || ( THIS->x > 505 && THIS->x < 544) || ( THIS->x > 1369 && THIS->x < 1408) || ( THIS->x > 1553 && THIS->x < 1592 ) || ( THIS->x > 1761 && THIS->x < 1800) ){
+            }else if( ( THIS->x > 169 && THIS->x < 224 ) || ( THIS->x > 297 && THIS->x < 336) || ( THIS->x > 393 && THIS->x < 416) || ( THIS->x > 449 && THIS->x < 488) || ( THIS->x > 521 && THIS->x < 544) || ( THIS->x > 1369 && THIS->x < 1408)  ){
                 if(stage3_cando == 1 && player_state != 11){
                     current_life = 0;
                     ScreenShake(1,1);
@@ -185,6 +185,7 @@ void CheckDeathTiles(){
                     SetSpriteAnim(THIS, anim_death, 15);
                     player_state = 11;
                 }
+            
             }else if((colision == 60 || colision == 61 || colision == 62 || colision == 63)){
                 if(stage3_cando == 1 && player_state != 11){
                     current_life = 0;
@@ -203,6 +204,7 @@ void CheckDeathTiles(){
                 }
             }
         }
+        
         if(current_level == 30 ){
             if((colision == 60 || colision == 61 || colision == 62 || colision == 63)){
                 if(canDo == 1 && player_state != 11){
@@ -245,7 +247,7 @@ void CheckDeathTiles(){
             }
         }
 
-        if ((colision == 81 || colision == 82 || colision == 83 || colision == 84) && canDo == 0)
+        if ((colision == 81 || colision == 82 || colision == 83 || colision == 84) && stage3_cando == 0)
         {
             if(canHurt && player_state != 11){
                 inmunity = InmunityTime;
@@ -255,7 +257,7 @@ void CheckDeathTiles(){
                 RefreshLife();
             }
             
-        }else if ((colision == 85 || colision == 86 || colision == 87 || colision == 88) && canDo == 1)
+        }else if ((colision == 85 || colision == 86 || colision == 87 || colision == 88) && stage3_cando == 1)
         {
             if(canHurt && player_state != 11){
                 inmunity = InmunityTime;
@@ -339,7 +341,7 @@ void CheckCollisionTile()
                 SpriteManagerAdd(SpritePlayerVfx, THIS->x - 4, THIS->y + 8);
             }
         }
-        if( (colision > 63 && colision < 76) && current_level > 10 && current_life != 0 && door_open == 0){
+        if( (colision > 63 && colision < 76) && current_state == StateStage3 && current_life != 0 && door_open == 0){
             current_life = 0;
             ScreenShake(1,1);
             RefreshLife();
@@ -702,6 +704,11 @@ void UPDATE()
                             current_cs = 7;
                             current_state = StateCutscenes;
                             SetState(current_state);
+                        }else if(current_state == StateStage3 && current_level == 5){
+                            load_next = 0;
+                            current_cs = 8;
+                            current_state = StateCutscenes;
+                            SetState(current_state);
                         }else{
                             load_next = 1;
                         }
@@ -942,7 +949,11 @@ void UPDATE()
                             }else if(sprData->state == 31){
                                 sprData->state = 14;
                             }else if(sprData->state == 33){
-                                sprData->state = 32;
+                                sprData->state = 15;
+                            }else if(sprData->state == 34){
+                                sprData->state = 5;
+                            }else if(sprData->state == 36){
+                                sprData->state = 4;
                             }
                             
                         }

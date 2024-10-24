@@ -15,7 +15,7 @@ DECLARE_MUSIC(unlinkedchainedsoul);
 const UINT8 pcs_walk_anim[] = {4, 1, 2, 0, 3};
 const UINT8 pcs_stand[] = {2, 4, 5};
 const UINT8 pcs_air[] = {5, 6, 7, 8, 9, 10};
-const UINT8 pcs_cape_stand[] = {2, 11, 12};
+const UINT8 pcs_cape_stand[] = {2, 15, 16};
 const UINT8 pcs_cape_walk[] = {4, 12, 13, 12, 14};
 
 
@@ -24,6 +24,9 @@ extern UINT8 dialog;
 extern UINT8 current_level;
 extern UINT8 dialog_pos;
 extern UINT8 current_cs;
+extern UINT8 canDoInterrupt;
+extern UINT16 scroller_y;
+
 UINT8 player_cs_state = 0;
 UINT8 player_c_counter = 0;
 UINT8 player_c_counter2 = 0;
@@ -45,11 +48,10 @@ void START()
         player_c_counter = 2;
         player_c_counter2 = 1;
         player_c_counter3 = 4;
+    }else if(current_cs == 8){
+        player_cs_state = 7;
+        SetSpriteAnim(THIS, pcs_cape_walk, 15);
     }
-    // if(current_level == 32){
-    //     player_cs_state = 5;
-    //     SetSpriteAnim(THIS, pcs_cape_walk, 15);
-    // }
 }
 
 void UPDATE()
@@ -174,8 +176,41 @@ void UPDATE()
             dialog = 1;
         }
         break;
-
-
+    case 7:
+         if(THIS->x != 72){
+            
+            // if(current_cs == 2 && player_c_counter < 4){
+            //     if(--player_c_counter2 == 0){
+            //         FadeMusic(player_c_counter);
+            //         player_c_counter++;
+            //         player_c_counter2 = 20;
+            //     }
+               
+            // }
+            THIS->x++;
+            if((THIS->anim_frame == 1 || THIS->anim_frame == 3) && player_c_canDo == 0){
+                player_c_canDo = 1;
+                PlayFx(CHANNEL_4, 5, 0x3A, 0x81, 0x00, 0xC0);
+            }else if ((THIS->anim_frame == 0 || THIS->anim_frame == 2 ) && player_c_canDo == 1){
+                player_c_canDo = 0;
+            }
+        }else{
+            player_cs_state++;
+            player_c_counter2 = 20;
+            SetSpriteAnim(THIS, pcs_cape_stand, 15);
+            
+            
+        }
+        break;
+    case 8:
+        if(--player_c_counter2 == 0){
+            canDoInterrupt = 4;
+            player_cs_state++;
+        }
+        case 9:
+            THIS->y = scroller_y + 145;
+            break;
+        break;
 
     }
 }
