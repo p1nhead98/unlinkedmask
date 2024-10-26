@@ -51,6 +51,13 @@ void START()
             }
            
         break;
+        case 1:
+            if(THIS->x < 264){
+                data->state = 99;
+                THIS->x += 36;
+                THIS->y -= 24;
+            }
+        break;
 
     }
     

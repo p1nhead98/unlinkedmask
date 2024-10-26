@@ -29,6 +29,9 @@ UINT8 GetTileReplacement(UINT8* tile_ptr, UINT8* tile) {
 			case 248:
 				*tile = 3;
 				return SpriteCrusherDown;
+			case 247:
+				*tile = 3;
+				return SpriteSplitBox;
 		}
 	}
 	return 255u;
