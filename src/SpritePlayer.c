@@ -283,7 +283,7 @@ void ChangeJumpCollision(){
     UINT8 colision6 = GetScrollTile((THIS->x + 10u) >> 3, (THIS->y + 8u ) >> 3);
 
     
-    if(current_level > 26 && current_level != 32){
+    if(current_state == StateStage4){
         if((colision == 47 || colision2 == 47 || colision3 == 47 || colision4 == 47 || colision5 == 47 || colision6 == 47) && change_jump_count == 0){
             change_jump_count = 20;
      
@@ -589,10 +589,14 @@ void UPDATE()
                     }
                 break;
                 case 1:
-                    if(!KEY_PRESSED(J_A) && player_accel_y < 0 && player_last_state == 1){
-                        player_accel_y = 0;
-                    }else if (!KEY_PRESSED(J_B) && player_accel_y < 0 && player_last_state == 2){
-                        player_accel_y = 0;
+                    if(player_last_state == 2){
+                        if(!KEY_PRESSED(J_B) && player_accel_y < 0  ){
+                            player_accel_y = 0;
+                        }
+                    }else if(player_last_state == 1){
+                        if(!KEY_PRESSED(J_A) && player_accel_y < 0  ){
+                            player_accel_y = 0;
+                        }
                     }
         
                     if (player_accel_y > 2)
@@ -616,9 +620,16 @@ void UPDATE()
                     }
                 break;
             case 2:
-                    if(!KEY_PRESSED(J_B) && player_accel_y < 0  ){
-                        player_accel_y = 0;
+                    if(player_last_state == 2){
+                        if(!KEY_PRESSED(J_B) && player_accel_y < 0  ){
+                            player_accel_y = 0;
+                        }
+                    }else if(player_last_state == 1){
+                        if(!KEY_PRESSED(J_A) && player_accel_y < 0  ){
+                            player_accel_y = 0;
+                        }
                     }
+                    
                     
                     
                     if(KEY_PRESSED(J_LEFT) && !KEY_PRESSED(J_RIGHT) && THIS->x > scroll_x + 2){
@@ -863,7 +874,7 @@ void UPDATE()
                  ){
                     CheckDeathTiles();
                 }
-                if(current_level > 26 && current_level < 31){
+                if(current_state == StateStage4){
                     ChangeJumpCollision();
                 }
             }
@@ -957,6 +968,30 @@ void UPDATE()
                             }
                             
                         }
+                    }
+                }
+                if(spr->type == SpriteOrbRooftop && player_accel_y > 0) {
+                    CUSTOM_DATA_ORB* sprData = (CUSTOM_DATA_ORB*)spr->custom_data;
+                    if(CheckCollision(THIS, spr) && THIS->y < (spr->y - 5) && (player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 2))) {
+                        player_state = 3;
+                        player_accel_y = -83;
+                        PlayFx(CHANNEL_4, 10, 0x02, 0xf1, 0x40, 0xc0);
+                        
+                        SetSpriteAnim(THIS, anim_spin, 20);
+                        SpriteManagerAdd(SpritePlayerVfx, THIS->x - 4, THIS->y + 8);
+                        
+                        if(sprData->state == 10){
+                            sprData->state = 9;
+                        }else if(sprData->state == 20){
+                            sprData->state = 17;
+                        }else if(sprData->state == 21){
+                            sprData->state = 15;
+                        }else if(sprData->state == 22){
+                            sprData->state = 8;
+                        }else if(sprData->state == 23){
+                            sprData->state = 6;
+                        }
+                       
                     }
                 }
 
@@ -1102,10 +1137,16 @@ void UPDATE()
                         SetSpriteAnim(THIS, anim_spin, 20);
                         PlayFx(CHANNEL_4, 10, 0x02, 0xf1, 0x40, 0xc0);
                     }else if(CheckCollision(THIS, spr) && THIS->y + 8 > (spr->y) && player_state != 11){
+                        // current_life = 0;
+                        // ScreenShake(1,1);
+                        // RefreshLife();
+                        // playerHurtSound();
+                        // SetSpriteAnim(THIS, anim_death, 15);
+                        // player_state = 11;
+
                         current_life = 0;
                         ScreenShake(1,1);
                         RefreshLife();
-                        playerHurtSound();
                         SetSpriteAnim(THIS, anim_death, 15);
                         player_state = 11;
                     }

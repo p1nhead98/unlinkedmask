@@ -7,6 +7,7 @@ _STATE(StateCutscenes)\
 _STATE(StateStage1)\
 _STATE(StateStage2)\
 _STATE(StateStage3)\
+_STATE(StateStage4)\
 STATE_DEF_END
 
 #define SPRITES \
@@ -58,6 +59,7 @@ _SPRITE_DMG(SpriteTitleFlash, titleFlash)\
 _SPRITE_DMG(SpriteMoon, moon)\
 _SPRITE_DMG(SpriteOrbForest, plataforma1)\
 _SPRITE_DMG(SpriteOrbTemple, plataforma1)\
+_SPRITE_DMG(SpriteOrbRooftop, plataforma1)\
 _SPRITE_DMG(SpriteSpinOrbEvent, plataforma1)\
 _SPRITE_DMG(SpriteElevatorPilar1, elevPilar1)\
 _SPRITE_DMG(SpriteElevatorPilar2, elevPilar2)\

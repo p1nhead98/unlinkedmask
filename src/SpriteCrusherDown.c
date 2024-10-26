@@ -33,6 +33,17 @@ void START()
     THIS->lim_y = 80;
     THIS->x += 7;
     data->state = 0;
+
+    if(current_state == StateStage4){
+        if(current_level == 0){
+            if(THIS->x > 704 && THIS->x < 808){
+                THIS->x += 8;
+            }
+        }
+    }
+
+
+
     if(current_level == 29){
         if(THIS->x > 768 && THIS->x < 840){
             THIS->y -= 24;
