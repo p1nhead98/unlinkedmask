@@ -56,6 +56,7 @@ extern UINT8 state_interrupts;
 extern Sprite* player_sprite;
 extern UINT8 load_next;
 extern INT8 player_state;
+extern UINT8 current_cs;
 
 const struct MapInfoBanked stage2_levels[] = {
 	BANKED_MAP(lvl_6),
@@ -366,5 +367,22 @@ void UPDATE() {
 		}
 		
 	}
+
+	if(KEY_PRESSED(J_DOWN) && KEY_PRESSED(J_A) && KEY_PRESSED(J_B) && KEY_PRESSED(J_SELECT)){
+		    current_level = 0;
+			current_cs = 0;
+			current_state = StateTitleScreen;
+			SetState(current_state);
+		}else if(KEY_PRESSED(J_LEFT) && KEY_PRESSED(J_A) && KEY_PRESSED(J_B) && KEY_PRESSED(J_SELECT)){
+		    current_level = 0;
+			current_cs = 0;
+			current_state = StateStage1;
+			SetState(current_state);
+		}else if(KEY_PRESSED(J_UP) && KEY_PRESSED(J_A) && KEY_PRESSED(J_B) && KEY_PRESSED(J_SELECT)){
+		    current_level = 8;
+			current_cs = 8;
+			current_state = StateCutscenes;
+			SetState(current_state);
+		}
 
 }

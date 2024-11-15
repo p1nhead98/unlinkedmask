@@ -174,6 +174,7 @@ void START() {
 			dialog = 0;
 			can_dialog = 0;
 			current_dialog = 0;
+			state_interrupts = 0;
 		break;
 
 		case 1:

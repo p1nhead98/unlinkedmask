@@ -1,6 +1,6 @@
 #include "ZGBMain.h"
 #include "Math.h"
-UINT8 next_state = StateStage3;
+UINT8 next_state = StateTitleScreen;
 UINT8 GetTileReplacement(UINT8* tile_ptr, UINT8* tile) {
 
 		switch(*tile_ptr){

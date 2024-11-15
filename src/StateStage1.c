@@ -10,6 +10,7 @@
 #include "Misc2.h"
 #include "WinController.h"
 #include "TileAnimation.h"
+#include "BossAttacks.h"
 
 IMPORT_MAP(lvl_1);
 IMPORT_MAP(lvl_2);
@@ -62,6 +63,7 @@ extern UINT8 dialog;
 extern UINT8 can_dialog;
 extern UINT8 IsCutscene;
 extern UINT8 bossFireState;
+extern UINT8 current_cs;
 
 extern INT8 boss_state;
 void FillBossStage() {
@@ -188,6 +190,7 @@ void START() {
 			dialog_pos = 120;
 			WY_REG = dialog_pos;
 			SHOW_SPRITES;
+			Attacks_Animations(30);
 			// scroll_x += 24;
 		break; 
 		
@@ -214,6 +217,7 @@ void START() {
 
 			stage1_counter  = 3;
 			stage1_anim = 0;
+			Attacks_Animations(30);
 			break;
 
 		default:
@@ -230,9 +234,9 @@ void START() {
 		break;
 	}
 
-	if(current_level == 0){
-		SpriteManagerAdd(SpriteMoon, 0, 56);
-	}
+	// if(current_level == 0){
+	// 	SpriteManagerAdd(SpriteMoon, 0, 56);
+	// }
 	if(current_level < 9){
 		INIT_HUD(window);
 		RefreshLife();
@@ -494,7 +498,7 @@ void UPDATE() {
 			}
 		}
 
-
+      
 		if(dialog == 1){
 			if(can_dialog == 0){
 				SetDialog();
@@ -508,4 +512,21 @@ void UPDATE() {
 		}
 
 	}
+
+	  if(KEY_PRESSED(J_DOWN) && KEY_PRESSED(J_A) && KEY_PRESSED(J_B) && KEY_PRESSED(J_SELECT)){
+		    current_level = 0;
+			current_cs = 0;
+			current_state = StateTitleScreen;
+			SetState(current_state);
+		}else if(KEY_PRESSED(J_LEFT) && KEY_PRESSED(J_A) && KEY_PRESSED(J_B) && KEY_PRESSED(J_SELECT)){
+		    current_level = 0;
+			current_cs = 0;
+			current_state = StateStage1;
+			SetState(current_state);
+		}else if(KEY_PRESSED(J_UP) && KEY_PRESSED(J_A) && KEY_PRESSED(J_B) && KEY_PRESSED(J_SELECT)){
+		    current_level = 8;
+			current_cs = 8;
+			current_state = StateCutscenes;
+			SetState(current_state);
+		}
 }

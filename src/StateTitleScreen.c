@@ -9,6 +9,7 @@
 #include "Keys.h"
 #include "Misc2.h"
 #include "Misc.h"
+#include "WinController.h"
 
 
 IMPORT_MAP(titleScreen);
@@ -171,7 +172,7 @@ void START() {
 	
     //Se carga mapa
 	InitScroll(BANK(titleScreen), &titleScreen, 0, 0);
-    
+    SetHudWin(0);
     //Se da valor a variables
     current_cs = ts_state = ts_anim = ts_anim2 = 0;
     ts_counter = ts_counter2 = 3;

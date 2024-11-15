@@ -99,6 +99,7 @@ void START()
         }
         
     }
+    boss_state = 0;
 
 }
 
@@ -177,10 +178,10 @@ void UPDATE()
                     }
                     ScreenShake(1,1);
                     PlayFx(CHANNEL_4, 25, 0x3a, 0xf3, 0x62, 0x80);
-                    bossSkullFlame_spr1 = SpriteManagerAdd(SpriteSkullFlame, THIS->x - 18, THIS->y - 8);
+                    bossSkullFlame_spr1 = SpriteManagerAdd(SpriteSkullFlame, THIS->x - 18, THIS->y);
                     CUSTOM_DATA* dataFlame1 = (CUSTOM_DATA*)bossSkullFlame_spr1->custom_data;
                     dataFlame1->state = 0;
-                    bossSkullFlame_spr2 = SpriteManagerAdd(SpriteSkullFlame, THIS->x + 16, THIS->y - 8);
+                    bossSkullFlame_spr2 = SpriteManagerAdd(SpriteSkullFlame, THIS->x + 16, THIS->y);
                     CUSTOM_DATA* dataFlame2 = (CUSTOM_DATA*)bossSkullFlame_spr2->custom_data;
                     dataFlame2->state = 1;
                     // Set_Sprite_Tiles(&bossCanHit, BANK(bossCanHit), 48, THIS->first_tile);
@@ -394,10 +395,10 @@ void UPDATE()
                 }
                 ScreenShake(1,1);
                 PlayFx(CHANNEL_4, 25, 0x3a, 0xf3, 0x62, 0x80);
-                bossSkullFlame_spr1 = SpriteManagerAdd(SpriteSkullFlame, THIS->x - 18, THIS->y - 8);
+                bossSkullFlame_spr1 = SpriteManagerAdd(SpriteSkullFlame, THIS->x - 18, THIS->y);
                 CUSTOM_DATA* dataFlame1 = (CUSTOM_DATA*)bossSkullFlame_spr1->custom_data;
                 dataFlame1->state = 0;
-                bossSkullFlame_spr2 = SpriteManagerAdd(SpriteSkullFlame, THIS->x + 16, THIS->y - 8);
+                bossSkullFlame_spr2 = SpriteManagerAdd(SpriteSkullFlame, THIS->x + 16, THIS->y);
                 CUSTOM_DATA* dataFlame2 = (CUSTOM_DATA*)bossSkullFlame_spr2->custom_data;
                 dataFlame2->state = 1;
             }
@@ -820,8 +821,9 @@ void UPDATE()
 
         case 57:
             if(--boss_counter == 0){
-                current_cs = 10;
-                current_state = StateCutscenes; 
+                current_cs = 0;
+                current_level = 0;
+                current_state = StateTitleScreen; 
 		        SetState(current_state);
            
             }
