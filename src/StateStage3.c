@@ -192,7 +192,7 @@ void START() {
 			state_interrupts = 0;
 			break;
 		case 3:
-			door_time_btwn_start = door_time_btwn = 170;
+			door_time_btwn_start = door_time_btwn = 115;
 			player_sprite = scroll_target = SpriteManagerAdd(SpritePlayer, stage3_start_positions[current_level].start_x, stage3_start_positions[current_level].start_y);
 			InitScroll(st_3_level->bank, st_3_level->map, stage3_col_tiles, 0);
 			ScrollRelocateMapTo(0,48);
@@ -444,24 +444,24 @@ void UPDATE() {
 
 	// if(_cpu == CGB_TYPE){
 
-		if(--stage3_counter_2 == 0){
-			stage3_counter_2 = 8;
-			stage3_anim_2++;
-			Tile_Anim(stage3_anim_2, 8, &templeCloudAnim, 76, BANK(templeCloudAnim));
-		}
+		// if(--stage3_counter_2 == 0){
+		// 	stage3_counter_2 = 8;
+		// 	stage3_anim_2++;
+		// 	Tile_Anim(stage3_anim_2, 8, &templeCloudAnim, 76, BANK(templeCloudAnim));
+		// }
 
-		if(--stage3_counter_3 == 0){
-			stage3_counter_3 = 4;
-			stage3_anim_3++;
-			Tile_Anim(stage3_anim_3, 8, &templeCloudAnim2, 48, BANK(templeCloudAnim2));
-		}
+		// if(--stage3_counter_3 == 0){
+		// 	stage3_counter_3 = 4;
+		// 	stage3_anim_3++;
+		// 	Tile_Anim(stage3_anim_3, 8, &templeCloudAnim2, 48, BANK(templeCloudAnim2));
+		// }
 
 		
-		if(--stage3_counter_4 == 0){
-			stage3_counter_4 = 2;
-			stage3_anim_4++;
-			Tile_Anim(stage3_anim_4, 8, &templeCloudAnim3, 47, BANK(templeCloudAnim3));
-		}
+		// if(--stage3_counter_4 == 0){
+		// 	stage3_counter_4 = 2;
+		// 	stage3_anim_4++;
+		// 	Tile_Anim(stage3_anim_4, 8, &templeCloudAnim3, 47, BANK(templeCloudAnim3));
+		// }
 	
 	// }
 

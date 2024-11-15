@@ -15,12 +15,7 @@ _SPRITE_DMG(SpritePlayer, playerCape)\
 _SPRITE_DMG(SpriteSpinOrb, plataforma1)\
 _SPRITE_DMG(SpriteJumpBox, plataforma2)\
 _SPRITE_DMG(SpriteCrusherDown, crusherDown)\
-_SPRITE_DMG(SpriteDoorTile1, doorTile1)\
-_SPRITE_DMG(SpriteDoorTile2, doorTile2)\
-_SPRITE_DMG(SpriteDoorTile3, doorTile3)\
-_SPRITE_DMG(SpriteDoorTile4, doorTile4)\
 _SPRITE_DMG(SpriteDoorButton, doorButton)\
-_SPRITE_DMG(SpriteTimeDoorClosed, timeDoorClosed)\
 _SPRITE_DMG(SpriteSpinOrbActivable, plataforma1)\
 _SPRITE_DMG(SpritePlayerDeath, playerDeath)\
 _SPRITE_DMG(SpritePlayerVfx, playerVFX)\
@@ -29,7 +24,6 @@ _SPRITE_DMG(SpritePlayerNoCape, playerNoCape)\
 _SPRITE_DMG(SpriteIntroBigShine, introBigShine)\
 _SPRITE_DMG(SpriteIntroMiniShine, introMiniShine)\
 _SPRITE_DMG(SpriteIntroFx, introFx)\
-_SPRITE_DMG(SpriteJumpBoxEvent, plataforma2)\
 _SPRITE_DMG(SpritePlayerCutscenes, playerNCinematic)\
 _SPRITE_DMG(SpriteViewerH, viewerHair)\
 _SPRITE_DMG(SpriteCapeCuts, capeCuts)\
@@ -51,9 +45,6 @@ _SPRITE_DMG(SpriteElevatorFloor1, elevFloor1)\
 _SPRITE_DMG(SpriteElevatorFloor2, elevFloor2)\
 _SPRITE_DMG(SpriteElevatorFloor3, elevFloor3)\
 _SPRITE_DMG(SpriteKaizoBlock, kaizoBlock)\
-_SPRITE_DMG(SpriteBossElec, elecBoss)\
-_SPRITE_DMG(SpriteElectBossFx, elecBossFx)\
-_SPRITE_DMG(SpritePlayerFinal, playerBackCape)\
 _SPRITE_DMG(SpriteBossHair, hair_boss)\
 _SPRITE_DMG(SpriteTitleFlash, titleFlash)\
 _SPRITE_DMG(SpriteMoon, moon)\
@@ -64,6 +55,7 @@ _SPRITE_DMG(SpriteSpinOrbEvent, plataforma1)\
 _SPRITE_DMG(SpriteElevatorPilar1, elevPilar1)\
 _SPRITE_DMG(SpriteElevatorPilar2, elevPilar2)\
 _SPRITE_DMG(SpriteElevatorPilar3, elevPilar3)\
+_SPRITE_DMG(SpriteJumpBox2, plataforma2)\
 SPRITE_DEF_END
 
 #include "ZGBMain_Init.h"

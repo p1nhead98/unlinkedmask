@@ -58,7 +58,7 @@ typedef struct {
 
 
 void pDelay(UINT8 numloops) BANKED;
-
+void ScreenShake(UINT8 duration, INT8 seismicscale) BANKED;
 // void ScreenShakeX(UINT8 duration, INT8 seismicscale) BANKED;
 void JumpRandSound(BOOLEAN spin) BANKED;
 void ScrollRelocateMapTo(UINT16 new_x, UINT16 new_y) BANKED;

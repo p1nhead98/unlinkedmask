@@ -55,6 +55,8 @@ extern UINT8 player_state;
 extern UINT8 state_interrupts;
 extern UINT8 dialog_pos;
 extern UINT8 IsCutscene;
+extern UINT8 current_cs;
+extern UINT8 current_dialog;
 
 Sprite* bossSkullFlame_spr1 = 1;
 Sprite* bossSkullFlame_spr2 = 1;
@@ -80,14 +82,18 @@ void START()
     THIS->lim_x = 140;
     boss_y_1 = 0;
     boss_y_2 = 0;
-    if(current_level == 32){
+    if(current_level == 9 && current_state == StateStage1){
         Set_Sprite_Tiles(&bossIdleGround, BANK(bossIdleGround), 48, THIS->first_tile);
         data->state = 54;
-    }else if(current_level == 34){
+    }else if(current_level == 10){
+        SetSpriteAnim(THIS, boss_flyidle, 20);
+        Set_Sprite_Tiles(&bossFlyIdle, BANK(bossFlyIdle), 48, THIS->first_tile);
         if(IsCutscene == 1){
             data->state = 58;
+            THIS->y = 79;
             boss_counter = 50;
         }else{
+            THIS->y = 79;
             data->state = 60;
             boss_counter = 50;
         }
@@ -171,10 +177,10 @@ void UPDATE()
                     }
                     ScreenShake(1,1);
                     PlayFx(CHANNEL_4, 25, 0x3a, 0xf3, 0x62, 0x80);
-                    bossSkullFlame_spr1 = SpriteManagerAdd(SpriteSkullFlame, THIS->x - 18, THIS->y - 4);
+                    bossSkullFlame_spr1 = SpriteManagerAdd(SpriteSkullFlame, THIS->x - 18, THIS->y - 8);
                     CUSTOM_DATA* dataFlame1 = (CUSTOM_DATA*)bossSkullFlame_spr1->custom_data;
                     dataFlame1->state = 0;
-                    bossSkullFlame_spr2 = SpriteManagerAdd(SpriteSkullFlame, THIS->x + 16, THIS->y - 4);
+                    bossSkullFlame_spr2 = SpriteManagerAdd(SpriteSkullFlame, THIS->x + 16, THIS->y - 8);
                     CUSTOM_DATA* dataFlame2 = (CUSTOM_DATA*)bossSkullFlame_spr2->custom_data;
                     dataFlame2->state = 1;
                     // Set_Sprite_Tiles(&bossCanHit, BANK(bossCanHit), 48, THIS->first_tile);
@@ -388,10 +394,10 @@ void UPDATE()
                 }
                 ScreenShake(1,1);
                 PlayFx(CHANNEL_4, 25, 0x3a, 0xf3, 0x62, 0x80);
-                bossSkullFlame_spr1 = SpriteManagerAdd(SpriteSkullFlame, THIS->x - 18, THIS->y - 4);
+                bossSkullFlame_spr1 = SpriteManagerAdd(SpriteSkullFlame, THIS->x - 18, THIS->y - 8);
                 CUSTOM_DATA* dataFlame1 = (CUSTOM_DATA*)bossSkullFlame_spr1->custom_data;
                 dataFlame1->state = 0;
-                bossSkullFlame_spr2 = SpriteManagerAdd(SpriteSkullFlame, THIS->x + 16, THIS->y - 4);
+                bossSkullFlame_spr2 = SpriteManagerAdd(SpriteSkullFlame, THIS->x + 16, THIS->y - 8);
                 CUSTOM_DATA* dataFlame2 = (CUSTOM_DATA*)bossSkullFlame_spr2->custom_data;
                 dataFlame2->state = 1;
             }
@@ -788,7 +794,7 @@ void UPDATE()
             break;
 
         case 54: // CINEMATICA
-            if(player_cs_state == 8){
+            if(player_state == 20){
                 data->state++;
                 boss_counter = 40;
             }
@@ -814,7 +820,8 @@ void UPDATE()
 
         case 57:
             if(--boss_counter == 0){
-                current_level++;
+                current_cs = 10;
+                current_state = StateCutscenes; 
 		        SetState(current_state);
            
             }
@@ -824,12 +831,13 @@ void UPDATE()
             if(--boss_counter == 0){
                 data->state++;
 				CleanWin();
-				dialog_pos = 120;
-				dialog = 1;
-				WY_REG = dialog_pos;
-				state_interrupts = 1;
-				LYC_REG = 0;
-                boss_counter = 50;
+                // canDoInterrupt = 3;
+                current_dialog = 46;
+                LYC_REG = 0;
+                dialog_pos = 120;
+                WY_REG = dialog_pos;
+                state_interrupts = 1;
+                dialog = 1;
             }
             break;
         case 59:

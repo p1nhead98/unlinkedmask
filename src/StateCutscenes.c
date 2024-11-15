@@ -11,7 +11,7 @@
 #include "WinController.h"
 #include "Cinematicas.h"
 #include "Math.h"
-#include "Sgb.h"
+
 #include "CustomFade.h"
 #include "TileAnimation.h"
 
@@ -24,28 +24,35 @@ IMPORT_MAP(capeCuts2);
 IMPORT_MAP(capeCuts7);
 IMPORT_MAP(templeCuts);
 
-IMPORT_MAP(cs_elev);
+IMPORT_MAP(bossCuts);
 
-IMPORT_MAP(linkedborder);
+IMPORT_MAP(corridorCutscene);
+
+IMPORT_MAP(cs_elev);
 
 //importar fuentes de cutscenes
 IMPORT_TILES(font);
 IMPORT_TILES(fontCapeCuts);
 
-IMPORT_TILES(elevScrewAnim1);
-IMPORT_TILES(elevScrewAnim2);
-IMPORT_TILES(elevScrewAnim3);
-IMPORT_TILES(elevScrewAnim4);
+
+
+IMPORT_TILES(cloudAnim1_b);
+IMPORT_TILES(cloudAnim2_b);
+IMPORT_TILES(cloudAnim3_b);
 
 UINT8 cs_counter = 0;
 UINT8 cs_counter_2 = 0;
 UINT8 cs_counter_3 = 0;
 UINT8 cd_fade_idx = 0; 
-UINT8 current_cs = 8;
+UINT8 current_cs = 0;
 UINT8 cs_cando_anim = 0;
 UINT8 cs_anim_index = 0;
 
 UINT8 anim_counter = 0;
+
+UINT8 anim_idx = 0;
+UINT8 anim_idx2 = 0;
+UINT8 anim_idx3 = 0;
 
 extern UINT8 current_dialog;
 extern UINT8 dialog_pos;
@@ -59,7 +66,10 @@ extern UINT8 counterInterrupt2;
 extern UINT8 can_scroll_x ;
 extern UINT8 can_scroll_y ;
 
-extern UINT16 scroller_y;
+extern INT16 scroller_y;
+
+UINT8 corridor_col_tiles[] = {110, 111, 112, 116, 113, 114, 0};
+
 
 const struct MapInfoBanked cs_levels[] = {
 	BANKED_MAP(intro_door),
@@ -71,6 +81,8 @@ const struct MapInfoBanked cs_levels[] = {
 	BANKED_MAP(cinematicCape),
 	BANKED_MAP(templeCuts),
 	BANKED_MAP(cs_elev),
+	BANKED_MAP(corridorCutscene),
+	BANKED_MAP(bossCuts),
 };
 
 const START_POS cs_start_positions[] = {
@@ -82,7 +94,8 @@ const START_POS cs_start_positions[] = {
 	{0, 96}, 
 	{0, 96}, 
 	{0, 96}, 
-	{0, 208}, 
+	{0, 96}, 
+	{0, 96}, 
 };
 
 void FillDoorCinemCs() {
@@ -96,16 +109,6 @@ void FillDoorCinemCs() {
 	}
 }
 
-void FillElevCinemCs() {
-    for (UINT8 y = 0u; y < 12u; y++)
-	{
-		for (UINT8 x = 0u; x < 30u; x++)
-		{
-				ScrollUpdateColumn(x, y);
-		}
-			
-	}
-}
 
 
 void FadeDMGCutscene(UINT8 fadeout) {
@@ -120,52 +123,13 @@ void FadeDMGCutscene(UINT8 fadeout) {
 }
 
 
-void FadeAllCutscene(){
-    FadeDMGCutscene(3);
-    PerDelay(20);
-    NR50_REG = 0x55;
-    FadeDMGCutscene(2);
-    PerDelay(20);
-    NR50_REG = 0x33;
-    FadeDMGCutscene(1);
-    PerDelay(20);
-    NR50_REG = 0x11;
-    FadeDMGCutscene(0);
-    PerDelay(20);
-    NR50_REG = 0x0;
-    StopMusic;
-    NR52_REG = 0x80; //Enables sound, you should always setup this first
-	NR51_REG = 0xFF; //Enables all channels (left and right)
-	NR50_REG = 0x77; //Max volume
-}
-
-
-
-
-
-void FadeAllCapeCuts(){
-	FadeDMGCutscene(0);
-	FadeStepColorCustom(5);
-	PerDelay(20);
-	FadeDMGCutscene(1);
-	FadeStepColorCustom(3);
-	PerDelay(20);
-	FadeDMGCutscene(2);
-	FadeStepColorCustom(1);
-	PerDelay(20);
-	FadeDMGCutscene(3);
-	FadeStepColorCustom(0);
-	PerDelay(20);
-
-}
-
 void FadeIdx(UINT8 idx){
 	DMGFadeCustom(idx);
 	FadeStepColorCustom(idx);
 }
-void ClampScrollLimits();
 
 void START() {
+	// current_cs = 9;
     const struct MapInfoBanked* level = &cs_levels[current_cs]; 
 	// scroll_target = SpriteManagerAdd(SpritePlayer, 50, 50);
 	
@@ -179,9 +143,9 @@ void START() {
 		scroll_offset_x = 0;
 	}
 	
-    CRITICAL {
-	    LOAD_SGB_BORDER(linkedborder);
-    }
+    // CRITICAL {
+	//     LOAD_SGB_BORDER(linkedborder);
+    // }
     
 	CRITICAL {
 #ifdef CGB
@@ -200,7 +164,7 @@ void START() {
 #endif
 	}
 
-    InitScroll(level->bank, level->map, 0, 0);
+    InitScroll(level->bank, level->map, corridor_col_tiles, 0);
     
     switch(current_cs){
         case 0:
@@ -240,7 +204,7 @@ void START() {
 			dialog = 0;
 			can_dialog = 0;
 			current_dialog = 0;
-			break;
+		break;
 
 		case 3:
 			SetHudWin(0);
@@ -253,7 +217,8 @@ void START() {
 			can_dialog = 0;
 			current_dialog = 9;
 			state_interrupts = 0;
-			break;
+		break;
+
 		case 4:
 			SetHudWin(0);
 			scroll_offset_x = 0;
@@ -267,7 +232,8 @@ void START() {
 			state_interrupts = 0;
 			cs_cando_anim = 0;
 			cs_anim_index = 0;
-			break;
+		break;
+
 		case 5:
 			SetHudWin(0);
 			scroll_offset_x = 0;
@@ -283,7 +249,7 @@ void START() {
 			state_interrupts = 0;
 			cs_cando_anim = 0;
 			cs_anim_index = 5;
-			break;
+		break;
         
 		case 6:
 			SHOW_SPRITES;
@@ -311,31 +277,69 @@ void START() {
 		break;
 		
 		case 8:
-			FillElevCinemCs();
-			SHOW_SPRITES;
 			can_scroll_y = 0;
+			// FillElevCinemCs();
+			SHOW_SPRITES;
 			SetHudWin(0);
-			state_interrupts = 3;
-			scroll_y = 112;
-			scroller_y = 63;
+			
+		
+			scroll_y = 0;
+			scroller_y = 0;
 			anim_counter = 0;
 			// cs_counter = 3;
 			// cs_counter_2 = 90;
 			counterInterrupt = counterInterrupt2 = 10;
-			SpriteManagerAdd(SpriteElevatorPilar1, 48, 80);
-			SpriteManagerAdd(SpriteElevatorPilar2, 48, 80);
-			SpriteManagerAdd(SpriteElevatorPilar3, 48, 80);
+			SpriteManagerAdd(SpriteElevatorPilar1, 48, 17);
+			SpriteManagerAdd(SpriteElevatorPilar2, 48, 17);
+			// SpriteManagerAdd(SpriteElevatorPilar3, 48, 17);
 
-			SpriteManagerAdd(SpriteElevatorPilar1, 96, 80);
-			SpriteManagerAdd(SpriteElevatorPilar2, 104, 80);
-			SpriteManagerAdd(SpriteElevatorPilar3, 104, 80);
+			SpriteManagerAdd(SpriteElevatorPilar1, 96, 17);
+			SpriteManagerAdd(SpriteElevatorPilar2, 104, 17);
+			// SpriteManagerAdd(SpriteElevatorPilar3, 104, 17);
 
-			SpriteManagerAdd(SpriteElevatorFloor1, 40, 112);
-			SpriteManagerAdd(SpriteElevatorFloor2, 72, 112);
-			SpriteManagerAdd(SpriteElevatorFloor3, 104, 112);
+			SpriteManagerAdd(SpriteElevatorFloor1, 40, 49);
+			SpriteManagerAdd(SpriteElevatorFloor2, 72, 49);
+			SpriteManagerAdd(SpriteElevatorFloor3, 104, 49);
 			SpriteManagerAdd(SpritePlayerCutscenes, cs_start_positions[current_cs].start_x, cs_start_positions[current_cs].start_y);
-			LYC_REG = 0;
+		
+			
+			state_interrupts = 0;
 		break;
+
+		case 9:
+			StopMusic;
+			BGP_REG	 = PAL_DEF(1, 2, 3, 0); 
+			can_scroll_y = 0;
+			can_scroll_x = 1;
+			// FillElevCinemCs();
+			SHOW_SPRITES;
+			
+			SetHudWin(1);
+			
+		
+			scroll_y = 0;
+			scroller_y = 0;
+			cs_counter = cs_counter_2 = cs_counter_3 = 2;
+			anim_idx = anim_idx2 = anim_idx3 = 0;
+			// cs_counter = 3;
+			// cs_counter_2 = 90;
+			// counterInterrupt = counterInterrupt2 = 10;
+			scroll_target = SpriteManagerAdd(SpritePlayer, cs_start_positions[current_cs].start_x, cs_start_positions[current_cs].start_y);
+		
+			
+			state_interrupts = 0;
+		break;
+
+		case 10:
+			SetHudWin(0);
+			cs_counter = 40;
+			INIT_FONT(font, PRINT_WIN);
+			dialog = 0;
+			can_dialog = 0;
+			current_dialog = 0;
+			canDoInterrupt = 20;
+		break;
+
 		default:
 		
         break;
@@ -356,7 +360,9 @@ void START() {
 
 void UPDATE() {
 
-	if(current_cs == 1){
+	switch (current_cs)
+	{
+	case 1:
 		if(canDoInterrupt == 0){
 			if(--cs_counter == 0){
 				canDoInterrupt = 1;
@@ -371,8 +377,19 @@ void UPDATE() {
 				dialog = 1;
 			}
 		}
+	break;
 
-	}else  if(current_cs == 3 || current_cs == 4){
+	case 3:
+		if(--cs_counter == 0 && state_interrupts == 0){
+			LYC_REG = 0;
+			dialog_pos = 120;
+			WY_REG = dialog_pos;
+			state_interrupts = 1;
+			dialog = 1;
+		}
+	break;
+
+	case 4:
 		if(--cs_counter == 0 && state_interrupts == 0){
 			LYC_REG = 0;
 			dialog_pos = 120;
@@ -400,7 +417,10 @@ void UPDATE() {
 				SetState(current_state);
 			}
 		}
-	}else if(current_cs == 5 ){
+	break;
+
+
+	case 5:
 		if(cs_cando_anim == 0){
 			if(--cs_counter_2 == 0){
 				cs_counter_2 = _cpu == CGB_TYPE ? 6 : 2;
@@ -455,22 +475,23 @@ void UPDATE() {
 			}
 
 		}
-	}else if(current_cs == 8){
+
+	break;
+
+	case 8:
 		// if(counterInterrupt == 0){
 			
 	
 		// }
+		
 		if(canDoInterrupt == 4){
+			
 			if(--counterInterrupt == 0){
 				scroller_y--;
 				if(scroller_y == 0){
 					state_interrupts = 0;	
 				}
 				anim_counter++;
-				// Tile_Anim(anim_counter, 2, &elevScrewAnim1, 6, BANK(elevScrewAnim1));
-				// Tile_Anim(anim_counter, 2, &elevScrewAnim2, 7, BANK(elevScrewAnim2));
-				Tile_Anim(anim_counter, 8, &elevScrewAnim3, 1, BANK(elevScrewAnim3));
-				Tile_Anim(anim_counter, 8, &elevScrewAnim4, 2, BANK(elevScrewAnim4));
 				if(counterInterrupt2 != 1){
 					counterInterrupt2--;
 					PlayFx(CHANNEL_4, 5, 0x3b, 0xf1, 0x30, 0x80);
@@ -481,7 +502,48 @@ void UPDATE() {
 			}
 			
 		}
+	break;
+
+	case 9:
+		
+		// if(--cs_counter == 0){
+		// 	cs_counter = 2;
+		// 	anim_idx++;
+		// 	Tile_Anim(anim_idx, 16, &cloudAnim1_b, 48, BANK(cloudAnim1_b));
+		// 	Tile_Anim(anim_idx + 8, 16, &cloudAnim1_b, 49, BANK(cloudAnim1_b));
+
+		// }
+		// if(--cs_counter_2 == 0){
+		// 	cs_counter_2 = 8;
+		// 	anim_idx2++;
+		// 	Tile_Anim(anim_idx2, 8, &cloudAnim2_b, 35, BANK(cloudAnim2_b));
+		// 	// Tile_Anim(stage4_anim_2 + 8, 16, &cloudAnim1, 46, BANK(cloudAnim1));
+		// }
+		// if(--cs_counter_3 == 0){
+		// 	cs_counter_3 = 30;
+		// 	anim_idx3++;
+		// 	Tile_Anim(anim_idx3, 8, &cloudAnim3_b, 28, BANK(cloudAnim3_b));
+		// 	// Tile_Anim(stage4_anim_2 + 8, 16, &cloudAnim1, 46, BANK(cloudAnim1));
+		// }
+	break;
+	
+	case 10:
+		if(--cs_counter == 0 && canDoInterrupt == 20){
+			canDoInterrupt = 21;
+			current_dialog = 31;
+			LYC_REG = 0;
+			dialog_pos = 120;
+			WY_REG = dialog_pos;
+			state_interrupts = 1;
+			dialog = 1;   
+		
+		}
+	break;
+	default:
+		break;
 	}
+
+	
 
     if(dialog == 1){
 		if(can_dialog == 0){

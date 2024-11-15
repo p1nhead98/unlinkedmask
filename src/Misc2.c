@@ -4,7 +4,7 @@
 #include "TileAnimation.h"
 #include "Misc2.h"
 
-UINT8 current_level = 1;
+UINT8 current_level = 5;
 INT8 load_next_x = 0;
 UINT8 event = 0;
 Sprite* player_sprite = 0;
@@ -17,36 +17,9 @@ IMPORT_TILES(doorAnim);
 IMPORT_TILES(OnAnim);
 IMPORT_TILES(OffAnim);
 
-void PerDelay(UINT8 numloops) BANKED
-{
-	
-	for (UINT8 i = 0; i < numloops; i++)
-	{
-		wait_vbl_done();
-	}
-}
 
-void ScreenShake(UINT8 duration, INT8 seismicscale) BANKED
-{
 
-	UINT8 d;
 
-	for (d = 0; d < duration; d++)
-	{
-
-		scroll_offset_y = seismicscale;
-
-		///scroll_offset_y=seismicscale;
-		PerDelay(1);
-		scroll_offset_y = -seismicscale;
-
-		//scroll_offset_y=-seismicscale;
-		PerDelay(1);
-	}
-
-	// scroll_offset_x = 0;
-	scroll_offset_y = 0;
-}
 
 void SetDoorCols(UINT8 off, UINT8 shake) BANKED{
     if(off == 1){

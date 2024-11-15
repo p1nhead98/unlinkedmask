@@ -31,7 +31,7 @@ INT16 inmunity = 0;
 INT8 pal_tick = 0;
 UINT8 current_pal = 0;
 UINT8 on_off = 0;
-UINT8 start_screen;
+UINT8 start_screen = 0;
 
 // extern UINT8 original_lvl_bank;
 // struct TilesInfo* original_tiles;
@@ -65,30 +65,27 @@ void pDelay(UINT8 numloops) BANKED
 	}
 }
 
+void ScreenShake(UINT8 duration, INT8 seismicscale) BANKED
+{
 
+	UINT8 d;
 
-// void ScreenShakeX(UINT8 duration, INT8 seismicscale) BANKED
-// {
+	for (d = 0; d < duration; d++)
+	{
 
-// 	UINT8 d;
+		scroll_offset_y = seismicscale;
 
-// 	for (d = 0; d < duration; d++)
-// 	{
+		///scroll_offset_y=seismicscale;
+		pDelay(1);
+		scroll_offset_y = -seismicscale;
 
-// 		scroll_x += seismicscale;
+		//scroll_offset_y=-seismicscale;
+		pDelay(1);
+	}
 
-// 		///scroll_offset_y=seismicscale;
-// 		pDelay(1);
-// 		scroll_x -= seismicscale;
-
-// 		//scroll_offset_y=-seismicscale;
-// 		pDelay(1);
-// 	}
-
-// 	scroll_offset_x = 0;
-// 	scroll_offset_y = 0;
-// }
-
+	// scroll_offset_x = 0;
+	scroll_offset_y = 0;
+}
 
 void JumpRandSound(BOOLEAN spin) BANKED{
 

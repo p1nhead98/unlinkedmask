@@ -8,9 +8,9 @@
 #include "Math.h"
 #include "ZGBMain.h"
 
-const UINT8 anim_box_event[] = {2, 0, 1};
-const UINT8 anim_box_event2[] = {2, 2, 2};
-extern UINT8 event;
+const UINT8 anim_box_d[] = {2, 0, 1};
+
+
 
 extern UINT8 start_screen;
 
@@ -19,9 +19,8 @@ void START()
     CUSTOM_DATA_BOX* data = (CUSTOM_DATA_BOX*)THIS->custom_data;
     data->initial_frame_speed = 0;
     data->initial_y = THIS->y;
+    data->initial_x = THIS->x;
     data->start = 1;
-    THIS->lim_x = 80;
-    THIS->lim_y = 80;
     data->state = 0;
 }
 
@@ -41,21 +40,49 @@ void UPDATE()
 
         switch( data->state ){
             case 0:
-                SetSpriteAnim(THIS, anim_box_event, 20);
+                SetSpriteAnim(THIS, anim_box_d, 20);
             break;
             case 1:
-        
-                    SetSpriteAnim(THIS, anim_box_event2, 2);
-                if(THIS->anim_frame == 1){
+                SpriteManagerRemove(THIS_IDX);
+                   
+            break;
+            case 2:
+                if(THIS->x < (data->initial_x + 31)){
+                    THIS->x+=2;
+                }else{
                     data->state = 0;
-                    SetSpriteAnim(THIS, anim_box_event, 20);
-                
+                }
+            break;
+            case 3:
+                if(THIS->x > (data->initial_x - 31)){
+                    THIS->x-=2;
+                }else{
+                    data->state = 0;
                 }
             break;
         }
-        if(event == 1){
-            SpriteManagerRemove(THIS_IDX);
-        }
+
+
+
+
+
+    
+
+            SPRITEMANAGER_ITERATE(i, spr) {
+                
+                if(spr->type == SpriteJumpBox2) {
+                    if(CheckCollision(THIS, spr))
+                        {
+                            CUSTOM_DATA_BOX* data_spr = (CUSTOM_DATA_BOX*)spr->custom_data;
+                            if(data->state == 0 && data_spr->state != 0){
+                                SpriteManagerRemove(THIS_IDX);
+                            }
+                            
+                        }
+               
+                }
+
+            }
     }else{
         if(THIS->y != 0  && data->start == 1){
             data->start = 0;

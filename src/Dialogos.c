@@ -14,6 +14,7 @@
 #include "Math.h"
 #include "CustomFade.h"
 #include "Misc2.h"
+#include "Misc.h"
 
 #define tDelay 25
 
@@ -38,7 +39,7 @@ extern UINT8 text_voice;
 extern UINT8 player_cs_state;
 
 extern INT8 boss_state;
-
+extern INT8 player_state;
 
 
 IMPORT_TILES(mugshots);
@@ -55,16 +56,16 @@ void FadeDMGCs(UINT8 fadeout) BANKED {
 
 void FadeColorAndMusicCs(){
     FadeDMGCs(3);
-    PerDelay(20);
+    pDelay(20);
     NR50_REG = 0x55;
     FadeDMGCs(2);
-    PerDelay(20);
+    pDelay(20);
     NR50_REG = 0x33;
     FadeDMGCs(1);
-    PerDelay(20);
+    pDelay(20);
     NR50_REG = 0x11;
     FadeDMGCs(0);
-    PerDelay(20);
+    pDelay(20);
     NR50_REG = 0x0;
     StopMusic;
 }
@@ -142,7 +143,7 @@ void SetDialog() BANKED{
         dialog_pos = 144;
         dialog = 0;
         state_interrupts = 10;
-        PerDelay(10);
+        pDelay(10);
 		FadeColorAndMusicCs();
         current_cs++;
 		SetState(current_state);
@@ -178,7 +179,7 @@ void SetDialog() BANKED{
         dialog_pos = 144;
         state_interrupts = 10;
         dialog = 0;
-        PerDelay(10);
+        pDelay(10);
 		FadeColorAndMusicCs();
         current_level = 0;
         current_state = StateStage1;
@@ -192,7 +193,7 @@ void SetDialog() BANKED{
         // dialog_pos = 144;
         // dialog = 0;
         // state_interrupts = 10;
-        // PerDelay(10);
+        // pDelay(10);
 		// FadeColorAndMusicCs();
         // current_cs++;
 		// SetState(current_state);
@@ -232,7 +233,7 @@ void SetDialog() BANKED{
         state_interrupts = 0;
         HIDE_WIN;
         dialog = 0;
-        PerDelay(10);
+        pDelay(10);
 		FadeColorAndMusic();
         DISPLAY_OFF;
         current_cs++;
@@ -400,7 +401,7 @@ void SetDialog() BANKED{
         HIDE_WIN;
         dialog = 0;
         can_dialog = 0;
-        player_cs_state = 8;
+        player_state = 20;
         // FadeColorAndMusic();
         // current_level++;
         // SetState(current_state);
@@ -508,7 +509,9 @@ void SetDialog() BANKED{
         dialog = 0;
         can_dialog = 0;
         FadeColorAndMusic();
-        current_level++;
+        DISPLAY_OFF;
+        current_level = 10;
+        current_state = StateStage1;
         SetState(current_state);
         break;
     case 46:

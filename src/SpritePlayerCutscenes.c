@@ -25,7 +25,7 @@ extern UINT8 current_level;
 extern UINT8 dialog_pos;
 extern UINT8 current_cs;
 extern UINT8 canDoInterrupt;
-extern UINT16 scroller_y;
+extern INT16 scroller_y;
 
 UINT8 player_cs_state = 0;
 UINT8 player_c_counter = 0;
@@ -187,6 +187,14 @@ void UPDATE()
             //     }
                
             // }
+            if(current_cs == 8 && player_c_counter < 4){
+                if(--player_c_counter2 == 0){
+                    FadeMusic(player_c_counter);
+                    player_c_counter++;
+                    player_c_counter2 = 20;
+                }
+               
+            }
             THIS->x++;
             if((THIS->anim_frame == 1 || THIS->anim_frame == 3) && player_c_canDo == 0){
                 player_c_canDo = 1;
@@ -206,15 +214,19 @@ void UPDATE()
         if(--player_c_counter2 == 0){
             canDoInterrupt = 4;
             player_cs_state++;
+            // LYC_REG = 0;
         }
-        case 9:
-            THIS->y = scroller_y + 145;
-            break;
-        break;
+    break;
+    case 9:
+        THIS->y = scroller_y + 96;
+    
+            
+    break;
 
     }
 }
 
 void DESTROY()
 {
+   
 }

@@ -8,6 +8,8 @@
 #include "Palette.h"
 #include "Keys.h"
 #include "Misc2.h"
+#include "Misc.h"
+
 
 IMPORT_MAP(titleScreen);
 IMPORT_MAP(linkedborder);
@@ -123,16 +125,16 @@ void FadeDMGTitleScreen(UINT8 fadeout) {
 
 void FadeAllTitleScreen(){
     FadeDMGTitleScreen(3);
-    PerDelay(20);
+    pDelay(20);
     NR50_REG = 0x55;
     FadeDMGTitleScreen(2);
-    PerDelay(20);
+    pDelay(20);
     NR50_REG = 0x33;
     FadeDMGTitleScreen(1);
-    PerDelay(20);
+    pDelay(20);
     NR50_REG = 0x11;
     FadeDMGTitleScreen(0);
-    PerDelay(20);
+    pDelay(20);
     NR50_REG = 0x0;
     StopMusic;
     NR52_REG = 0x80; //Enables sound, you should always setup this first

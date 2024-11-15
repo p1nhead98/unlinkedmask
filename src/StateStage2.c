@@ -89,7 +89,7 @@ const START_POS stage2_start_positions[] = {
 
 void START() {
 	// current_level = 4;
-	const struct MapInfoBanked* st_2_level = _cpu == CGB_TYPE ? &stage2_levels[current_level] : &stage2_levels_gb[current_level]; 
+	const struct MapInfoBanked* st_2_level =  &stage2_levels[current_level] ; 
 
 	CRITICAL {
 #ifdef CGB

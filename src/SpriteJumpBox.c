@@ -13,6 +13,8 @@ const UINT8 anim_box2[] = {2, 2, 2};
 
 
 extern UINT8 start_screen;
+extern UINT8 event;
+extern UINT8 current_level;
 
 void START()
 {
@@ -21,9 +23,13 @@ void START()
     data->initial_y = THIS->y;
     data->initial_x = THIS->x;
     data->start = 1;
-    THIS->lim_x = 80;
-    THIS->lim_y = 80;
     data->state = 0;
+    if(current_state == StateStage3 && current_level == 3 && THIS->x > 1080){
+        THIS->y += 16;
+        if(event == 2 ){
+            SpriteManagerRemove(THIS_IDX);
+        }
+    }
 }
 
 void UPDATE()
@@ -67,6 +73,11 @@ void UPDATE()
                     data->state = 0;
                 }
             break;
+        }
+
+
+        if(current_state == StateStage3 && current_level == 3 && event == 2 && THIS->x > 1080){
+            SpriteManagerRemove(THIS_IDX);
         }
     }else{
         if(THIS->y != 0  && data->start == 1){

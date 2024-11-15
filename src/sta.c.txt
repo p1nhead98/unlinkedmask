@@ -177,7 +177,7 @@ UINT8 state_counter = 0;
 
 
 extern UINT8 state_interrupts;
-extern UINT16 scroller_y;
+extern INT16 scroller_y;
 extern UINT8 canDoInterrupt;
 extern UINT8 counterInterrupt;
 extern UINT8 counterInterrupt2;

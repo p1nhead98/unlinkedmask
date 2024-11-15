@@ -7,6 +7,7 @@
 #include <gb/gb.h>
 #include <gb/cgb.h>
 #include "Misc2.h"
+#include "Misc.h"
 #include "Music.h"
 
 extern UWORD ZGB_Fading_BPal[32];
@@ -52,27 +53,27 @@ void FadeStepColorCustom(UINT8 i) BANKED{
 void FadeColorAndMusic() BANKED{
     DMGFadeCustom(0);
     FadeStepColorCustom(0);
-    PerDelay(10);
+    pDelay(10);
     NR50_REG = 0x55;
     DMGFadeCustom(1);
     FadeStepColorCustom(1);
-    PerDelay(10);
+    pDelay(10);
     NR50_REG = 0x33;
     DMGFadeCustom(2);
     FadeStepColorCustom(2);
-    PerDelay(10);
+    pDelay(10);
     NR50_REG = 0x11;
     DMGFadeCustom(3);
     FadeStepColorCustom(3);
-    PerDelay(10);
+    pDelay(10);
     NR50_REG = 0x0;
     StopMusic;
     DMGFadeCustom(4);
     FadeStepColorCustom(4);
-    PerDelay(10);
+    pDelay(10);
     DMGFadeCustom(5);
     FadeStepColorCustom(5);
-    PerDelay(10);
+    pDelay(10);
 }
 
     

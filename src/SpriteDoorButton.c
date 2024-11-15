@@ -25,11 +25,13 @@ void START()
     CUSTOM_DATA_BTN* data = (CUSTOM_DATA_BTN*)THIS->custom_data;
     data->state = 0;
 
-    if(current_level == 30){
-        THIS->x = 704;
-        THIS->y = 120;
-    }
-    
+    // if(current_level == 30){
+        
+    // }
+    // if(current_state == StateStage4 && current_level == 3){
+    //     THIS->x = 704;
+    //     THIS->y = 120;
+    // }
 
 }
 

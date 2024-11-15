@@ -20,9 +20,23 @@ void START()
     data->initial_frame_speed = 0;
     data->initial_y = THIS->y;
     data->start = 1;
-    THIS->lim_x = 200;
-    THIS->lim_y = 80;
     data->state = 0;
+
+    if(current_state == StateStage4){
+        switch (current_level)
+        {
+        case 1:
+            if(THIS->x > 586){
+                THIS->x += 24;
+            }
+            
+            break;
+        
+        default:
+            break;
+        }
+    }
+
     if(current_level == 28 && THIS->x > 592 && THIS->x < 672){
         THIS->x = 624;
     }else if(current_level == 28 && THIS->x > 1088){
@@ -57,9 +71,9 @@ void UPDATE()
             break;
             case 1:
                 SpriteManagerRemove(THIS_IDX);
-                Sprite* jbox1 = SpriteManagerAdd(SpriteJumpBox, THIS->x, THIS->y );
+                Sprite* jbox1 = SpriteManagerAdd(SpriteJumpBox2, THIS->x, THIS->y );
                 CUSTOM_DATA_BOX* dataj1 = (CUSTOM_DATA_BOX*)jbox1->custom_data;
-                Sprite* jbox2 = SpriteManagerAdd(SpriteJumpBox, THIS->x, THIS->y );
+                Sprite* jbox2 = SpriteManagerAdd(SpriteJumpBox2, THIS->x, THIS->y );
                 CUSTOM_DATA_BOX* dataj2 = (CUSTOM_DATA_BOX*)jbox2->custom_data;
 
                 dataj1->state = 2;

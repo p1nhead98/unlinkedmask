@@ -10,7 +10,7 @@
 
 extern UINT8 door_time;
 extern UINT8 door_open;
-extern UINT16 scroller_y;
+extern INT16 scroller_y;
 
 void START()
 {

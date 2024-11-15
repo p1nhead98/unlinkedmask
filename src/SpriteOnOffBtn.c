@@ -14,6 +14,7 @@ const UINT8 off_anim[] = {2, 1, 1};
 
 
 extern UINT8 stage3_col_tiles[];
+extern UINT8 stage4_col_tiles[];
 extern UINT8 on_off;
 
 
@@ -55,13 +56,13 @@ void UPDATE()
                     SetSpriteAnim(THIS, off_anim, 15);
                     THIS->y -= 5;
                     data->state++;
-                    SetOnOffCols(stage3_col_tiles, on_off);
+                    SetOnOffCols(current_state == StateStage4 ? stage4_col_tiles : stage3_col_tiles, on_off);
                 }else{
                     on_off = 0;
                     SetSpriteAnim(THIS, on_anim, 15);
                     THIS->y -= 5;
                     data->state++;
-                    SetOnOffCols(stage3_col_tiles, on_off);
+                    SetOnOffCols(current_state == StateStage4 ? stage4_col_tiles : stage3_col_tiles, on_off);
                 }
             break;
             case 2:

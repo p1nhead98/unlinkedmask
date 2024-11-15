@@ -18,10 +18,9 @@ void START()
 {
     CUSTOM_DATA_BOX* data = (CUSTOM_DATA_BOX*)THIS->custom_data;
     data->initial_frame_speed = 0;
-    data->initial_y = THIS->y = 136;
     data->initial_x = THIS->x = 1392;
     data->start = 1;
-    
+    THIS->lim_x = 150;
     SetSpriteAnim(THIS, kaizo_anim, 20);
     
     data->state = 0;

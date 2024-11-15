@@ -16,19 +16,33 @@ IMPORT_MAP(lvl_2);
 IMPORT_MAP(lvl_3);
 IMPORT_MAP(lvl_4);
 IMPORT_MAP(lvl_5);
+IMPORT_MAP(bossfight1);
 
+IMPORT_TILES(font);
 IMPORT_MAP(window);
 
 
 IMPORT_TILES(spikesAnimSt1);
 IMPORT_TILES(spikesAnim2St1);
+IMPORT_TILES(forestCloudAnim);
+
+IMPORT_TILES(flameBoss);
+IMPORT_TILES(flameBoss2);
+IMPORT_TILES(flameBoss3);
 
 UINT8 stage1_col_tiles[] = {4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 33, 34, 35, 36, 37, 38, 62, 63, 64, 65, 66, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 0};
+UINT8 bossfight_col_tiles[] = {74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 0};
 
 
 UINT8 current_stage1 = 0;
-UINT8 stage1_counter = 0;
-UINT8 stage1_anim = 0;
+INT8 stage1_counter = 0;
+UINT8 stage1_counter_2 = 0;
+INT8 stage1_anim = 0;
+UINT8 stage1_anim2 = 0;
+
+
+
+
 
 extern UINT8 current_level;
 extern UINT8 can_scroll_x;
@@ -41,6 +55,26 @@ extern UINT8 state_interrupts;
 extern UINT8 load_next;
 extern Sprite* player_sprite;
 extern INT8 player_nc_state;
+
+extern UINT8 current_dialog;
+extern UINT8 dialog_pos;
+extern UINT8 dialog;
+extern UINT8 can_dialog;
+extern UINT8 IsCutscene;
+extern UINT8 bossFireState;
+
+extern INT8 boss_state;
+void FillBossStage() {
+    for (UINT8 y = 0u; y < 12u; y++)
+	{
+		for (UINT8 x = 0u; x < 40u; x++)
+		{
+				ScrollUpdateColumn(x, y);
+		}
+			
+	}
+}
+
 
 const struct MapInfoBanked stage1_levels[] = {
 	BANKED_MAP(lvl_1),
@@ -102,19 +136,32 @@ void START() {
 			
 	}else{
 	
-		TMA_REG = 180u;
+		if(current_level > 8){
+			TMA_REG = 205u;
+		}else{
+			TMA_REG = 180u;
+		}
 		
 	}
 #else
-	TMA_REG = 180u;
+	if(current_level > 8){
+		TMA_REG = 205u;
+	}else{
+		TMA_REG = 180u;
+	}
+	
 		
 #endif
 	}
 
-
 	OBP0_REG = PAL_DEF(3, 0, 1, 2);
 	OBP1_REG = PAL_DEF(1, 0, 0, 0);
-	BGP_REG	 = PAL_DEF(2, 0, 1, 3); 
+	if(current_level < 9){
+		BGP_REG	 = PAL_DEF(2, 0, 1, 3);
+	}else{
+		BGP_REG	 = PAL_DEF(0, 1, 2, 3);
+	}
+	 
 
 
 	can_scroll_x = 1;
@@ -122,15 +169,62 @@ void START() {
 	current_life = max_life;
 
 	switch(current_level){
+		case 9:
+			SetHudWin(0);
+			IsCutscene = 1;
+			FillBossStage();
+			InitScroll(BANK(bossfight1), &bossfight1, bossfight_col_tiles, 0);
+			SpriteManagerAdd(SpriteBoss1, 144, 125);
+			ScrollRelocateMapTo(40,40);
+			SpriteManagerAdd(SpritePlayer, 25, 136);
+			can_scroll_x = 0;
+			can_scroll_y = 0;
+
+			INIT_FONT(font, PRINT_WIN);
+			dialog = 0;
+			can_dialog = 0;
+			current_dialog = 0;
+			state_interrupts = 0;
+			dialog_pos = 120;
+			WY_REG = dialog_pos;
+			SHOW_SPRITES;
+			// scroll_x += 24;
+		break; 
+		
+		case 10:
+			SetHudWin(0);
+			
+			FillBossStage();
+			InitScroll(BANK(bossfight1), &bossfight1, bossfight_col_tiles, 0);
+			SpriteManagerAdd(SpriteBoss1, 144, 125);
+			ScrollRelocateMapTo(40,40);
+			player_sprite = SpriteManagerAdd(SpritePlayer, 25, 136);
+			can_scroll_x = 0;
+			can_scroll_y = 0;
+
+			INIT_FONT(font, PRINT_WIN);
+			dialog = 0;
+			can_dialog = 0;
+			current_dialog = 0;
+			state_interrupts = 0;
+			dialog_pos = 120;
+			WY_REG = dialog_pos;
+			
+			SHOW_SPRITES;
+
+			stage1_counter  = 3;
+			stage1_anim = 0;
+			break;
 
 		default:
 			
 			player_sprite = scroll_target = SpriteManagerAdd(SpritePlayerNoCape, stage1_start_positions[current_level].start_x, stage1_start_positions[current_level].start_y);
 			InitScroll(st_1_level->bank, st_1_level->map, stage1_col_tiles, 0);
 			ScrollRelocateMapTo(0,48);
-			// SetHudWin(1);
 			
-			stage1_counter = 3;
+			// 
+			
+			stage1_counter = stage1_counter_2 = 3;
 			stage1_anim = 0;
 			state_interrupts = 0;
 		break;
@@ -139,9 +233,15 @@ void START() {
 	if(current_level == 0){
 		SpriteManagerAdd(SpriteMoon, 0, 56);
 	}
+	if(current_level < 9){
+		INIT_HUD(window);
+		RefreshLife();
+	}else if(current_level == 10 && IsCutscene == 0){
+		INIT_HUD(window);
+		RefreshLife();
+	}
 	
-	INIT_HUD(window);
-	RefreshLife();
+
     NR52_REG = 0x80; //Enables sound, you should always setup this first
 	NR51_REG = 0xFF; //Enables all channels (left and right)
 	NR50_REG = 0x77; //Max volume
@@ -321,30 +421,91 @@ void UPDATE() {
 		}
 	}
 
-	
-	if(--stage1_counter == 0){
-		stage1_anim = stage1_anim == 1 ? 0 : 1;
-		if(stage1_anim == 0){
-			Set_Bkg_Data(&spikesAnimSt1, 112, 4, BANK(spikesAnimSt1));
-		}else{
-			Set_Bkg_Data(&spikesAnim2St1, 112, 4, BANK(spikesAnim2St1));
+	if(current_level < 9){
+		if(--stage1_counter == 0){
+			stage1_anim = stage1_anim == 1 ? 0 : 1;
+			if(stage1_anim == 0){
+				Set_Bkg_Data(&spikesAnimSt1, 112, 4, BANK(spikesAnimSt1));
+			}else{
+				Set_Bkg_Data(&spikesAnim2St1, 112, 4, BANK(spikesAnim2St1));
+			}
+			stage1_counter = 5;
 		}
-		stage1_counter = 5;
-	}
 
 
-	
-	if(load_next) {
-		if( load_next) { //current_level > 0 || load_next == 1 (to avoid going under 0)
-			
-			current_level += load_next;
-
-			
-			LoadNextScreen(current_level - load_next, current_level, stage1_levels);
-		
+		if(_cpu == CGB_TYPE){
+			if(--stage1_counter_2 == 0){
+				stage1_counter_2 = 3;
+				stage1_anim2++;
+				Tile_Anim(stage1_anim2, 8, &forestCloudAnim, 55, BANK(forestCloudAnim));
+			}
 		}
-		load_next = 0;
-		player_nc_state = 1;
 		
+		if(load_next) {
+			if( load_next) { //current_level > 0 || load_next == 1 (to avoid going under 0)
+				
+				current_level += load_next;
+
+				
+				LoadNextScreen(current_level - load_next, current_level, stage1_levels);
+			
+			}
+			load_next = 0;
+			player_nc_state = 1;
+			
+		}
+	}else{
+		
+		if(current_level == 10){
+		
+			if(stage1_counter < 40){
+				stage1_counter++;
+				
+				if(stage1_counter == 5){
+					stage1_counter = 0;
+
+					
+					switch (stage1_anim)
+					{
+					case 0:
+						Set_Bkg_Data(&flameBoss2, 108, 4, BANK(flameBoss2));
+						stage1_anim++;
+						break;
+					
+					case 1:
+						Set_Bkg_Data(&flameBoss3, 108, 4, BANK(flameBoss3));
+						stage1_anim++;
+						break;
+					
+					case 2:
+						Set_Bkg_Data(&flameBoss, 108, 4, BANK(flameBoss));
+						stage1_anim++;
+						break;
+					
+
+					}
+					if(stage1_anim == 3){
+						stage1_anim = 0;
+					}
+					
+
+					
+				}
+			}
+		}
+
+
+		if(dialog == 1){
+			if(can_dialog == 0){
+				SetDialog();
+				can_dialog = 1;
+			}
+			if(KEY_TICKED(J_A) && can_dialog == 1){
+				current_dialog++;
+				// PlayFx(CHANNEL_1, 15, 0x3a, 0x9a, 0x91, 0xe0, 0x86);
+				can_dialog = 0;
+			}
+		}
+
 	}
 }

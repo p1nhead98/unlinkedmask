@@ -23,7 +23,7 @@ extern UINT8 dialog;
 extern UINT8 current_level;
 extern UINT8 dialog_pos;
 extern UINT8 canDoInterrupt;
-extern UINT16 scroller_y;
+extern INT16 scroller_y;
 
 UINT8 player_cst_state = 0;
 UINT8 player_cst_counter = 0;

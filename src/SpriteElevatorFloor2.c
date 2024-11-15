@@ -10,7 +10,7 @@
 
 extern UINT8 door_time;
 extern UINT8 door_open;
-extern UINT16 scroller_y;
+extern INT16 scroller_y;
 
 void START()
 {
@@ -25,7 +25,7 @@ void UPDATE()
     switch (data->state)
     {
         case 0:
-            THIS->y = scroller_y + 161;
+            THIS->y = scroller_y + 112;
             if(scroller_y == 1){
                 data->state++;
             }
