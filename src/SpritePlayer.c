@@ -29,6 +29,15 @@ const UINT8 anim_back[] = {3, 19, 20, 21};
 
 // DECLARE_MUSIC(unlinkedunchainedsoul);
 
+
+
+#ifdef CGB
+const UINT16 pal_on[]  = {RGB(31, 31, 31), RGB(20, 20, 20), RGB(10, 10, 10), RGB(0,   0,  0)};
+const UINT16 pal_off[] = {RGB(31, 31, 31), RGB(31, 31, 31), RGB(31, 31, 31), RGB(31, 31, 31)};
+const UINT16* pals_color[] = {pal_on, pal_off};
+#endif
+
+
 extern UINT8 load_next;
 
 extern INT16 inmunity;
@@ -473,9 +482,20 @@ void UPDATE()
                 {
                     pal_tick += 3;
                     current_pal++;
-                    SPRITE_SET_DMG_PALETTE(THIS, current_pal % 2);
+#ifdef CGB
+			if(_cpu == CGB_TYPE) {
+				SetPalette(SPRITES_PALETTE, 1, 1, pals_color[current_pal % 2], 2);
+			} else
+#endif
+			SPRITE_SET_DMG_PALETTE(THIS, current_pal % 2);
+                    
                 }
             }
+
+
+
+
+
 
 
             if((KEY_PRESSED(J_LEFT) || KEY_PRESSED(J_RIGHT)) && _cpu == CGB_TYPE && dialog == 0){

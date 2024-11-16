@@ -152,7 +152,7 @@ void START() {
     CRITICAL {
 #ifdef CGB
 	if (_cpu == CGB_TYPE) {
-		TMA_REG = 55u;
+		TMA_REG = 52u;
 	}else{
 		TMA_REG = 154u;
 	}
