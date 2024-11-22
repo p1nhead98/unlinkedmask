@@ -21,6 +21,7 @@ IMPORT_MAP(bossfight1);
 
 IMPORT_TILES(font);
 IMPORT_MAP(window);
+IMPORT_MAP(windowBoss);
 
 
 IMPORT_TILES(spikesAnimSt1);
@@ -30,6 +31,8 @@ IMPORT_TILES(forestCloudAnim);
 IMPORT_TILES(flameBoss);
 IMPORT_TILES(flameBoss2);
 IMPORT_TILES(flameBoss3);
+IMPORT_TILES(flameBoss4);
+IMPORT_TILES(flameBoss5);
 
 UINT8 stage1_col_tiles[] = {4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 33, 34, 35, 36, 37, 38, 62, 63, 64, 65, 66, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 0};
 UINT8 bossfight_col_tiles[] = {74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 0};
@@ -172,6 +175,7 @@ void START() {
 
 	switch(current_level){
 		case 9:
+			scroll_offset_x = 0;
 			SetHudWin(0);
 			IsCutscene = 1;
 			FillBossStage();
@@ -195,13 +199,17 @@ void START() {
 		break; 
 		
 		case 10:
+			scroll_offset_x = 0;
 			SetHudWin(0);
 			
 			FillBossStage();
 			InitScroll(BANK(bossfight1), &bossfight1, bossfight_col_tiles, 0);
+			SpriteManagerAdd(SpriteWarning2, 144, 125);
+			player_sprite = SpriteManagerAdd(SpritePlayer, 25, 136);
 			SpriteManagerAdd(SpriteBoss1, 144, 125);
 			ScrollRelocateMapTo(40,40);
-			player_sprite = SpriteManagerAdd(SpritePlayer, 25, 136);
+			
+		
 			can_scroll_x = 0;
 			can_scroll_y = 0;
 
@@ -241,7 +249,7 @@ void START() {
 		INIT_HUD(window);
 		RefreshLife();
 	}else if(current_level == 10 && IsCutscene == 0){
-		INIT_HUD(window);
+		INIT_HUD(windowBoss);
 		RefreshLife();
 	}
 	
@@ -444,56 +452,65 @@ void UPDATE() {
 				Tile_Anim(stage1_anim2, 8, &forestCloudAnim, 55, BANK(forestCloudAnim));
 			}
 		}
-		
-		if(load_next) {
-			if( load_next) { //current_level > 0 || load_next == 1 (to avoid going under 0)
-				
-				current_level += load_next;
+		if(current_level < 9){
+			if(load_next) {
+				if( load_next) { //current_level > 0 || load_next == 1 (to avoid going under 0)
+					
+					current_level += load_next;
 
+					
+					LoadNextScreen(current_level - load_next, current_level, stage1_levels);
 				
-				LoadNextScreen(current_level - load_next, current_level, stage1_levels);
-			
+				}
+				load_next = 0;
+				player_nc_state = 1;
+				
 			}
-			load_next = 0;
-			player_nc_state = 1;
-			
 		}
 	}else{
 		
 		if(current_level == 10){
-		
-			if(stage1_counter < 40){
-				stage1_counter++;
-				
-				if(stage1_counter == 5){
-					stage1_counter = 0;
+			if(boss_state < 1){
+				if(stage1_counter < 40){
+					stage1_counter++;
+					
+					if(stage1_counter == 5){
+						stage1_counter = 0;
 
-					
-					switch (stage1_anim)
-					{
-					case 0:
-						Set_Bkg_Data(&flameBoss2, 108, 4, BANK(flameBoss2));
-						stage1_anim++;
-						break;
-					
-					case 1:
-						Set_Bkg_Data(&flameBoss3, 108, 4, BANK(flameBoss3));
-						stage1_anim++;
-						break;
-					
-					case 2:
-						Set_Bkg_Data(&flameBoss, 108, 4, BANK(flameBoss));
-						stage1_anim++;
-						break;
-					
+						
+						switch (stage1_anim)
+						{
+						case 0:
+							Set_Bkg_Data(&flameBoss2, 108, 4, BANK(flameBoss2));
+							stage1_anim++;
+							break;
+						
+						case 1:
+							Set_Bkg_Data(&flameBoss3, 108, 4, BANK(flameBoss3));
+							stage1_anim++;
+							break;
+						
+						case 2:
+							Set_Bkg_Data(&flameBoss, 108, 4, BANK(flameBoss));
+							stage1_anim++;
+							break;
+						
 
+						}
+						if(stage1_anim == 3){
+							stage1_anim = 0;
+						}
+						
+
+						
 					}
-					if(stage1_anim == 3){
-						stage1_anim = 0;
-					}
-					
-
-					
+				}
+			}else if(boss_state > 24 && boss_state < 44){
+				if(--stage1_counter == 0){
+					stage1_counter = 2;
+					stage1_anim++;
+					Tile_Anim(stage1_anim, 8, &flameBoss4, 106, BANK(flameBoss4));
+					Tile_Anim(stage1_anim, 2, &flameBoss5, 107, BANK(flameBoss5));
 				}
 			}
 		}
@@ -516,17 +533,17 @@ void UPDATE() {
 	  if(KEY_PRESSED(J_DOWN) && KEY_PRESSED(J_A) && KEY_PRESSED(J_B) && KEY_PRESSED(J_SELECT)){
 		    current_level = 0;
 			current_cs = 0;
-			current_state = StateTitleScreen;
+			current_state = StateStage1;
 			SetState(current_state);
 		}else if(KEY_PRESSED(J_LEFT) && KEY_PRESSED(J_A) && KEY_PRESSED(J_B) && KEY_PRESSED(J_SELECT)){
 		    current_level = 0;
 			current_cs = 0;
-			current_state = StateStage1;
+			current_state = StateStage3;
 			SetState(current_state);
 		}else if(KEY_PRESSED(J_UP) && KEY_PRESSED(J_A) && KEY_PRESSED(J_B) && KEY_PRESSED(J_SELECT)){
-		    current_level = 8;
-			current_cs = 9;
-			current_state = StateCutscenes;
+		    current_level = 0;
+			current_cs = 0;
+			current_state = StateStage4;
 			SetState(current_state);
 		}
 }

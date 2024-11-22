@@ -485,18 +485,29 @@ void UPDATE() {
 			Tile_Anim(stage4_anim, 6, &spinChangerAnim2, 47, BANK(spinChangerAnim2));
 		}
 	}
-	// if(--stage4_counter_2 == 0){
-	// 	stage4_counter_2 = 5;
-	// 	stage4_anim_2++;
-	// 	Tile_Anim(-stage4_anim_2, 8, &cloudAnim2, 44, BANK(cloudAnim2));
-	// 	// Tile_Anim(stage4_anim_2 + 8, 16, &cloudAnim1, 46, BANK(cloudAnim1));
-	// }
-	// if(--stage4_counter_3 == 0){
-	// 	stage4_counter_3 = 30;
-	// 	stage4_anim_3++;
-	// 	Tile_Anim(stage4_anim_3, 8, &cloudAnim3, 43, BANK(cloudAnim3));
-	// 	// Tile_Anim(stage4_anim_2 + 8, 16, &cloudAnim1, 46, BANK(cloudAnim1));
-	// }
+
+
+
+
+		if(_cpu == CGB_TYPE){
+			if(--stage4_counter_2 == 0){
+				stage4_counter_2 = 5;
+				stage4_anim_2++;
+				if(stage4_anim_2 % 2 == 0){
+					Set_Bkg_Data(&spikesAnim, 112, 4, BANK(spikesAnim));
+				}else{
+					Set_Bkg_Data(&spikesAnim2, 112, 4, BANK(spikesAnim2));
+				}
+				// Tile_Anim(stage4_anim_2, 8, &cloudAnim2, 44, BANK(cloudAnim2));
+				// Tile_Anim(stage4_anim_2 + 8, 16, &cloudAnim1, 46, BANK(cloudAnim1));
+			}
+			if(--stage4_counter_3 == 0){
+				stage4_counter_3 = 30;
+				stage4_anim_3++;
+				Tile_Anim(stage4_anim_3, 8, &cloudAnim3, 43, BANK(cloudAnim3));
+				// Tile_Anim(stage4_anim_2 + 8, 16, &cloudAnim1, 46, BANK(cloudAnim1));
+			}
+		}
 
 
 	if( change_jump_count > 0 ){
@@ -509,15 +520,6 @@ void UPDATE() {
 		change_jump_count--;
 	}
 	
-	if(--stage4_counter_2 == 0){
-		stage4_anim_2 = stage4_anim_2 == 1 ? 0 : 1;
-		if(stage4_anim_2 == 0){
-			Set_Bkg_Data(&spikesAnim, 112, 4, BANK(spikesAnim));
-		}else{
-			Set_Bkg_Data(&spikesAnim2, 112, 4, BANK(spikesAnim2));
-		}
-		stage4_counter_2 = 5;
-	}
 
 
 
@@ -650,20 +652,20 @@ void UPDATE() {
 	}	
 
 
-    if(KEY_PRESSED(J_DOWN) && KEY_PRESSED(J_A) && KEY_PRESSED(J_B) && KEY_PRESSED(J_SELECT)){
-		    current_level = 0;
-			current_cs = 0;
-			current_state = StateTitleScreen;
-			SetState(current_state);
-		}else if(KEY_PRESSED(J_LEFT) && KEY_PRESSED(J_A) && KEY_PRESSED(J_B) && KEY_PRESSED(J_SELECT)){
+ if(KEY_PRESSED(J_DOWN) && KEY_PRESSED(J_A) && KEY_PRESSED(J_B) && KEY_PRESSED(J_SELECT)){
 		    current_level = 0;
 			current_cs = 0;
 			current_state = StateStage1;
 			SetState(current_state);
+		}else if(KEY_PRESSED(J_LEFT) && KEY_PRESSED(J_A) && KEY_PRESSED(J_B) && KEY_PRESSED(J_SELECT)){
+		    current_level = 0;
+			current_cs = 0;
+			current_state = StateStage3;
+			SetState(current_state);
 		}else if(KEY_PRESSED(J_UP) && KEY_PRESSED(J_A) && KEY_PRESSED(J_B) && KEY_PRESSED(J_SELECT)){
-		    current_level = 8;
-			current_cs = 8;
-			current_state = StateCutscenes;
+		    current_level = 0;
+			current_cs = 0;
+			current_state = StateStage4;
 			SetState(current_state);
 		}
 }

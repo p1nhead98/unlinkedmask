@@ -444,28 +444,28 @@ void UPDATE() {
 
 
 
-	// if(_cpu == CGB_TYPE){
+	if(_cpu == CGB_TYPE){
 
-		// if(--stage3_counter_2 == 0){
-		// 	stage3_counter_2 = 8;
-		// 	stage3_anim_2++;
-		// 	Tile_Anim(stage3_anim_2, 8, &templeCloudAnim, 76, BANK(templeCloudAnim));
-		// }
+		if(--stage3_counter_2 == 0){
+			stage3_counter_2 = 8;
+			stage3_anim_2++;
+			Tile_Anim(stage3_anim_2, 8, &templeCloudAnim, 76, BANK(templeCloudAnim));
+		}
 
-		// if(--stage3_counter_3 == 0){
-		// 	stage3_counter_3 = 4;
-		// 	stage3_anim_3++;
-		// 	Tile_Anim(stage3_anim_3, 8, &templeCloudAnim2, 48, BANK(templeCloudAnim2));
-		// }
+		if(--stage3_counter_3 == 0){
+			stage3_counter_3 = 4;
+			stage3_anim_3++;
+			Tile_Anim(stage3_anim_3, 8, &templeCloudAnim2, 48, BANK(templeCloudAnim2));
+		}
 
 		
-		// if(--stage3_counter_4 == 0){
-		// 	stage3_counter_4 = 2;
-		// 	stage3_anim_4++;
-		// 	Tile_Anim(stage3_anim_4, 8, &templeCloudAnim3, 47, BANK(templeCloudAnim3));
-		// }
+		if(--stage3_counter_4 == 0){
+			stage3_counter_4 = 2;
+			stage3_anim_4++;
+			Tile_Anim(stage3_anim_4, 8, &templeCloudAnim3, 47, BANK(templeCloudAnim3));
+		}
 	
-	// }
+	}
 
 
 
@@ -551,20 +551,20 @@ void UPDATE() {
 		
 	}		
 
-	if(KEY_PRESSED(J_DOWN) && KEY_PRESSED(J_A) && KEY_PRESSED(J_B) && KEY_PRESSED(J_SELECT)){
-		    current_level = 0;
-			current_cs = 0;
-			current_state = StateTitleScreen;
-			SetState(current_state);
-		}else if(KEY_PRESSED(J_LEFT) && KEY_PRESSED(J_A) && KEY_PRESSED(J_B) && KEY_PRESSED(J_SELECT)){
+	 if(KEY_PRESSED(J_DOWN) && KEY_PRESSED(J_A) && KEY_PRESSED(J_B) && KEY_PRESSED(J_SELECT)){
 		    current_level = 0;
 			current_cs = 0;
 			current_state = StateStage1;
 			SetState(current_state);
+		}else if(KEY_PRESSED(J_LEFT) && KEY_PRESSED(J_A) && KEY_PRESSED(J_B) && KEY_PRESSED(J_SELECT)){
+		    current_level = 0;
+			current_cs = 0;
+			current_state = StateStage3;
+			SetState(current_state);
 		}else if(KEY_PRESSED(J_UP) && KEY_PRESSED(J_A) && KEY_PRESSED(J_B) && KEY_PRESSED(J_SELECT)){
-		    current_level = 8;
-			current_cs = 8;
-			current_state = StateCutscenes;
+		    current_level = 0;
+			current_cs = 0;
+			current_state = StateStage4;
 			SetState(current_state);
 		}
 

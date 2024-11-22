@@ -366,7 +366,7 @@ void CheckCollisionTile()
         }
     }else{
         if( (colision2 == 112 || colision2 == 113) ||  (colision3 == 112 || colision3 == 113)){
-            if((player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 2))  && player_accel_y > 2 && (boss_state > 24 && boss_state < 43) ){
+            if((player_state == 2 || player_state == 3 || (player_state == 10 && player_last_state == 2))  && player_accel_y > 2 && (boss_state > 24 && boss_state < 44)){
                 player_state = 3;
                 player_accel_y = -83;
                 PlayFx(CHANNEL_4, 10, 0x02, 0xf1, 0x40, 0xc0);
@@ -482,12 +482,13 @@ void UPDATE()
                 {
                     pal_tick += 3;
                     current_pal++;
-#ifdef CGB
-			if(_cpu == CGB_TYPE) {
-				SetPalette(SPRITES_PALETTE, 1, 1, pals_color[current_pal % 2], 2);
-			} else
-#endif
-			SPRITE_SET_DMG_PALETTE(THIS, current_pal % 2);
+                    SPRITE_SET_DMG_PALETTE(THIS, current_pal % 2);
+// #ifdef CGB
+// 			if(_cpu == CGB_TYPE) {
+// 				SetPalette(SPRITES_PALETTE, 1, 1, pals_color[current_pal % 2], 2);
+// 			} else
+// #endif
+			
                     
                 }
             }

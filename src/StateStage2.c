@@ -368,20 +368,20 @@ void UPDATE() {
 		
 	}
 
-	if(KEY_PRESSED(J_DOWN) && KEY_PRESSED(J_A) && KEY_PRESSED(J_B) && KEY_PRESSED(J_SELECT)){
-		    current_level = 0;
-			current_cs = 0;
-			current_state = StateTitleScreen;
-			SetState(current_state);
-		}else if(KEY_PRESSED(J_LEFT) && KEY_PRESSED(J_A) && KEY_PRESSED(J_B) && KEY_PRESSED(J_SELECT)){
+	 if(KEY_PRESSED(J_DOWN) && KEY_PRESSED(J_A) && KEY_PRESSED(J_B) && KEY_PRESSED(J_SELECT)){
 		    current_level = 0;
 			current_cs = 0;
 			current_state = StateStage1;
 			SetState(current_state);
+		}else if(KEY_PRESSED(J_LEFT) && KEY_PRESSED(J_A) && KEY_PRESSED(J_B) && KEY_PRESSED(J_SELECT)){
+		    current_level = 0;
+			current_cs = 0;
+			current_state = StateStage3;
+			SetState(current_state);
 		}else if(KEY_PRESSED(J_UP) && KEY_PRESSED(J_A) && KEY_PRESSED(J_B) && KEY_PRESSED(J_SELECT)){
-		    current_level = 8;
-			current_cs = 8;
-			current_state = StateCutscenes;
+		    current_level = 0;
+			current_cs = 0;
+			current_state = StateStage4;
 			SetState(current_state);
 		}
 
