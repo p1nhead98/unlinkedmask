@@ -4,7 +4,7 @@
 #include "TileAnimation.h"
 #include "Misc2.h"
 
-UINT8 current_level = 9;
+UINT8 current_level = 10;
 INT8 load_next_x = 0;
 UINT8 event = 0;
 Sprite* player_sprite = 0;

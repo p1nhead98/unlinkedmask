@@ -85,6 +85,7 @@ UINT8 player_canDo = 0;
 
 UINT8 player_start = 0;
 INT16 player_initial_y = 0;
+
 INT16 player_init_framespeed = 0;
 
 UINT8 bossCanHurt = 0;
@@ -1202,12 +1203,12 @@ void UPDATE()
 void DESTROY()
 {
 
-    if(player_state != 9 && player_state != 8 && player_state != 11){
-       current_life = 0;
-        ScreenShake(1,1);
-        RefreshLife();
-        playerHurtSound();
-        SetState(current_state);
-    }   
+    // if(player_state != 9 && player_state != 8 && player_state != 11){
+    //    current_life = 0;
+    //     ScreenShake(1,1);
+    //     RefreshLife();
+    //     playerHurtSound();
+    //     SetState(current_state);
+    // }   
 
 }

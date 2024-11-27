@@ -48,6 +48,7 @@ UINT8 stage1_anim2 = 0;
 
 
 
+
 extern UINT8 current_level;
 extern UINT8 can_scroll_x;
 extern UINT8 can_scroll_y;
@@ -204,7 +205,7 @@ void START() {
 			
 			FillBossStage();
 			InitScroll(BANK(bossfight1), &bossfight1, bossfight_col_tiles, 0);
-			SpriteManagerAdd(SpriteWarning2, 144, 125);
+	
 			player_sprite = SpriteManagerAdd(SpritePlayer, 25, 136);
 			SpriteManagerAdd(SpriteBoss1, 144, 125);
 			ScrollRelocateMapTo(40,40);

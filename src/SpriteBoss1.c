@@ -58,6 +58,8 @@ extern UINT8 IsCutscene;
 extern UINT8 current_cs;
 extern UINT8 current_dialog;
 
+
+
 Sprite* bossSkullFlame_spr1 = 1;
 Sprite* bossSkullFlame_spr2 = 1;
 
@@ -379,7 +381,7 @@ void UPDATE()
             if(--boss_counter == 0){
                 boss_counter = 50;
                 boss_counter2++;
-                SpriteManagerAdd(SpriteWarning2, player_sprite->x - 4, player_sprite->y);
+                SpriteManagerAdd(SpriteWarning2, player_sprite->x - 8, player_sprite->y);
                 PlayFx(CHANNEL_1, 10, 0x2c, 0xbf, 0xf1, warn2_sounds[boss_counter2], 0x87);
             }
             if(boss_counter2 == 4){
